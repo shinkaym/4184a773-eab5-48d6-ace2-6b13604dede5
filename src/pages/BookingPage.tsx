@@ -30,10 +30,12 @@ export function BookingPage() {
   // Step 1 - Appointment selection state
   const [selectedStaff, setSelectedStaff] = useState<string>('any');
   const [selectedDate, setSelectedDate] = useState<number>(15);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedTime, setSelectedTime] = useState<string>('09:30 AM');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [isHoveringCarousel, setIsHoveringCarousel] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const staffMembers = [
     {
       id: 'any',
@@ -75,8 +77,120 @@ export function BookingPage() {
   const cardsPerPage = 4; // Show 4 cards per page on desktop
   const totalPages = Math.ceil(staffMembers.length / cardsPerPage);
 
-  const morningTimes = ['09:00 AM', '09:30 AM', '10:15 AM', '11:00 AM', '11:30 AM'];
-  const afternoonTimes = ['01:00 PM', '01:45 PM', '02:30 PM', '03:15 PM', '04:00 PM'];
+  // Service categories
+  const categories = [
+    { id: 'all', name: 'All Services', icon: '✨' },
+    { id: 'nails', name: 'Nails', icon: '💅' },
+    { id: 'spa', name: 'Spa & Wellness', icon: '🧖' },
+    { id: 'beauty', name: 'Beauty', icon: '💄' },
+  ];
+
+  // Services data
+  const services = [
+    {
+      id: 'manicure',
+      name: 'Manicure',
+      category: 'nails',
+      duration: 30,
+      price: 35,
+      image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300&fit=crop',
+    },
+    {
+      id: 'pedicure',
+      name: 'Pedicure',
+      category: 'nails',
+      duration: 45,
+      price: 45,
+      image: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=400&h=300&fit=crop',
+    },
+    {
+      id: 'gel-polish',
+      name: 'Gel Polish',
+      category: 'nails',
+      duration: 60,
+      price: 55,
+      image: 'https://images.unsplash.com/photo-1610992015732-2449b76344bc?w=400&h=300&fit=crop',
+    },
+    {
+      id: 'acrylic-nails',
+      name: 'Acrylic Nails',
+      category: 'nails',
+      duration: 90,
+      price: 75,
+      image: 'https://images.unsplash.com/photo-1632345031435-8727f6897d53?w=400&h=300&fit=crop',
+    },
+    {
+      id: 'nail-art',
+      name: 'Nail Art',
+      category: 'beauty',
+      duration: 30,
+      price: 25,
+      image: 'https://images.unsplash.com/photo-1599206676335-193c82b13c9e?w=400&h=300&fit=crop',
+    },
+    {
+      id: 'spa-treatment',
+      name: 'Spa Treatment',
+      category: 'spa',
+      duration: 60,
+      price: 65,
+      image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=400&h=300&fit=crop',
+    },
+  ];
+
+  // Filter services by category
+  const filteredServices =
+    selectedCategory === 'all' ? services : services.filter((service) => service.category === selectedCategory);
+
+  // Calculate total duration of selected services
+  const totalDuration = selectedServices.reduce((total, serviceId) => {
+    const service = services.find((s) => s.id === serviceId);
+    return total + (service?.duration || 0);
+  }, 0);
+
+  // Generate time slots for full day in 15-minute intervals (9 AM to 7 PM)
+  const generateTimeSlots = () => {
+    const slots = [];
+    const startHour = 9;
+    const endHour = 19;
+
+    for (let hour = startHour; hour < endHour; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        const period = hour >= 12 ? 'PM' : 'AM';
+        const displayHour = hour > 12 ? hour - 12 : hour;
+        const time = `${displayHour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')} ${period}`;
+        slots.push(time);
+      }
+    }
+    return slots;
+  };
+
+  const timeSlots = generateTimeSlots();
+  const disabledTimeSlots = ['11:00 AM', '11:15 AM', '02:00 PM', '02:15 PM']; // Example time-off slots
+
+  // Toggle service selection
+  const toggleService = (serviceId: string) => {
+    setSelectedServices((prev) =>
+      prev.includes(serviceId) ? prev.filter((id) => id !== serviceId) : [...prev, serviceId]
+    );
+  };
+
+  // Helper function to convert time string to minutes from midnight
+  const timeToMinutes = (timeStr: string) => {
+    const [time, period] = timeStr.split(' ');
+    const [hours, minutes] = time.split(':').map(Number);
+    const totalMinutes =
+      (period === 'PM' && hours !== 12 ? hours + 12 : hours === 12 && period === 'AM' ? 0 : hours) * 60 + minutes;
+    return totalMinutes;
+  };
+
+  // Check if a time slot is within the selected appointment duration
+  const isTimeInRange = (timeSlot: string) => {
+    if (!selectedTime) return false;
+    const startMinutes = timeToMinutes(selectedTime);
+    const currentMinutes = timeToMinutes(timeSlot);
+    const endMinutes = startMinutes + totalDuration;
+    return currentMinutes >= startMinutes && currentMinutes < endMinutes;
+  };
 
   // Auto-scroll carousel logic
   useEffect(() => {
@@ -400,142 +514,267 @@ export function BookingPage() {
                 </div>
               </motion.div>
 
-              {/* Select Date & Time Section */}
-              <motion.div variants={itemVariants} className='grid md:grid-cols-2 gap-8 mb-10'>
-                {/* Calendar */}
-                <div>
-                  <div className='flex items-center gap-3 mb-6'>
-                    <Calendar className='w-5 h-5' />
-                    <h2 className='text-xl font-black tracking-tight'>Select Date</h2>
+              {/* Select Date Section */}
+              <motion.div variants={itemVariants} className='mb-10'>
+                <div className='flex items-center gap-3 mb-6'>
+                  <Calendar className='w-5 h-5' />
+                  <h2 className='text-xl font-black tracking-tight'>Select Date</h2>
+                </div>
+
+                <div className='border-2 border-nature-divider rounded-lg p-6 bg-white max-w-md'>
+                  <div className='flex items-center justify-between mb-6'>
+                    <button className='p-1 hover:bg-nature-surface rounded transition-colors'>
+                      <ChevronLeft className='w-5 h-5' />
+                    </button>
+                    <span className='font-mono font-bold text-sm tracking-widest'>Jan 2024</span>
+                    <button className='p-1 hover:bg-nature-surface rounded transition-colors'>
+                      <ChevronRight className='w-5 h-5' />
+                    </button>
                   </div>
 
-                  <div className='border-2 border-nature-divider rounded-lg p-6 bg-white'>
-                    <div className='flex items-center justify-between mb-6'>
-                      <button className='p-1 hover:bg-nature-surface rounded transition-colors'>
-                        <ChevronLeft className='w-5 h-5' />
-                      </button>
-                      <span className='font-mono font-bold text-sm tracking-widest'>Jan 2024</span>
-                      <button className='p-1 hover:bg-nature-surface rounded transition-colors'>
-                        <ChevronRight className='w-5 h-5' />
-                      </button>
-                    </div>
+                  <div className='grid grid-cols-7 gap-2'>
+                    {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map((day) => (
+                      <div key={day} className='text-center text-[10px] font-mono text-nature-text-tertiary font-bold'>
+                        {day}
+                      </div>
+                    ))}
 
-                    <div className='grid grid-cols-7 gap-2'>
-                      {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map((day) => (
-                        <div
-                          key={day}
-                          className='text-center text-[10px] font-mono text-nature-text-tertiary font-bold'
+                    {[...Array(31)].map((_, i) => {
+                      const date = i + 1;
+                      const isSelected = date === selectedDate;
+                      const isDisabled = date === 11;
+                      return (
+                        <button
+                          key={i}
+                          disabled={isDisabled}
+                          onClick={() => setSelectedDate(date)}
+                          className={`
+                            aspect-square text-sm flex items-center justify-center rounded transition-all
+                            ${isSelected ? 'bg-nature-text-primary text-white font-bold' : ''}
+                            ${isDisabled ? 'text-nature-text-tertiary/30 line-through cursor-not-allowed' : ''}
+                            ${!isSelected && !isDisabled ? 'hover:bg-nature-surface' : ''}
+                          `}
                         >
-                          {day}
-                        </div>
-                      ))}
+                          {date}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </motion.div>
 
-                      {[...Array(31)].map((_, i) => {
-                        const date = i + 1;
-                        const isSelected = date === selectedDate;
-                        const isDisabled = date === 11;
+              {/* Select Services Section */}
+              <motion.div variants={itemVariants} className='mb-10'>
+                <div className='flex items-center justify-between mb-6'>
+                  <div className='flex items-center gap-3'>
+                    <Scissors className='w-5 h-5' />
+                    <h2 className='text-xl font-black tracking-tight'>Select Services</h2>
+                  </div>
+                  {selectedServices.length > 0 && (
+                    <div className='px-4 py-2 bg-nature-text-primary text-white text-xs font-mono font-bold'>
+                      {selectedServices.length} SELECTED • {totalDuration} MIN
+                    </div>
+                  )}
+                </div>
+
+                {/* Category Filter */}
+                <div className='mb-6 flex flex-wrap gap-3'>
+                  {categories.map((category) => {
+                    const isSelected = selectedCategory === category.id;
+                    const categoryCount =
+                      category.id === 'all'
+                        ? services.length
+                        : services.filter((s) => s.category === category.id).length;
+                    return (
+                      <motion.button
+                        key={category.id}
+                        onClick={() => setSelectedCategory(category.id)}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`
+                          relative px-6 py-3 border-2 transition-all font-bold text-sm tracking-wider
+                          ${
+                            isSelected
+                              ? 'bg-nature-text-primary text-white border-nature-text-primary shadow-lg'
+                              : 'bg-white text-nature-text-secondary border-nature-divider hover:border-nature-text-primary'
+                          }
+                        `}
+                      >
+                        {/* Corner accent for selected */}
+                        {isSelected && <div className='absolute -top-1 -right-1 w-3 h-3 bg-nature-primary' />}
+                        <span className='mr-2'>{category.icon}</span>
+                        {category.name}
+                        <span
+                          className={`ml-2 text-xs font-mono ${
+                            isSelected ? 'text-white/80' : 'text-nature-text-tertiary'
+                          }`}
+                        >
+                          ({categoryCount})
+                        </span>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+
+                {filteredServices.length === 0 ? (
+                  <div className='col-span-full border-2 border-dashed border-nature-divider p-12 text-center bg-nature-surface/30'>
+                    <Scissors className='w-12 h-12 mx-auto mb-4 text-nature-text-tertiary' />
+                    <p className='text-nature-text-tertiary font-mono text-sm'>No services found in this category</p>
+                  </div>
+                ) : (
+                  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                    {filteredServices.map((service) => {
+                      const isSelected = selectedServices.includes(service.id);
+                      return (
+                        <motion.button
+                          key={service.id}
+                          onClick={() => toggleService(service.id)}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className={`
+                            relative overflow-hidden border-2 transition-all text-left
+                            ${
+                              isSelected
+                                ? 'border-nature-text-primary bg-white shadow-lg'
+                                : 'border-nature-divider hover:border-nature-text-primary bg-white'
+                            }
+                          `}
+                        >
+                          {/* Service Image */}
+                          <div className='relative h-40 overflow-hidden'>
+                            <img src={service.image} alt={service.name} className='w-full h-full object-cover' />
+                            {/* Image overlay gradient */}
+                            <div
+                              className={`absolute inset-0 transition-all ${
+                                isSelected ? 'bg-nature-primary/20' : 'bg-gradient-to-t from-black/40 to-transparent'
+                              }`}
+                            />
+
+                            {/* Checkmark indicator */}
+                            <div className='absolute top-4 right-4'>
+                              <div
+                                className={`
+                                  w-8 h-8 border-2 flex items-center justify-center transition-all backdrop-blur-sm
+                                  ${
+                                    isSelected
+                                      ? 'bg-nature-text-primary border-nature-text-primary'
+                                      : 'bg-white/90 border-white'
+                                  }
+                                `}
+                              >
+                                {isSelected && <Check className='w-5 h-5 text-white stroke-[3]' />}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Service Info */}
+                          <div className='p-6'>
+                            <div className='mb-3'>
+                              <h3
+                                className={`text-lg font-black tracking-tight mb-1 ${
+                                  isSelected ? 'text-nature-text-primary' : ''
+                                }`}
+                              >
+                                {service.name}
+                              </h3>
+                              <div className='text-[10px] font-mono text-nature-text-tertiary tracking-wider font-bold'>
+                                {service.duration} MINUTES
+                              </div>
+                            </div>
+
+                            <div className='text-2xl font-black tracking-tighter'>${service.price}</div>
+                          </div>
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Select Time Section */}
+              <motion.div variants={itemVariants} className='mb-10'>
+                <div className='flex items-center justify-between mb-6'>
+                  <h2 className='text-xl font-black tracking-tight flex items-center gap-3'>
+                    <span className='w-5 h-5 rounded-full border-2 border-nature-text-primary flex items-center justify-center'>
+                      <span className='w-2 h-2 bg-nature-text-primary rounded-full'></span>
+                    </span>
+                    Available Times
+                  </h2>
+                  <div className='text-xs font-mono text-nature-text-tertiary tracking-wider'>
+                    <span className='font-bold'>Jan 15</span>
+                    {totalDuration > 0 && <span className='ml-2'>• Duration: {totalDuration} min</span>}
+                  </div>
+                </div>
+
+                {selectedServices.length === 0 ? (
+                  <div className='border-2 border-dashed border-nature-divider p-12 text-center bg-nature-surface/30'>
+                    <Clock className='w-12 h-12 mx-auto mb-4 text-nature-text-tertiary' />
+                    <p className='text-nature-text-tertiary font-mono text-sm'>
+                      Please select at least one service to see available times
+                    </p>
+                  </div>
+                ) : (
+                  <div className='border-2 border-nature-divider p-6 bg-white'>
+                    <div className='flex items-center justify-between mb-4'>
+                      <div className='text-[10px] font-mono text-nature-text-tertiary tracking-widest font-bold'>
+                        15-MINUTE INTERVALS • 9:00 AM - 7:00 PM
+                      </div>
+                      {selectedTime && (
+                        <div className='flex items-center gap-2 text-xs font-mono'>
+                          <div className='flex items-center gap-1'>
+                            <div className='w-3 h-3 bg-nature-text-primary' />
+                            <span className='text-nature-text-tertiary'>Start</span>
+                          </div>
+                          <div className='flex items-center gap-1'>
+                            <div className='w-3 h-3 bg-nature-primary' />
+                            <span className='text-nature-text-tertiary'>Duration</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className='grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 max-h-96 overflow-y-auto'>
+                      {timeSlots.map((time) => {
+                        const isStartTime = time === selectedTime;
+                        const isInRange = isTimeInRange(time);
+                        const isDisabled = disabledTimeSlots.includes(time);
                         return (
                           <button
-                            key={i}
+                            key={time}
                             disabled={isDisabled}
-                            onClick={() => setSelectedDate(date)}
+                            onClick={() => setSelectedTime(time)}
                             className={`
-                              aspect-square text-sm flex items-center justify-center rounded transition-all
-                              ${isSelected ? 'bg-nature-text-primary text-white font-bold' : ''}
-                              ${isDisabled ? 'text-nature-text-tertiary/30 line-through cursor-not-allowed' : ''}
-                              ${!isSelected && !isDisabled ? 'hover:bg-nature-surface' : ''}
+                              py-3 px-2 text-xs font-mono border-2 transition-all relative
+                              ${
+                                isStartTime
+                                  ? 'bg-nature-text-primary text-white border-nature-text-primary font-bold z-10'
+                                  : ''
+                              }
+                              ${
+                                isInRange && !isStartTime
+                                  ? 'bg-nature-primary/30 text-nature-text-primary border-nature-primary font-bold'
+                                  : ''
+                              }
+                              ${
+                                isDisabled
+                                  ? 'bg-nature-surface/50 text-nature-text-tertiary/30 border-nature-divider/30 cursor-not-allowed line-through'
+                                  : ''
+                              }
+                              ${
+                                !isStartTime && !isInRange && !isDisabled
+                                  ? 'border-nature-divider hover:border-nature-text-primary hover:bg-nature-surface'
+                                  : ''
+                              }
                             `}
                           >
-                            {date}
+                            {/* Start time indicator */}
+                            {isStartTime && <div className='absolute -top-1 -right-1 w-3 h-3 bg-nature-primary' />}
+                            {time}
                           </button>
                         );
                       })}
                     </div>
                   </div>
-                </div>
-
-                {/* Available Times */}
-                <div>
-                  <div className='flex items-center justify-between mb-6'>
-                    <h2 className='text-xl font-black tracking-tight flex items-center gap-3'>
-                      <span className='w-5 h-5 rounded-full border-2 border-nature-text-primary flex items-center justify-center'>
-                        <span className='w-2 h-2 bg-nature-text-primary rounded-full'></span>
-                      </span>
-                      Available Times
-                    </h2>
-                    <span className='text-xs font-mono text-nature-text-tertiary tracking-wider'>Jan 15</span>
-                  </div>
-
-                  <div className='space-y-6'>
-                    {/* Morning */}
-                    <div>
-                      <div className='text-[10px] font-mono text-nature-text-tertiary tracking-widest mb-3 font-bold'>
-                        Morning
-                      </div>
-                      <div className='grid grid-cols-3 gap-3'>
-                        {morningTimes.map((time) => {
-                          const isSelected = time === selectedTime;
-                          const isDisabled = time === '11:00 AM';
-                          return (
-                            <button
-                              key={time}
-                              disabled={isDisabled}
-                              onClick={() => setSelectedTime(time)}
-                              className={`
-                                py-3 px-2 text-xs font-mono border-2 rounded transition-all
-                                ${
-                                  isSelected
-                                    ? 'bg-nature-text-primary text-white border-nature-text-primary font-bold'
-                                    : ''
-                                }
-                                ${
-                                  isDisabled
-                                    ? 'bg-nature-surface/50 text-nature-text-tertiary/30 border-nature-divider/30 cursor-not-allowed line-through'
-                                    : ''
-                                }
-                                ${
-                                  !isSelected && !isDisabled
-                                    ? 'border-nature-divider hover:border-nature-text-primary hover:bg-nature-surface'
-                                    : ''
-                                }
-                              `}
-                            >
-                              {time}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Afternoon */}
-                    <div>
-                      <div className='text-[10px] font-mono text-nature-text-tertiary tracking-widest mb-3 font-bold'>
-                        Afternoon
-                      </div>
-                      <div className='grid grid-cols-3 gap-3'>
-                        {afternoonTimes.map((time) => {
-                          const isSelected = time === selectedTime;
-                          return (
-                            <button
-                              key={time}
-                              onClick={() => setSelectedTime(time)}
-                              className={`
-                                py-3 px-2 text-xs font-mono border-2 rounded transition-all
-                                ${
-                                  isSelected
-                                    ? 'bg-nature-text-primary text-white border-nature-text-primary font-bold'
-                                    : 'border-nature-divider hover:border-nature-text-primary hover:bg-nature-surface'
-                                }
-                              `}
-                            >
-                              {time}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                )}
               </motion.div>
 
               {/* Divider */}
@@ -587,7 +826,23 @@ export function BookingPage() {
                     <div className='flex items-start justify-between'>
                       <div>
                         <h3 className='font-bold text-lg mb-1'>January 15, 2024</h3>
-                        <p className='font-mono text-sm text-nature-text-secondary'>{selectedTime} - 10:15 AM</p>
+                        <p className='font-mono text-sm text-nature-text-secondary'>
+                          {selectedTime} -{' '}
+                          {(() => {
+                            // Calculate end time based on total duration
+                            const [time, period] = selectedTime.split(' ');
+                            const [hours, minutes] = time.split(':').map(Number);
+                            const totalMinutes =
+                              (period === 'PM' && hours !== 12 ? hours + 12 : hours) * 60 + minutes + totalDuration;
+                            const endHours = Math.floor(totalMinutes / 60) % 24;
+                            const endMinutes = totalMinutes % 60;
+                            const endPeriod = endHours >= 12 ? 'PM' : 'AM';
+                            const displayHours = endHours > 12 ? endHours - 12 : endHours === 0 ? 12 : endHours;
+                            return `${displayHours.toString().padStart(2, '0')}:${endMinutes
+                              .toString()
+                              .padStart(2, '0')} ${endPeriod}`;
+                          })()}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -609,17 +864,51 @@ export function BookingPage() {
                   </div>
                 </div>
 
-                {/* Service Details */}
+                {/* Services Details */}
                 <div className='flex items-start gap-6'>
                   <div className='w-12 h-12 border-2 border-nature-text-primary flex items-center justify-center flex-shrink-0'>
                     <Scissors className='w-6 h-6' />
                   </div>
                   <div className='flex-grow'>
-                    <div className='flex items-start justify-between'>
+                    <h3 className='font-bold text-lg mb-4'>Selected Services</h3>
+                    <div className='space-y-3'>
+                      {selectedServices.map((serviceId) => {
+                        const service = services.find((s) => s.id === serviceId);
+                        if (!service) return null;
+                        return (
+                          <div
+                            key={serviceId}
+                            className='flex items-center justify-between p-4 bg-nature-surface/30 border-l-4 border-nature-primary'
+                          >
+                            <div>
+                              <div className='font-bold text-base'>{service.name}</div>
+                              <div className='font-mono text-xs text-nature-text-secondary mt-1'>
+                                {service.duration} minutes
+                              </div>
+                            </div>
+                            <div className='text-lg font-black'>${service.price}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Total Summary */}
+                    <div className='mt-6 pt-6 border-t-2 border-nature-text-primary flex items-center justify-between'>
                       <div>
-                        <h3 className='font-bold text-lg mb-1'>Haircut & Styling</h3>
-                        <p className='font-mono text-sm text-nature-text-secondary'>Duration: 45 minutes</p>
-                        <p className='font-mono text-sm text-nature-text-secondary'>Price: $65.00</p>
+                        <div className='text-[10px] font-mono text-nature-text-tertiary tracking-wider font-bold mb-1'>
+                          TOTAL
+                        </div>
+                        <div className='font-mono text-sm text-nature-text-secondary'>
+                          {totalDuration} minutes • {selectedServices.length} service
+                          {selectedServices.length > 1 ? 's' : ''}
+                        </div>
+                      </div>
+                      <div className='text-3xl font-black tracking-tighter'>
+                        $
+                        {selectedServices.reduce((total, serviceId) => {
+                          const service = services.find((s) => s.id === serviceId);
+                          return total + (service?.price || 0);
+                        }, 0)}
                       </div>
                     </div>
                   </div>
@@ -692,12 +981,6 @@ export function BookingPage() {
                 variants={checkmarkVariants}
                 className='w-32 h-32 border-4 border-nature-text-primary flex items-center justify-center mb-8 relative bg-white'
               >
-                {/* Corner brackets */}
-                <div className='absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-nature-text-primary' />
-                <div className='absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-nature-text-primary' />
-                <div className='absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-nature-text-primary' />
-                <div className='absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-nature-text-primary' />
-
                 <Check className='w-16 h-16 stroke-[3]' />
               </motion.div>
 
@@ -731,7 +1014,23 @@ export function BookingPage() {
                         Date & Time
                       </div>
                       <div className='font-bold text-lg'>January 15, 2024</div>
-                      <div className='font-mono text-sm text-nature-text-secondary'>{selectedTime} - 10:15 AM</div>
+                      <div className='font-mono text-sm text-nature-text-secondary'>
+                        {selectedTime} -{' '}
+                        {(() => {
+                          // Calculate end time based on total duration
+                          const [time, period] = selectedTime.split(' ');
+                          const [hours, minutes] = time.split(':').map(Number);
+                          const totalMinutes =
+                            (period === 'PM' && hours !== 12 ? hours + 12 : hours) * 60 + minutes + totalDuration;
+                          const endHours = Math.floor(totalMinutes / 60) % 24;
+                          const endMinutes = totalMinutes % 60;
+                          const endPeriod = endHours >= 12 ? 'PM' : 'AM';
+                          const displayHours = endHours > 12 ? endHours - 12 : endHours === 0 ? 12 : endHours;
+                          return `${displayHours.toString().padStart(2, '0')}:${endMinutes
+                            .toString()
+                            .padStart(2, '0')} ${endPeriod}`;
+                        })()}
+                      </div>
                     </div>
                   </div>
 
@@ -750,17 +1049,31 @@ export function BookingPage() {
                     </div>
                   </div>
 
-                  {/* Service */}
+                  {/* Services */}
                   <div className='flex items-start gap-4'>
                     <div className='w-12 h-12 border-2 border-nature-text-primary flex items-center justify-center flex-shrink-0 bg-white'>
-                      <Clock className='w-6 h-6' />
+                      <Scissors className='w-6 h-6' />
                     </div>
                     <div className='flex-grow'>
                       <div className='text-[10px] font-mono text-nature-text-tertiary tracking-wider mb-1 font-bold'>
-                        Service
+                        Services
                       </div>
-                      <div className='font-bold text-lg'>Haircut & Styling</div>
-                      <div className='font-mono text-sm text-nature-text-secondary'>45 minutes • $65.00</div>
+                      {selectedServices.map((serviceId) => {
+                        const service = services.find((s) => s.id === serviceId);
+                        if (!service) return null;
+                        return (
+                          <div key={serviceId} className='font-bold text-lg'>
+                            {service.name}
+                          </div>
+                        );
+                      })}
+                      <div className='font-mono text-sm text-nature-text-secondary mt-2'>
+                        {totalDuration} minutes • $
+                        {selectedServices.reduce((total, serviceId) => {
+                          const service = services.find((s) => s.id === serviceId);
+                          return total + (service?.price || 0);
+                        }, 0)}
+                      </div>
                     </div>
                   </div>
 
