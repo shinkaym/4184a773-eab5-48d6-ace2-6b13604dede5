@@ -500,20 +500,20 @@ export function BookingPage() {
                           className='w-full sm:w-auto pl-10 pr-4 py-2.5 border border-nature-divider rounded-soft text-sm focus:border-nature-primary focus:outline-none focus:ring-2 focus:ring-nature-primary/20 transition-all bg-white'
                         />
                       </div>
-                      <div className='flex gap-2 justify-center sm:justify-start'>
+                      <div className='flex gap-1 sm:gap-2 justify-center sm:justify-start'>
                         <button
                           onClick={scrollStaffPrev}
-                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          className='p-1.5 sm:p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
                           aria-label='Previous staff'
                         >
-                          <ChevronLeft className='w-5 h-5' />
+                          <ChevronLeft className='w-4 h-4 sm:w-5 sm:h-5' />
                         </button>
                         <button
                           onClick={scrollStaffNext}
-                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          className='p-1.5 sm:p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
                           aria-label='Next staff'
                         >
-                          <ChevronRight className='w-5 h-5' />
+                          <ChevronRight className='w-4 h-4 sm:w-5 sm:h-5' />
                         </button>
                       </div>
                     </div>
@@ -961,21 +961,21 @@ export function BookingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className='bg-white rounded-softer p-8 md:p-12 shadow-soft-lg'
+                className='bg-white rounded-softer p-4 sm:p-6 md:p-8 lg:p-12 shadow-soft-lg'
               >
-                <h1 className='text-3xl md:text-4xl font-display font-semibold tracking-tight mb-8 md:mb-12'>
+                <h1 className='text-2xl sm:text-3xl md:text-4xl font-display font-semibold tracking-tight mb-6 sm:mb-8 md:mb-12'>
                   Review Your Booking
                 </h1>
 
-                <div className='space-y-8 mb-12'>
+                <div className='space-y-4 sm:space-y-6 md:space-y-8 mb-8 sm:mb-10 md:mb-12'>
                   {/* Date & Time */}
-                  <div className='flex items-start gap-5'>
-                    <div className='w-14 h-14 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
-                      <Calendar className='w-7 h-7 text-nature-primary' />
+                  <div className='flex items-start gap-3 sm:gap-4 md:gap-5'>
+                    <div className='w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
+                      <Calendar className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-nature-primary' />
                     </div>
                     <div className='flex-grow'>
-                      <h3 className='font-semibold text-lg mb-1'>January 15, 2024</h3>
-                      <p className='text-sm text-nature-text-secondary font-light'>
+                      <h3 className='font-semibold text-base sm:text-lg mb-1'>January 15, 2024</h3>
+                      <p className='text-xs sm:text-sm text-nature-text-secondary font-light'>
                         {selectedTime} -{' '}
                         {(() => {
                           const [time, period] = selectedTime.split(' ');
@@ -995,56 +995,56 @@ export function BookingPage() {
                   </div>
 
                   {/* Staff */}
-                  <div className='flex items-start gap-5'>
-                    <div className='w-14 h-14 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
-                      <User className='w-7 h-7 text-nature-primary' />
+                  <div className='flex items-start gap-3 sm:gap-4 md:gap-5'>
+                    <div className='w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
+                      <User className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-nature-primary' />
                     </div>
                     <div className='flex-grow'>
-                      <h3 className='font-semibold text-lg'>
+                      <h3 className='font-semibold text-base sm:text-lg'>
                         {staffMembers.find((s) => s.id === selectedStaff)?.name || 'Any Staff'}
                       </h3>
-                      <p className='text-sm text-nature-text-secondary font-light'>Employee</p>
+                      <p className='text-xs sm:text-sm text-nature-text-secondary font-light'>Employee</p>
                     </div>
                   </div>
 
                   {/* Services */}
-                  <div className='flex items-start gap-5'>
-                    <div className='w-14 h-14 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
-                      <Scissors className='w-7 h-7 text-nature-primary' />
+                  <div className='flex items-start gap-3 sm:gap-4 md:gap-5'>
+                    <div className='w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
+                      <Scissors className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-nature-primary' />
                     </div>
                     <div className='flex-grow'>
-                      <h3 className='font-semibold text-lg mb-4'>Selected Services</h3>
-                      <div className='space-y-3'>
+                      <h3 className='font-semibold text-base sm:text-lg mb-3 sm:mb-4'>Selected Services</h3>
+                      <div className='space-y-2 sm:space-y-3'>
                         {selectedServices.map((serviceId) => {
                           const service = services.find((s) => s.id === serviceId);
                           if (!service) return null;
                           return (
                             <div
                               key={serviceId}
-                              className='flex items-center justify-between p-4 bg-gradient-to-r from-nature-primary/5 to-nature-secondary/5 rounded-soft border-l-4 border-nature-primary'
+                              className='flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-nature-primary/5 to-nature-secondary/5 rounded-soft border-l-4 border-nature-primary'
                             >
                               <div>
-                                <div className='font-semibold'>{service.name}</div>
+                                <div className='font-semibold text-sm sm:text-base'>{service.name}</div>
                                 <div className='text-xs text-nature-text-secondary mt-1 font-light'>
                                   {service.duration} minutes
                                 </div>
                               </div>
-                              <div className='text-lg font-bold'>${service.price}</div>
+                              <div className='text-base sm:text-lg font-bold'>${service.price}</div>
                             </div>
                           );
                         })}
                       </div>
 
                       {/* Total */}
-                      <div className='mt-6 pt-6 border-t border-nature-divider flex items-center justify-between'>
+                      <div className='mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-nature-divider flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
                         <div>
                           <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-1'>TOTAL</div>
-                          <div className='text-sm text-nature-text-secondary font-light'>
+                          <div className='text-xs sm:text-sm text-nature-text-secondary font-light'>
                             {totalDuration} minutes • {selectedServices.length} service
                             {selectedServices.length > 1 ? 's' : ''}
                           </div>
                         </div>
-                        <div className='text-3xl font-bold tracking-tight'>
+                        <div className='text-2xl sm:text-3xl font-bold tracking-tight'>
                           $
                           {selectedServices.reduce((total, serviceId) => {
                             const service = services.find((s) => s.id === serviceId);
@@ -1056,27 +1056,27 @@ export function BookingPage() {
                   </div>
 
                   {/* Client */}
-                  <div className='flex items-start gap-5'>
-                    <div className='w-14 h-14 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
-                      <Briefcase className='w-7 h-7 text-nature-primary' />
+                  <div className='flex items-start gap-3 sm:gap-4 md:gap-5'>
+                    <div className='w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
+                      <Briefcase className='w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-nature-primary' />
                     </div>
                     <div className='flex-grow'>
-                      <h3 className='font-semibold text-lg mb-1'>John Doe</h3>
-                      <p className='text-sm text-nature-text-secondary font-light'>(555) 123-4567</p>
-                      <p className='text-sm text-nature-text-secondary font-light'>john.doe@example.com</p>
+                      <h3 className='font-semibold text-base sm:text-lg mb-1'>John Doe</h3>
+                      <p className='text-xs sm:text-sm text-nature-text-secondary font-light'>(555) 123-4567</p>
+                      <p className='text-xs sm:text-sm text-nature-text-secondary font-light'>john.doe@example.com</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className='flex justify-between items-center gap-4 pt-6 border-t border-nature-divider'>
+                <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4 pt-4 sm:pt-6 border-t border-nature-divider'>
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleBack}
-                    className='bg-white border-2 border-nature-primary text-nature-primary px-8 py-3.5 rounded-soft flex items-center gap-3 font-medium hover:bg-nature-primary/5 transition-all'
+                    className='bg-white border-2 border-nature-primary text-nature-primary px-6 sm:px-8 py-3 sm:py-3.5 rounded-soft flex items-center justify-center gap-2 sm:gap-3 font-medium hover:bg-nature-primary/5 transition-all order-2 sm:order-1'
                   >
-                    <ArrowLeft className='w-5 h-5' />
+                    <ArrowLeft className='w-4 h-4 sm:w-5 sm:h-5' />
                     Back
                   </motion.button>
 
@@ -1084,10 +1084,10 @@ export function BookingPage() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleConfirm}
-                    className='bg-nature-primary text-white px-10 py-3.5 rounded-soft flex items-center gap-3 font-medium hover:bg-nature-primary/90 transition-all shadow-soft hover:shadow-soft-lg'
+                    className='bg-nature-primary text-white px-6 sm:px-10 py-3 sm:py-3.5 rounded-soft flex items-center justify-center gap-2 sm:gap-3 font-medium hover:bg-nature-primary/90 transition-all shadow-soft hover:shadow-soft-lg order-1 sm:order-2'
                   >
                     Confirm Booking
-                    <Check className='w-5 h-5' />
+                    <Check className='w-4 h-4 sm:w-5 sm:h-5' />
                   </motion.button>
                 </div>
               </motion.div>
@@ -1101,22 +1101,22 @@ export function BookingPage() {
                 initial='hidden'
                 animate='visible'
                 exit={{ opacity: 0 }}
-                className='flex flex-col items-center'
+                className='flex flex-col items-center px-4'
               >
                 {/* Success Icon */}
                 <motion.div
                   variants={checkmarkVariants}
-                  className='w-32 h-32 rounded-full border-4 border-nature-primary bg-nature-primary/5 flex items-center justify-center mb-8 shadow-soft-lg'
+                  className='w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full border-3 sm:border-4 border-nature-primary bg-nature-primary/5 flex items-center justify-center mb-6 sm:mb-8 shadow-soft-lg'
                 >
-                  <Check className='w-16 h-16 text-nature-primary stroke-[3]' />
+                  <Check className='w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 text-nature-primary stroke-[3]' />
                 </motion.div>
 
                 {/* Success Message */}
-                <motion.div variants={itemVariants} className='text-center mb-8 md:mb-12'>
-                  <h1 className='text-3xl md:text-4xl lg:text-5xl font-display font-semibold tracking-tight mb-4'>
+                <motion.div variants={itemVariants} className='text-center mb-6 sm:mb-8 md:mb-12'>
+                  <h1 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-semibold tracking-tight mb-3 sm:mb-4'>
                     Booking Confirmed
                   </h1>
-                  <p className='text-sm md:text-base text-nature-text-secondary font-light'>
+                  <p className='text-xs sm:text-sm md:text-base text-nature-text-secondary font-light px-4'>
                     Your appointment has been successfully booked
                   </p>
                 </motion.div>
@@ -1124,28 +1124,28 @@ export function BookingPage() {
                 {/* Confirmation Card */}
                 <motion.div
                   variants={itemVariants}
-                  className='w-full max-w-2xl bg-white rounded-softer p-10 shadow-soft-xl mb-8'
+                  className='w-full max-w-2xl bg-white rounded-softer p-6 sm:p-8 md:p-10 shadow-soft-xl mb-6 sm:mb-8'
                 >
                   {/* Confirmation Number */}
-                  <div className='mb-8 pb-8 border-b border-nature-divider'>
+                  <div className='mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-nature-divider'>
                     <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-2'>
                       CONFIRMATION NUMBER
                     </div>
-                    <div className='text-3xl font-display font-bold tracking-tight'>#BK-2024-00152</div>
+                    <div className='text-2xl sm:text-3xl font-display font-bold tracking-tight'>#BK-2024-00152</div>
                   </div>
 
                   {/* Details */}
-                  <div className='space-y-6'>
-                    <div className='flex items-start gap-4'>
-                      <div className='w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
-                        <Calendar className='w-6 h-6 text-nature-primary' />
+                  <div className='space-y-4 sm:space-y-5 md:space-y-6'>
+                    <div className='flex items-start gap-3 sm:gap-4'>
+                      <div className='w-10 h-10 sm:w-12 sm:h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
+                        <Calendar className='w-5 h-5 sm:w-6 sm:h-6 text-nature-primary' />
                       </div>
                       <div className='flex-grow'>
                         <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-1'>
                           DATE & TIME
                         </div>
-                        <div className='font-semibold text-lg'>January 15, 2024</div>
-                        <div className='text-sm text-nature-text-secondary font-light'>
+                        <div className='font-semibold text-base sm:text-lg'>January 15, 2024</div>
+                        <div className='text-xs sm:text-sm text-nature-text-secondary font-light'>
                           {selectedTime} -{' '}
                           {(() => {
                             const [time, period] = selectedTime.split(' ');
@@ -1164,23 +1164,23 @@ export function BookingPage() {
                       </div>
                     </div>
 
-                    <div className='flex items-start gap-4'>
-                      <div className='w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
-                        <User className='w-6 h-6 text-nature-primary' />
+                    <div className='flex items-start gap-3 sm:gap-4'>
+                      <div className='w-10 h-10 sm:w-12 sm:h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
+                        <User className='w-5 h-5 sm:w-6 sm:h-6 text-nature-primary' />
                       </div>
                       <div className='flex-grow'>
                         <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-1'>
                           EMPLOYEE
                         </div>
-                        <div className='font-semibold text-lg'>
+                        <div className='font-semibold text-base sm:text-lg'>
                           {staffMembers.find((s) => s.id === selectedStaff)?.name || 'Any Staff'}
                         </div>
                       </div>
                     </div>
 
-                    <div className='flex items-start gap-4'>
-                      <div className='w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
-                        <Scissors className='w-6 h-6 text-nature-primary' />
+                    <div className='flex items-start gap-3 sm:gap-4'>
+                      <div className='w-10 h-10 sm:w-12 sm:h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
+                        <Scissors className='w-5 h-5 sm:w-6 sm:h-6 text-nature-primary' />
                       </div>
                       <div className='flex-grow'>
                         <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-1'>
@@ -1190,12 +1190,12 @@ export function BookingPage() {
                           const service = services.find((s) => s.id === serviceId);
                           if (!service) return null;
                           return (
-                            <div key={serviceId} className='font-semibold text-lg'>
+                            <div key={serviceId} className='font-semibold text-base sm:text-lg'>
                               {service.name}
                             </div>
                           );
                         })}
-                        <div className='text-sm text-nature-text-secondary mt-2 font-light'>
+                        <div className='text-xs sm:text-sm text-nature-text-secondary mt-2 font-light'>
                           {totalDuration} minutes • $
                           {selectedServices.reduce((total, serviceId) => {
                             const service = services.find((s) => s.id === serviceId);
@@ -1205,16 +1205,16 @@ export function BookingPage() {
                       </div>
                     </div>
 
-                    <div className='flex items-start gap-4'>
-                      <div className='w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
-                        <MapPin className='w-6 h-6 text-nature-primary' />
+                    <div className='flex items-start gap-3 sm:gap-4'>
+                      <div className='w-10 h-10 sm:w-12 sm:h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0'>
+                        <MapPin className='w-5 h-5 sm:w-6 sm:h-6 text-nature-primary' />
                       </div>
                       <div className='flex-grow'>
                         <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-1'>
                           LOCATION
                         </div>
-                        <div className='font-semibold text-lg text-nature-text-primary'>AICOMPOS</div>
-                        <div className='text-sm text-nature-text-secondary font-light'>
+                        <div className='font-semibold text-base sm:text-lg text-nature-text-primary'>AICOMPOS</div>
+                        <div className='text-xs sm:text-sm text-nature-text-secondary font-light'>
                           123 Main Street, City, ST 12345
                         </div>
                       </div>
@@ -1223,14 +1223,14 @@ export function BookingPage() {
                 </motion.div>
 
                 {/* Action Buttons */}
-                <motion.div variants={itemVariants} className='w-full max-w-2xl flex flex-col sm:flex-row gap-4 mb-6'>
+                <motion.div variants={itemVariants} className='w-full max-w-2xl flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6'>
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleBackToHome}
-                    className='flex-1 bg-white border-2 border-nature-primary text-nature-primary px-6 py-3.5 rounded-soft flex items-center justify-center gap-3 font-medium hover:bg-nature-primary/5 transition-all'
+                    className='flex-1 bg-white border-2 border-nature-primary text-nature-primary px-4 sm:px-6 py-3 sm:py-3.5 rounded-soft flex items-center justify-center gap-2 sm:gap-3 font-medium hover:bg-nature-primary/5 transition-all text-sm sm:text-base'
                   >
-                    <ArrowLeft className='w-5 h-5' />
+                    <ArrowLeft className='w-4 h-4 sm:w-5 sm:h-5' />
                     Back to Home
                   </motion.button>
 
@@ -1238,9 +1238,9 @@ export function BookingPage() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleDownloadTicket}
-                    className='flex-1 bg-nature-primary text-white px-6 py-3.5 rounded-soft flex items-center justify-center gap-3 font-medium hover:bg-nature-primary/90 transition-all shadow-soft hover:shadow-soft-lg'
+                    className='flex-1 bg-nature-primary text-white px-4 sm:px-6 py-3 sm:py-3.5 rounded-soft flex items-center justify-center gap-2 sm:gap-3 font-medium hover:bg-nature-primary/90 transition-all shadow-soft hover:shadow-soft-lg text-sm sm:text-base'
                   >
-                    <Download className='w-5 h-5' />
+                    <Download className='w-4 h-4 sm:w-5 sm:h-5' />
                     Download Ticket
                   </motion.button>
                 </motion.div>
@@ -1248,9 +1248,9 @@ export function BookingPage() {
                 {/* Email Notice */}
                 <motion.div
                   variants={itemVariants}
-                  className='w-full max-w-2xl border-2 border-dashed border-nature-divider rounded-soft p-4 bg-nature-surface/30'
+                  className='w-full max-w-2xl border-2 border-dashed border-nature-divider rounded-soft p-3 sm:p-4 bg-nature-surface/30'
                 >
-                  <p className='text-center text-xs text-nature-text-tertiary font-light'>
+                  <p className='text-center text-xs sm:text-sm text-nature-text-tertiary font-light'>
                     A confirmation email has been sent to john.doe@example.com
                   </p>
                 </motion.div>
