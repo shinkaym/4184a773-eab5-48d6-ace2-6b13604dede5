@@ -11,8 +11,8 @@ const images = [
 
 const slideVariants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? 1000 : -1000,
-    opacity: 0,
+    x: direction > 0 ? '100%' : '-100%',
+    opacity: 1,
   }),
   center: {
     zIndex: 1,
@@ -21,8 +21,8 @@ const slideVariants = {
   },
   exit: (direction: number) => ({
     zIndex: 0,
-    x: direction < 0 ? 1000 : -1000,
-    opacity: 0,
+    x: direction < 0 ? '100%' : '-100%',
+    opacity: 1,
   }),
 };
 
@@ -55,12 +55,12 @@ export function Carousel() {
             exit='exit'
             transition={{
               x: {
-                type: 'spring',
-                stiffness: 300,
-                damping: 30,
+                type: 'tween',
+                duration: 0.5,
+                ease: 'easeInOut',
               },
               opacity: {
-                duration: 0.2,
+                duration: 0.5,
               },
             }}
             className='absolute inset-0 flex items-center justify-center bg-nature-bg/30'

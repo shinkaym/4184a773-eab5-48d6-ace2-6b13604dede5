@@ -9,6 +9,8 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   ArrowLeft,
   Check,
   Clock,
@@ -28,11 +30,13 @@ export function BookingPage() {
 
   // Step 1 state
   const [selectedStaff, setSelectedStaff] = useState<string>('any');
-  const [selectedDate, setSelectedDate] = useState<number>(15);
+  const [selectedDate, setSelectedDate] = useState<number>(new Date().getDate());
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedTime, setSelectedTime] = useState<string>('09:30 AM');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth()); // 0 = January, 11 = December
+  const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
 
   const staffMembers = [
     { id: 'any', name: 'Any Staff', image: '' },
@@ -127,7 +131,7 @@ export function BookingPage() {
   };
 
   const timeSlots = generateTimeSlots();
-  const disabledTimeSlots = ['11:00 AM', '11:15 AM', '02:00 PM', '02:15 PM'];
+  const disabledTimeSlots = ['09:00 AM', '09:15 AM', '06:30 PM', '06:45 PM'];
 
   const toggleService = (serviceId: string) => {
     setSelectedServices((prev) =>
@@ -204,6 +208,47 @@ export function BookingPage() {
   const handleLogout = () => {
     navigate('/');
   };
+
+  const handlePreviousMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
+
+  const handleFirstMonth = () => {
+    setCurrentMonth(0);
+  };
+
+  const handleLastMonth = () => {
+    setCurrentMonth(11);
+  };
+
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
   return (
     <div className='min-h-screen w-full bg-nature-main flex flex-col font-sans text-nature-text-primary'>
@@ -376,7 +421,7 @@ export function BookingPage() {
                     <h2 className='text-2xl font-display font-semibold tracking-tight'>Select Date</h2>
                   </div>
 
-                  <div className='relative rounded-softer border border-nature-divider p-8 bg-gradient-to-br from-white to-nature-surface/30 max-w-2xl shadow-soft'>
+                  <div className='relative rounded-softer border border-nature-divider p-8 bg-gradient-to-br from-white to-nature-surface/30 max-w-2xl mx-auto shadow-soft'>
                     {/* Quick Selection */}
                     <div className='mb-6 flex flex-wrap gap-3'>
                       <motion.button
@@ -390,7 +435,11 @@ export function BookingPage() {
                       <motion.button
                         whileHover={{ y: -2 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => setSelectedDate(15)}
+                        onClick={() => {
+                          setSelectedDate(new Date().getDate());
+                          setCurrentMonth(new Date().getMonth());
+                          setCurrentYear(new Date().getFullYear());
+                        }}
                         className='px-4 py-2.5 rounded-soft border border-nature-primary bg-nature-primary/5 hover:bg-nature-primary/10 transition-all text-xs font-medium tracking-wide flex items-center gap-2'
                       >
                         <span className='w-2 h-2 rounded-full bg-nature-primary' />
@@ -408,25 +457,51 @@ export function BookingPage() {
 
                     {/* Month Navigation */}
                     <div className='flex items-center justify-between mb-8 pb-6 border-b border-nature-divider'>
-                      <motion.button
-                        whileHover={{ x: -2 }}
-                        whileTap={{ scale: 0.9 }}
-                        className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
-                      >
-                        <ChevronLeft className='w-5 h-5' />
-                      </motion.button>
+                      <div className='flex items-center gap-2'>
+                        <motion.button
+                          whileHover={{ x: -2 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={handleFirstMonth}
+                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          title='First month of year'
+                        >
+                          <ChevronsLeft className='w-5 h-5' />
+                        </motion.button>
+                        <motion.button
+                          whileHover={{ x: -2 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={handlePreviousMonth}
+                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          title='Previous month'
+                        >
+                          <ChevronLeft className='w-5 h-5' />
+                        </motion.button>
+                      </div>
                       <div className='flex flex-col items-center'>
                         <span className='font-display text-2xl font-semibold tracking-wide text-nature-text-primary'>
-                          January 2024
+                          {monthNames[currentMonth]} {currentYear}
                         </span>
                       </div>
-                      <motion.button
-                        whileHover={{ x: 2 }}
-                        whileTap={{ scale: 0.9 }}
-                        className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
-                      >
-                        <ChevronRight className='w-5 h-5' />
-                      </motion.button>
+                      <div className='flex items-center gap-2'>
+                        <motion.button
+                          whileHover={{ x: 2 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={handleNextMonth}
+                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          title='Next month'
+                        >
+                          <ChevronRight className='w-5 h-5' />
+                        </motion.button>
+                        <motion.button
+                          whileHover={{ x: 2 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={handleLastMonth}
+                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          title='Last month of year'
+                        >
+                          <ChevronsRight className='w-5 h-5' />
+                        </motion.button>
+                      </div>
                     </div>
 
                     {/* Calendar Grid */}
@@ -440,8 +515,22 @@ export function BookingPage() {
                       {[...Array(31)].map((_, i) => {
                         const date = i + 1;
                         const isSelected = date === selectedDate;
-                        const isDisabled = date === 11;
-                        const isToday = date === 15;
+
+                        // Get current date for comparison
+                        const today = new Date();
+                        const currentDay = today.getDate();
+                        const currentMonthIndex = today.getMonth();
+                        const currentYearValue = today.getFullYear();
+
+                        // Disable dates before today
+                        const isDisabled =
+                          currentYear < currentYearValue ? true : // Past year - disable all
+                          currentYear > currentYearValue ? false : // Future year - enable all
+                          currentMonth < currentMonthIndex ? true : // Past month - disable all
+                          currentMonth > currentMonthIndex ? false : // Future month - enable all
+                          date < currentDay; // Same month - disable dates before today
+
+                        const isToday = date === currentDay && currentMonth === currentMonthIndex && currentYear === currentYearValue;
                         return (
                           <motion.button
                             key={i}
@@ -452,7 +541,7 @@ export function BookingPage() {
                             className={`
                               aspect-square text-sm font-medium flex items-center justify-center transition-all rounded-soft
                               ${isSelected ? 'bg-nature-primary text-white shadow-soft scale-105' : ''}
-                              ${isDisabled ? 'text-nature-text-tertiary/30 cursor-not-allowed line-through' : ''}
+                              ${isDisabled ? 'text-nature-text-tertiary/30 cursor-not-allowed line-through bg-nature-surface/50 border border-nature-divider/50' : ''}
                               ${
                                 !isSelected && !isDisabled
                                   ? 'bg-white border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5'
@@ -476,7 +565,7 @@ export function BookingPage() {
                         <div className='flex items-center gap-3'>
                           <div className='text-right'>
                             <div className='text-base font-semibold text-nature-text-primary'>
-                              January {selectedDate}, 2024
+                              {monthNames[currentMonth]} {selectedDate}, {currentYear}
                             </div>
                             <div className='text-xs text-nature-text-secondary'>
                               {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][
