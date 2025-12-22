@@ -30,7 +30,7 @@ export default {
         'nature-header': 'linear-gradient(135deg, #7D8EE1, #94E4B8)',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Roboto', 'system-ui', 'sans-serif'],
       }
     },
   },

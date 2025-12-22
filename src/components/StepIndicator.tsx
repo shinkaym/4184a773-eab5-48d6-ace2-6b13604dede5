@@ -1,4 +1,3 @@
-import React from 'react';
 import { Check } from 'lucide-react';
 interface StepProps {
   number: number;
@@ -34,23 +33,23 @@ export function StepIndicator({
         return 'text-nature-text-tertiary font-medium';
     }
   };
-  return <div className="flex gap-4 relative">
+  return (
+    <div className='flex gap-4 relative'>
       {/* Vertical Line */}
-      {!isLast && <div className="absolute left-[15px] top-10 bottom-[-24px] w-[2px] bg-nature-divider/50 -z-10" />}
+      {!isLast && <div className='absolute left-[15px] top-10 bottom-[-24px] w-[2px] bg-nature-divider/50 -z-10' />}
 
       {/* Circle Indicator */}
-      <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${getCircleStyles()}`}>
-        {status === 'completed' ? <Check className="w-4 h-4" /> : <span className="text-sm font-bold">{number}</span>}
+      <div
+        className={`w-8 h-8 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${getCircleStyles()}`}
+      >
+        {status === 'completed' ? <Check className='w-4 h-4' /> : <span className='text-sm font-bold'>{number}</span>}
       </div>
 
       {/* Text Content */}
-      <div className="pt-1 pb-8">
-        <div className={`text-sm tracking-wide uppercase mb-1 ${getTextStyles()}`}>
-          {title}
-        </div>
-        {subtitle && <div className="text-[10px] font-mono text-nature-text-tertiary uppercase tracking-wider">
-            {subtitle}
-          </div>}
+      <div className='pt-1 pb-8'>
+        <div className={`text-sm tracking-wide mb-1 ${getTextStyles()}`}>{title}</div>
+        {subtitle && <div className='text-[10px] font-mono text-nature-text-tertiary tracking-wider'>{subtitle}</div>}
       </div>
-    </div>;
+    </div>
+  );
 }

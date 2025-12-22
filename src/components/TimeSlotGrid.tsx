@@ -21,23 +21,25 @@ export function TimeSlotGrid({
       `}>
       {time}
     </button>;
-  return <div className="space-y-6">
+  return (
+    <div className='space-y-6'>
       <div>
-        <h5 className="text-[10px] font-mono text-nature-text-tertiary uppercase tracking-widest mb-3">
-          Morning
-        </h5>
-        <div className="grid grid-cols-3 gap-3">
-          {morningSlots.map(time => <SlotButton key={time} time={time} disabled={time === '11:00 AM'} />)}
+        <h5 className='text-[10px] font-mono text-nature-text-tertiary tracking-widest mb-3'>Morning</h5>
+        <div className='grid grid-cols-3 gap-3'>
+          {morningSlots.map((time) => (
+            <SlotButton key={time} time={time} disabled={time === '11:00 AM'} />
+          ))}
         </div>
       </div>
 
       <div>
-        <h5 className="text-[10px] font-mono text-nature-text-tertiary uppercase tracking-widest mb-3">
-          Afternoon
-        </h5>
-        <div className="grid grid-cols-3 gap-3">
-          {afternoonSlots.map(time => <SlotButton key={time} time={time} />)}
+        <h5 className='text-[10px] font-mono text-nature-text-tertiary tracking-widest mb-3'>Afternoon</h5>
+        <div className='grid grid-cols-3 gap-3'>
+          {afternoonSlots.map((time) => (
+            <SlotButton key={time} time={time} />
+          ))}
         </div>
       </div>
-    </div>;
+    </div>
+  );
 }

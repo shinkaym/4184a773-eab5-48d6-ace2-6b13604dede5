@@ -6,8 +6,8 @@ export function LoginPage() {
       {/* Header */}
       <header className='w-full max-w-7xl mx-auto flex justify-between items-center mb-8 px-2'>
         <div className='flex items-center gap-2'>
-          <h1 className='text-2xl md:text-3xl font-black tracking-tighter text-nature-text-primary uppercase'>
-            Store <span className='text-white drop-shadow-md'>Name</span>
+          <h1 className='text-2xl md:text-3xl font-black tracking-tighter text-nature-text-primary'>
+            AICOM<span className='text-white drop-shadow-md'>POS</span>
           </h1>
         </div>
       </header>

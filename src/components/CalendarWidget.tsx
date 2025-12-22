@@ -1,4 +1,3 @@
-import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 export function CalendarWidget() {
   const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
@@ -102,34 +101,42 @@ export function CalendarWidget() {
     day: '31',
     disabled: false
   }];
-  return <div className="border border-nature-divider rounded-lg p-6 bg-white">
-      <div className="flex items-center justify-between mb-6">
-        <button className="p-1 hover:bg-nature-surface rounded transition-colors">
-          <ChevronLeft className="w-4 h-4 text-nature-text-secondary" />
+  return (
+    <div className='border border-nature-divider rounded-lg p-6 bg-white'>
+      <div className='flex items-center justify-between mb-6'>
+        <button className='p-1 hover:bg-nature-surface rounded transition-colors'>
+          <ChevronLeft className='w-4 h-4 text-nature-text-secondary' />
         </button>
-        <span className="font-mono font-bold text-sm tracking-widest uppercase">
-          Jan 2024
-        </span>
-        <button className="p-1 hover:bg-nature-surface rounded transition-colors">
-          <ChevronRight className="w-4 h-4 text-nature-text-secondary" />
+        <span className='font-mono font-bold text-sm tracking-widest'>Jan 2024</span>
+        <button className='p-1 hover:bg-nature-surface rounded transition-colors'>
+          <ChevronRight className='w-4 h-4 text-nature-text-secondary' />
         </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-y-4 text-center">
-        {days.map(day => <div key={day} className="text-[10px] font-mono text-nature-text-tertiary uppercase">
+      <div className='grid grid-cols-7 gap-y-4 text-center'>
+        {days.map((day) => (
+          <div key={day} className='text-[10px] font-mono text-nature-text-tertiary'>
             {day}
-          </div>)}
+          </div>
+        ))}
 
-        {dates.map((date, i) => <div key={i} className="flex justify-center">
-            {date.day && <button className={`
+        {dates.map((date, i) => (
+          <div key={i} className='flex justify-center'>
+            {date.day && (
+              <button
+                className={`
                   w-8 h-8 text-sm flex items-center justify-center rounded-sm transition-all
                   ${date.highlighted ? 'bg-nature-text-primary text-white font-bold' : ''}
                   ${date.selected ? 'font-bold border-b-2 border-nature-text-primary' : ''}
                   ${!date.highlighted && !date.selected ? 'text-nature-text-secondary hover:bg-nature-surface' : ''}
-                `}>
+                `}
+              >
                 {date.day}
-              </button>}
-          </div>)}
+              </button>
+            )}
+          </div>
+        ))}
       </div>
-    </div>;
+    </div>
+  );
 }

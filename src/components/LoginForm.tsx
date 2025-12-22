@@ -13,6 +13,7 @@ export function LoginForm() {
     agreed: false,
   });
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const dobInputRef = React.useRef<HTMLInputElement>(null);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -34,7 +35,7 @@ export function LoginForm() {
     }
     text-nature-text-primary placeholder:text-nature-text-tertiary/50
   `;
-  const labelClasses = 'block text-xs font-bold uppercase tracking-wider text-nature-text-primary mb-2';
+  const labelClasses = 'block text-xs font-bold tracking-wider text-nature-text-primary mb-2';
   return (
     <div className='w-full h-full flex flex-col justify-center p-8 md:p-12 bg-nature-surface rounded-xl shadow-xl border border-white/50 relative overflow-hidden'>
       {/* Decorative background element */}
@@ -53,8 +54,7 @@ export function LoginForm() {
           duration: 0.5,
         }}
       >
-        <h2 className='text-4xl font-bold text-nature-text-primary mb-2 tracking-tight'>LOGIN</h2>
-        <p className='text-nature-text-secondary font-mono text-sm mb-10'> // ENTER CREDENTIALS</p>
+        <h2 className='text-4xl font-bold text-nature-text-primary tracking-tight mb-10'>LOGIN</h2>
 
         <form className='space-y-6' onSubmit={handleSubmit}>
           {/* Name Field */}
@@ -72,7 +72,7 @@ export function LoginForm() {
                 type='text'
                 id='name'
                 name='name'
-                placeholder='FULL NAME'
+                placeholder='Full name'
                 value={formData.name}
                 onChange={handleChange}
                 onFocus={() => setFocusedField('name')}
@@ -109,7 +109,7 @@ export function LoginForm() {
 
           {/* Progressive Profiling Separator */}
           <div className='flex items-center gap-4 py-2 opacity-60'>
-            <span className='text-[10px] font-mono uppercase tracking-widest text-nature-text-tertiary whitespace-nowrap'>
+            <span className='text-[10px] font-mono tracking-widest text-nature-text-tertiary whitespace-nowrap'>
               [ PROGRESSIVE PROFILING ]
             </span>
             <div className='h-px bg-nature-divider flex-grow'></div>
@@ -153,14 +153,18 @@ export function LoginForm() {
                   }`}
                 />
                 <input
+                  ref={dobInputRef}
                   type='date'
                   id='dob'
                   name='dob'
                   value={formData.dob}
                   onChange={handleChange}
+                  onClick={() => dobInputRef.current?.showPicker()}
                   onFocus={() => setFocusedField('dob')}
                   onBlur={() => setFocusedField(null)}
-                  className={inputClasses('dob')}
+                  className={`${inputClasses(
+                    'dob'
+                  )} [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:opacity-0 cursor-pointer`}
                 />
               </div>
             </div>
@@ -187,7 +191,7 @@ export function LoginForm() {
               />
               <span className='text-sm text-nature-text-secondary font-medium group-hover:text-nature-text-primary transition-colors'>
                 I agree to the{' '}
-                <span className='underline decoration-nature-primary decoration-2 underline-offset-2'>
+                <span className='underline decoration-nature-primary decoration-2 underline-offset-2 text-nature-primary'>
                   Privacy Policy
                 </span>
               </span>
@@ -205,7 +209,7 @@ export function LoginForm() {
             }}
             className='w-full bg-nature-text-primary text-white h-14 rounded-lg flex items-center justify-between px-6 mt-8 group shadow-lg hover:shadow-xl transition-all'
           >
-            <span className='font-bold tracking-widest uppercase'>Next Step</span>
+            <span className='font-bold tracking-widest'>Next Step</span>
             <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
           </motion.button>
         </form>

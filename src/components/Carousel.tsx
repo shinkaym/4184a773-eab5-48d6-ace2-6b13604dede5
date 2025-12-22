@@ -1,45 +1,53 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { wrap } from 'popmotion';
+
 const images = [
-  '/image.png',
-  'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1000&q=80',
-  'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=80', // Forest placeholder
+  'https://images.unsplash.com/photo-1612887390768-fb02affea7a6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8bmFpbHN8ZW58MHx8MHx8fDA%3D',
+  'https://images.unsplash.com/photo-1604902396830-aca29e19b067?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG5haWxzfGVufDB8fDB8fHww', // Forest placeholder
+  'https://images.unsplash.com/photo-1619607146034-5a05296c8f9a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fG5haWxzfGVufDB8fDB8fHww', // Forest placeholder
 ];
+
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 1000 : -1000,
+    opacity: 0,
+  }),
+  center: {
+    zIndex: 1,
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    zIndex: 0,
+    x: direction < 0 ? 1000 : -1000,
+    opacity: 0,
+  }),
+};
+
 export function Carousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
-      opacity: 0,
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
-      opacity: 0,
-    }),
+  const [[page, direction], setPage] = useState([0, 0]);
+
+  // We have to find the wrapped index related to the page
+  const imageIndex = wrap(0, images.length, page);
+
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
   };
-  const swipe = (newDirection: number) => {
-    setDirection(newDirection);
-    if (newDirection === 1) {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    } else {
-      setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-    }
+
+  const goTo = (newIndex: number) => {
+    const newDirection = newIndex > imageIndex ? 1 : -1;
+    setPage([newIndex, newDirection]);
   };
+
   return (
     <div className='relative w-full h-full min-h-[400px] flex flex-col items-center justify-center p-8 border-2 border-nature-text-primary/10 rounded-xl bg-nature-surface/50 backdrop-blur-sm shadow-sm'>
       {/* Main Image Area */}
       <div className='relative w-full aspect-square max-w-md bg-white rounded-lg overflow-hidden shadow-inner border border-nature-divider'>
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
-            key={currentIndex}
+            key={page}
             custom={direction}
             variants={slideVariants}
             initial='enter'
@@ -57,16 +65,12 @@ export function Carousel() {
             }}
             className='absolute inset-0 flex items-center justify-center bg-nature-bg/30'
           >
-            {images[currentIndex] ? (
-              <img
-                src={images[currentIndex]}
-                alt={`Slide ${currentIndex + 1}`}
-                className='w-full h-full object-cover'
-              />
+            {images[imageIndex] ? (
+              <img src={images[imageIndex]} alt={`Slide ${imageIndex + 1}`} className='w-full h-full object-cover' />
             ) : (
               <div className='flex flex-col items-center text-nature-text-tertiary'>
                 <ImageIcon size={64} className='mb-4 opacity-50' />
-                <span className='uppercase tracking-widest text-sm font-medium'>Image Placeholder</span>
+                <span className='tracking-widest text-sm font-medium'>Image Placeholder</span>
               </div>
             )}
           </motion.div>
@@ -74,14 +78,14 @@ export function Carousel() {
 
         {/* Navigation Arrows */}
         <button
-          onClick={() => swipe(-1)}
+          onClick={() => paginate(-1)}
           className='absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white text-nature-text-primary rounded-full shadow-lg transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-nature-primary z-10'
           aria-label='Previous slide'
         >
           <ChevronLeft size={24} />
         </button>
         <button
-          onClick={() => swipe(1)}
+          onClick={() => paginate(1)}
           className='absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white text-nature-text-primary rounded-full shadow-lg transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-nature-primary z-10'
           aria-label='Next slide'
         >
@@ -94,12 +98,9 @@ export function Carousel() {
         {images.map((_, idx) => (
           <button
             key={idx}
-            onClick={() => {
-              setDirection(idx > currentIndex ? 1 : -1);
-              setCurrentIndex(idx);
-            }}
+            onClick={() => goTo(idx)}
             className={`w-3 h-3 rounded-sm transition-all duration-300 ${
-              idx === currentIndex ? 'bg-nature-text-primary scale-110' : 'bg-nature-divider hover:bg-nature-primary'
+              idx === imageIndex ? 'bg-nature-primary scale-110' : 'bg-nature-surface hover:bg-nature-primary'
             }`}
             aria-label={`Go to slide ${idx + 1}`}
           />

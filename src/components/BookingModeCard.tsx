@@ -1,5 +1,4 @@
-import React from 'react';
-import { ArrowRight, BoxIcon } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 interface BookingModeCardProps {
   title: string;
@@ -13,41 +12,37 @@ export function BookingModeCard({
   icon: Icon,
   onClick
 }: BookingModeCardProps) {
-  return <motion.div whileHover={{
-    scale: 1.02,
-    y: -5
-  }} whileTap={{
-    scale: 0.98
-  }} onClick={onClick} className="group relative w-full bg-white border-2 border-nature-text-primary p-8 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col h-full min-h-[400px]">
-      {/* Corner Brackets */}
-      <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-nature-text-primary" />
-      <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-nature-text-primary" />
-      <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-nature-text-primary" />
-      <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-nature-text-primary" />
+  return (
+    <motion.div
+      whileHover={{
+        scale: 1.02,
+        y: -5,
+      }}
+      whileTap={{
+        scale: 0.98,
+      }}
+      onClick={onClick}
+      className='group relative w-full bg-white p-8 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col h-full min-h-[400px]'
+    >
 
       {/* Icon Box */}
-      <div className="w-16 h-16 border-2 border-nature-text-primary flex items-center justify-center mb-8 bg-nature-surface group-hover:bg-nature-accent/20 transition-colors">
-        <Icon className="w-8 h-8 text-nature-text-primary" strokeWidth={1.5} />
+      <div className='w-16 h-16 border-2 border-nature-text-primary flex items-center justify-center mb-8 bg-nature-surface group-hover:bg-nature-accent/20 transition-colors'>
+        <Icon className='w-8 h-8 text-nature-text-primary' strokeWidth={1.5} />
       </div>
 
       {/* Content */}
-      <h3 className="text-2xl md:text-3xl font-bold text-nature-text-primary mb-4 uppercase tracking-tight">
-        {title}
-      </h3>
+      <h3 className='text-2xl md:text-3xl font-bold text-nature-text-primary mb-4 tracking-tight'>{title}</h3>
 
-      <p className="text-nature-text-secondary font-mono text-sm leading-relaxed mb-8 flex-grow">
-        {description}
-      </p>
+      <p className='text-nature-text-secondary font-mono text-sm leading-relaxed mb-8 flex-grow'>{description}</p>
 
       {/* Divider */}
-      <div className="w-full border-t border-dashed border-nature-divider mb-8" />
+      <div className='w-full border-t border-dashed border-nature-divider mb-8' />
 
       {/* Action Row */}
-      <div className="flex items-center justify-between mt-auto">
-        <span className="font-mono text-sm font-bold tracking-widest uppercase text-nature-text-primary">
-          Select Option
-        </span>
-        <ArrowRight className="w-6 h-6 text-nature-text-primary transform group-hover:translate-x-2 transition-transform duration-300" />
+      <div className='flex items-center justify-between mt-auto'>
+        <span className='font-mono text-sm font-bold tracking-widest text-nature-text-primary'>Select Option</span>
+        <ArrowRight className='w-6 h-6 text-nature-text-primary transform group-hover:translate-x-2 transition-transform duration-300' />
       </div>
-    </motion.div>;
+    </motion.div>
+  );
 }

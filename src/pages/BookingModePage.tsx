@@ -28,16 +28,6 @@ export function BookingModePage() {
   };
   return (
     <div className='min-h-screen w-full bg-nature-main p-4 md:p-8 flex flex-col relative overflow-hidden'>
-      {/* Background Grid Overlay */}
-      {/*<div
-        className="fixed inset-0 pointer-events-none z-0 opacity-20"
-        style={{
-          backgroundImage:
-            'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-       />*/}
-
       <div className='relative z-10 max-w-7xl mx-auto w-full flex flex-col min-h-[calc(100vh-4rem)]'>
         {/* Header */}
         <header className='flex justify-between items-start mb-16 md:mb-24'>
@@ -51,7 +41,7 @@ export function BookingModePage() {
               x: 0,
             }}
             onClick={() => navigate('/')}
-            className='flex items-center gap-2 px-6 py-3 bg-white border-2 border-nature-text-primary font-bold uppercase tracking-wider hover:bg-nature-surface transition-colors shadow-md hover:shadow-lg group'
+            className='flex items-center gap-2 px-6 py-3 bg-white font-bold tracking-wider hover:bg-nature-surface transition-colors shadow-md hover:shadow-lg group'
           >
             <ArrowLeft className='w-5 h-5 group-hover:-translate-x-1 transition-transform' />
             Back
@@ -66,12 +56,9 @@ export function BookingModePage() {
           className='flex-grow flex flex-col justify-center'
         >
           <motion.div variants={itemVariants} className='mb-12'>
-            <h1 className='text-4xl md:text-6xl font-black tracking-tighter text-nature-text-primary uppercase mb-4'>
-              Select Booking Mode
+            <h1 className='text-4xl md:text-6xl font-black tracking-tighter text-nature-text-primary mb-4'>
+              Select Booking Type
             </h1>
-            <p className='text-nature-text-tertiary font-mono text-sm md:text-base tracking-wide'>
-              // CHOOSE HOW YOU WANT TO SCHEDULE THIS APPOINTMENT
-            </p>
           </motion.div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-stretch'>
