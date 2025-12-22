@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import {
   Calendar,
   Phone,
@@ -33,12 +33,12 @@ export function BookingPage() {
   const [emblaStaffRef, emblaStaffApi] = useEmblaCarousel({
     align: 'start',
     dragFree: true,
-    containScroll: 'trimSnaps'
+    containScroll: 'trimSnaps',
   });
   const [emblaCategoryRef, emblaCategoryApi] = useEmblaCarousel({
     align: 'start',
     dragFree: true,
-    containScroll: 'trimSnaps'
+    containScroll: 'trimSnaps',
   });
 
   // Step 1 state
@@ -356,12 +356,12 @@ export function BookingPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className='max-w-3xl'
           >
-            <h1 className='text-5xl md:text-6xl font-display font-semibold tracking-tight text-white mb-5 drop-shadow-lg leading-tight'>
+            <h1 className='text-4xl md:text-5xl lg:text-6xl font-display font-semibold tracking-tight text-white mb-5 drop-shadow-lg leading-tight'>
               Professional
               <br />
               Beauty Services
             </h1>
-            <p className='text-white/90 text-lg font-light max-w-2xl leading-relaxed'>
+            <p className='text-white/90 text-base md:text-lg font-light max-w-2xl leading-relaxed'>
               Experience premium nail care and styling services with our expert team. Book your appointment in just a
               few simple steps.
             </p>
@@ -403,24 +403,27 @@ export function BookingPage() {
                 exit={{ opacity: 0, y: -20 }}
                 className='bg-white rounded-softer p-8 md:p-12 shadow-soft-lg'
               >
-                <motion.h1 variants={itemVariants} className='text-4xl font-display font-semibold tracking-tight mb-12'>
+                <motion.h1
+                  variants={itemVariants}
+                  className='text-3xl md:text-4xl font-display font-semibold tracking-tight mb-8 md:mb-12'
+                >
                   Select Appointment
                 </motion.h1>
 
                 {/* Client Info */}
                 <motion.div
                   variants={itemVariants}
-                  className='mb-10 p-5 bg-gradient-to-br from-nature-primary/5 to-nature-secondary/5 rounded-soft border-l-4 border-nature-primary'
+                  className='mb-10 p-4 sm:p-5 bg-gradient-to-br from-nature-primary/5 to-nature-secondary/5 rounded-soft border-l-4 border-nature-primary'
                 >
-                  <div className='flex items-center gap-4'>
-                    <div className='w-14 h-14 rounded-full bg-nature-primary/15 flex items-center justify-center'>
-                      <User className='w-7 h-7 text-nature-primary' />
+                  <div className='flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4'>
+                    <div className='w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-nature-primary/15 flex items-center justify-center flex-shrink-0'>
+                      <User className='w-6 h-6 sm:w-7 sm:h-7 text-nature-primary' />
                     </div>
                     <div className='flex-grow'>
                       <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-1'>CLIENT</div>
-                      <div className='font-semibold text-xl'>John Doe</div>
+                      <div className='font-semibold text-lg sm:text-xl'>John Doe</div>
                     </div>
-                    <div className='text-right text-sm text-nature-text-secondary font-light'>
+                    <div className='text-left sm:text-right text-sm text-nature-text-secondary font-light w-full sm:w-auto'>
                       <div>ID: #83920</div>
                       <div>(555) 123-4567</div>
                     </div>
@@ -429,23 +432,23 @@ export function BookingPage() {
 
                 {/* Select Employee */}
                 <motion.div variants={itemVariants} className='mb-10'>
-                  <div className='flex items-center justify-between mb-6'>
+                  <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6'>
                     <div className='flex items-center gap-3'>
                       <Scissors className='w-5 h-5 text-nature-primary' />
-                      <h2 className='text-2xl font-display font-semibold tracking-tight'>Select Employee</h2>
+                      <h2 className='text-xl md:text-2xl font-display font-semibold tracking-tight'>Select Employee</h2>
                     </div>
-                    <div className='flex items-center gap-3'>
-                      <div className='relative'>
+                    <div className='flex flex-col sm:flex-row items-stretch sm:items-center gap-3'>
+                      <div className='relative flex-grow sm:flex-grow-0'>
                         <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-nature-text-tertiary' />
                         <input
                           type='text'
                           placeholder='Search staff...'
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          className='pl-10 pr-4 py-2.5 border border-nature-divider rounded-soft text-sm focus:border-nature-primary focus:outline-none focus:ring-2 focus:ring-nature-primary/20 transition-all bg-white'
+                          className='w-full sm:w-auto pl-10 pr-4 py-2.5 border border-nature-divider rounded-soft text-sm focus:border-nature-primary focus:outline-none focus:ring-2 focus:ring-nature-primary/20 transition-all bg-white'
                         />
                       </div>
-                      <div className='flex gap-2'>
+                      <div className='flex gap-2 justify-center sm:justify-start'>
                         <button
                           onClick={scrollStaffPrev}
                           className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
@@ -485,10 +488,10 @@ export function BookingPage() {
                 <motion.div variants={itemVariants} className='mb-10'>
                   <div className='flex items-center gap-3 mb-6'>
                     <Calendar className='w-5 h-5 text-nature-primary' />
-                    <h2 className='text-2xl font-display font-semibold tracking-tight'>Select Date</h2>
+                    <h2 className='text-xl md:text-2xl font-display font-semibold tracking-tight'>Select Date</h2>
                   </div>
 
-                  <div className='relative rounded-softer border border-nature-divider p-8 bg-gradient-to-br from-white to-nature-surface/30 max-w-2xl mx-auto shadow-soft'>
+                  <div className='relative rounded-softer border border-nature-divider p-4 sm:p-6 md:p-8 bg-gradient-to-br from-white to-nature-surface/30 max-w-2xl mx-auto shadow-soft'>
                     {/* Quick Selection */}
                     <div className='mb-6 flex flex-wrap gap-3'>
                       <motion.button
@@ -523,50 +526,50 @@ export function BookingPage() {
                     </div>
 
                     {/* Month Navigation */}
-                    <div className='flex items-center justify-between mb-8 pb-6 border-b border-nature-divider'>
-                      <div className='flex items-center gap-2'>
+                    <div className='flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 pb-6 border-b border-nature-divider'>
+                      <div className='flex items-center gap-1 sm:gap-2'>
                         <motion.button
                           whileHover={{ x: -2 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={handleFirstMonth}
-                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          className='p-1.5 sm:p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
                           title='First month of year'
                         >
-                          <ChevronsLeft className='w-5 h-5' />
+                          <ChevronsLeft className='w-4 h-4 sm:w-5 sm:h-5' />
                         </motion.button>
                         <motion.button
                           whileHover={{ x: -2 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={handlePreviousMonth}
-                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          className='p-1.5 sm:p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
                           title='Previous month'
                         >
-                          <ChevronLeft className='w-5 h-5' />
+                          <ChevronLeft className='w-4 h-4 sm:w-5 sm:h-5' />
                         </motion.button>
                       </div>
                       <div className='flex flex-col items-center'>
-                        <span className='font-display text-2xl font-semibold tracking-wide text-nature-text-primary'>
+                        <span className='font-display text-xl sm:text-2xl font-semibold tracking-wide text-nature-text-primary'>
                           {monthNames[currentMonth]} {currentYear}
                         </span>
                       </div>
-                      <div className='flex items-center gap-2'>
+                      <div className='flex items-center gap-1 sm:gap-2'>
                         <motion.button
                           whileHover={{ x: 2 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={handleNextMonth}
-                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          className='p-1.5 sm:p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
                           title='Next month'
                         >
-                          <ChevronRight className='w-5 h-5' />
+                          <ChevronRight className='w-4 h-4 sm:w-5 sm:h-5' />
                         </motion.button>
                         <motion.button
                           whileHover={{ x: 2 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={handleLastMonth}
-                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          className='p-1.5 sm:p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
                           title='Last month of year'
                         >
-                          <ChevronsRight className='w-5 h-5' />
+                          <ChevronsRight className='w-4 h-4 sm:w-5 sm:h-5' />
                         </motion.button>
                       </div>
                     </div>
@@ -591,13 +594,18 @@ export function BookingPage() {
 
                         // Disable dates before today
                         const isDisabled =
-                          currentYear < currentYearValue ? true : // Past year - disable all
-                          currentYear > currentYearValue ? false : // Future year - enable all
-                          currentMonth < currentMonthIndex ? true : // Past month - disable all
-                          currentMonth > currentMonthIndex ? false : // Future month - enable all
-                          date < currentDay; // Same month - disable dates before today
+                          currentYear < currentYearValue
+                            ? true // Past year - disable all
+                            : currentYear > currentYearValue
+                            ? false // Future year - enable all
+                            : currentMonth < currentMonthIndex
+                            ? true // Past month - disable all
+                            : currentMonth > currentMonthIndex
+                            ? false // Future month - enable all
+                            : date < currentDay; // Same month - disable dates before today
 
-                        const isToday = date === currentDay && currentMonth === currentMonthIndex && currentYear === currentYearValue;
+                        const isToday =
+                          date === currentDay && currentMonth === currentMonthIndex && currentYear === currentYearValue;
                         return (
                           <motion.button
                             key={i}
@@ -608,7 +616,11 @@ export function BookingPage() {
                             className={`
                               aspect-square text-sm font-medium flex items-center justify-center transition-all rounded-soft
                               ${isSelected ? 'bg-nature-primary text-white shadow-soft scale-105' : ''}
-                              ${isDisabled ? 'text-nature-text-tertiary/30 cursor-not-allowed line-through bg-nature-surface/50 border border-nature-divider/50' : ''}
+                              ${
+                                isDisabled
+                                  ? 'text-nature-text-tertiary/30 cursor-not-allowed line-through bg-nature-surface/50 border border-nature-divider/50'
+                                  : ''
+                              }
                               ${
                                 !isSelected && !isDisabled
                                   ? 'bg-white border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5'
@@ -625,19 +637,21 @@ export function BookingPage() {
 
                     {/* Selection Info */}
                     <div className='mt-6 pt-6 border-t border-nature-divider'>
-                      <div className='flex items-center justify-between'>
+                      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
                         <div className='text-xs font-medium text-nature-text-tertiary tracking-wider'>
                           SELECTED DATE
                         </div>
                         <div className='flex items-center gap-3'>
-                          <div className='text-right'>
-                            <div className='text-base font-semibold text-nature-text-primary'>
+                          <div className='text-left sm:text-right'>
+                            <div className='text-sm sm:text-base font-semibold text-nature-text-primary'>
                               {monthNames[currentMonth]} {selectedDate}, {currentYear}
                             </div>
                             <div className='text-xs text-nature-text-secondary'>
-                              {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][
-                                selectedDate % 7
-                              ]}
+                              {
+                                ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][
+                                  selectedDate % 7
+                                ]
+                              }
                             </div>
                           </div>
                         </div>
@@ -648,13 +662,13 @@ export function BookingPage() {
 
                 {/* Select Services */}
                 <motion.div variants={itemVariants} className='mb-10'>
-                  <div className='flex items-center justify-between mb-6'>
+                  <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6'>
                     <div className='flex items-center gap-3'>
                       <Scissors className='w-5 h-5 text-nature-primary' />
-                      <h2 className='text-2xl font-display font-semibold tracking-tight'>Select Services</h2>
+                      <h2 className='text-xl md:text-2xl font-display font-semibold tracking-tight'>Select Services</h2>
                     </div>
                     {selectedServices.length > 0 && (
-                      <div className='px-4 py-2 bg-nature-primary rounded-soft text-white text-xs font-medium'>
+                      <div className='px-4 py-2 bg-nature-primary rounded-soft text-white text-xs font-medium w-fit'>
                         {selectedServices.length} SELECTED • {totalDuration} MIN
                       </div>
                     )}
@@ -663,26 +677,26 @@ export function BookingPage() {
                   {/* Category Filter */}
                   <div className='mb-6 relative'>
                     <div className='flex items-center justify-between mb-4'>
-                      <div className='text-sm font-medium text-nature-text-tertiary'>CATEGORIES</div>
-                      <div className='flex gap-2'>
+                      <div className='text-xs sm:text-sm font-medium text-nature-text-tertiary'>CATEGORIES</div>
+                      <div className='flex gap-1 sm:gap-2'>
                         <button
                           onClick={scrollCategoryPrev}
-                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          className='p-1.5 sm:p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
                           aria-label='Previous category'
                         >
-                          <ChevronLeft className='w-4 h-4' />
+                          <ChevronLeft className='w-3 h-3 sm:w-4 sm:h-4' />
                         </button>
                         <button
                           onClick={scrollCategoryNext}
-                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          className='p-1.5 sm:p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
                           aria-label='Next category'
                         >
-                          <ChevronRight className='w-4 h-4' />
+                          <ChevronRight className='w-3 h-3 sm:w-4 sm:h-4' />
                         </button>
                       </div>
                     </div>
                     <div className='overflow-hidden py-2' ref={emblaCategoryRef}>
-                      <div className='flex gap-3 px-1'>
+                      <div className='flex gap-2 sm:gap-3 px-1'>
                         {categories.map((category) => {
                           const isSelected = selectedCategory === category.id;
                           const categoryCount =
@@ -696,7 +710,7 @@ export function BookingPage() {
                                 whileHover={{ y: -2 }}
                                 whileTap={{ scale: 0.98 }}
                                 className={`
-                                  px-4 py-2.5 rounded-soft border transition-all font-medium text-sm flex items-center gap-3 whitespace-nowrap
+                                  px-2.5 sm:px-3 md:px-4 py-2 sm:py-2.5 rounded-soft border transition-all font-medium text-xs sm:text-sm flex items-center gap-2 sm:gap-3 whitespace-nowrap
                                   ${
                                     isSelected
                                       ? 'bg-nature-primary text-white border-nature-primary shadow-soft scale-[1.02]'
@@ -707,10 +721,13 @@ export function BookingPage() {
                                 <img
                                   src={category.image}
                                   alt={category.name}
-                                  className='w-8 h-8 rounded-soft object-cover'
+                                  className='w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-soft object-cover flex-shrink-0'
                                 />
-                                <span>{category.name}</span>
-                                <span className={`text-xs ${isSelected ? 'text-white/80' : 'text-nature-text-tertiary'}`}>
+                                <span className='hidden sm:inline'>{category.name}</span>
+                                <span className='sm:hidden'>{category.name.split(' ')[0]}</span>
+                                <span
+                                  className={`text-xs ${isSelected ? 'text-white/80' : 'text-nature-text-tertiary'}`}
+                                >
                                   ({categoryCount})
                                 </span>
                               </motion.button>
@@ -750,9 +767,7 @@ export function BookingPage() {
                               <img src={service.image} alt={service.name} className='w-full h-full object-cover' />
                               <div
                                 className={`absolute inset-0 transition-all ${
-                                  isSelected
-                                    ? 'bg-nature-primary/10'
-                                    : 'bg-gradient-to-t from-black/20 to-transparent'
+                                  isSelected ? 'bg-nature-primary/10' : 'bg-gradient-to-t from-black/20 to-transparent'
                                 }`}
                               />
 
@@ -761,7 +776,11 @@ export function BookingPage() {
                                 <div
                                   className={`
                                     w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all backdrop-blur-sm
-                                    ${isSelected ? 'bg-nature-primary border-nature-primary' : 'bg-white/90 border-white'}
+                                    ${
+                                      isSelected
+                                        ? 'bg-nature-primary border-nature-primary'
+                                        : 'bg-white/90 border-white'
+                                    }
                                   `}
                                 >
                                   {isSelected && <Check className='w-5 h-5 text-white stroke-[3]' />}
@@ -792,8 +811,8 @@ export function BookingPage() {
 
                 {/* Select Time */}
                 <motion.div variants={itemVariants} className='mb-10'>
-                  <div className='flex items-center justify-between mb-6'>
-                    <h2 className='text-2xl font-display font-semibold tracking-tight flex items-center gap-3'>
+                  <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6'>
+                    <h2 className='text-xl md:text-2xl font-display font-semibold tracking-tight flex items-center gap-3'>
                       <Clock className='w-5 h-5 text-nature-primary' />
                       Available Times
                     </h2>
@@ -804,20 +823,20 @@ export function BookingPage() {
                   </div>
 
                   {selectedServices.length === 0 ? (
-                    <div className='border-2 border-dashed border-nature-divider rounded-softer p-12 text-center bg-nature-surface/30'>
-                      <Clock className='w-12 h-12 mx-auto mb-4 text-nature-text-tertiary' />
-                      <p className='text-nature-text-tertiary text-sm'>
+                    <div className='border-2 border-dashed border-nature-divider rounded-softer p-8 md:p-12 text-center bg-nature-surface/30'>
+                      <Clock className='w-10 h-10 md:w-12 md:h-12 mx-auto mb-4 text-nature-text-tertiary' />
+                      <p className='text-nature-text-tertiary text-xs sm:text-sm'>
                         Please select at least one service to see available times
                       </p>
                     </div>
                   ) : (
-                    <div className='rounded-softer border border-nature-divider p-6 bg-white'>
-                      <div className='flex items-center justify-between mb-4'>
+                    <div className='rounded-softer border border-nature-divider p-4 sm:p-5 md:p-6 bg-white'>
+                      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4'>
                         <div className='text-xs font-medium text-nature-text-tertiary tracking-wider'>
-                          15-MINUTE INTERVALS • 9:00 AM - 7:00 PM
+                          15-MIN INTERVALS • 9:00 AM - 7:00 PM
                         </div>
                         {selectedTime && (
-                          <div className='flex items-center gap-3 text-xs'>
+                          <div className='flex items-center gap-2 sm:gap-3 text-xs flex-wrap'>
                             <div className='flex items-center gap-1.5'>
                               <div className='w-3 h-3 rounded-sm bg-nature-primary' />
                               <span className='text-nature-text-tertiary font-medium'>Start</span>
@@ -829,7 +848,7 @@ export function BookingPage() {
                           </div>
                         )}
                       </div>
-                      <div className='grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 max-h-96 overflow-y-auto'>
+                      <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1.5 sm:gap-2 max-h-96 overflow-y-auto'>
                         {timeSlots.map((time) => {
                           const isStartTime = time === selectedTime;
                           const isInRange = isTimeInRange(time);
@@ -840,7 +859,7 @@ export function BookingPage() {
                               disabled={isDisabled}
                               onClick={() => setSelectedTime(time)}
                               className={`
-                                py-2.5 px-2 text-xs font-medium rounded-soft border transition-all
+                                py-2 sm:py-2.5 px-1.5 sm:px-2 text-xs font-medium rounded-soft border transition-all
                                 ${isStartTime ? 'bg-nature-primary text-white border-nature-primary shadow-soft' : ''}
                                 ${
                                   isInRange && !isStartTime
@@ -892,7 +911,9 @@ export function BookingPage() {
                 exit={{ opacity: 0, y: -20 }}
                 className='bg-white rounded-softer p-8 md:p-12 shadow-soft-lg'
               >
-                <h1 className='text-4xl font-display font-semibold tracking-tight mb-12'>Review Your Booking</h1>
+                <h1 className='text-3xl md:text-4xl font-display font-semibold tracking-tight mb-8 md:mb-12'>
+                  Review Your Booking
+                </h1>
 
                 <div className='space-y-8 mb-12'>
                   {/* Date & Time */}
@@ -930,9 +951,7 @@ export function BookingPage() {
                       <h3 className='font-semibold text-lg'>
                         {staffMembers.find((s) => s.id === selectedStaff)?.name || 'Any Staff'}
                       </h3>
-                      <p className='text-sm text-nature-text-secondary font-light'>
-                        Employee
-                      </p>
+                      <p className='text-sm text-nature-text-secondary font-light'>Employee</p>
                     </div>
                   </div>
 
@@ -1041,9 +1060,13 @@ export function BookingPage() {
                 </motion.div>
 
                 {/* Success Message */}
-                <motion.div variants={itemVariants} className='text-center mb-12'>
-                  <h1 className='text-5xl font-display font-semibold tracking-tight mb-4'>Booking Confirmed</h1>
-                  <p className='text-nature-text-secondary font-light'>Your appointment has been successfully booked</p>
+                <motion.div variants={itemVariants} className='text-center mb-8 md:mb-12'>
+                  <h1 className='text-3xl md:text-4xl lg:text-5xl font-display font-semibold tracking-tight mb-4'>
+                    Booking Confirmed
+                  </h1>
+                  <p className='text-sm md:text-base text-nature-text-secondary font-light'>
+                    Your appointment has been successfully booked
+                  </p>
                 </motion.div>
 
                 {/* Confirmation Card */}
@@ -1094,7 +1117,9 @@ export function BookingPage() {
                         <User className='w-6 h-6 text-nature-primary' />
                       </div>
                       <div className='flex-grow'>
-                        <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-1'>EMPLOYEE</div>
+                        <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-1'>
+                          EMPLOYEE
+                        </div>
                         <div className='font-semibold text-lg'>
                           {staffMembers.find((s) => s.id === selectedStaff)?.name || 'Any Staff'}
                         </div>
@@ -1106,7 +1131,9 @@ export function BookingPage() {
                         <Scissors className='w-6 h-6 text-nature-primary' />
                       </div>
                       <div className='flex-grow'>
-                        <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-1'>SERVICES</div>
+                        <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-1'>
+                          SERVICES
+                        </div>
                         {selectedServices.map((serviceId) => {
                           const service = services.find((s) => s.id === serviceId);
                           if (!service) return null;
@@ -1131,9 +1158,13 @@ export function BookingPage() {
                         <MapPin className='w-6 h-6 text-nature-primary' />
                       </div>
                       <div className='flex-grow'>
-                        <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-1'>LOCATION</div>
+                        <div className='text-xs font-medium text-nature-text-tertiary tracking-wider mb-1'>
+                          LOCATION
+                        </div>
                         <div className='font-semibold text-lg text-nature-text-primary'>AICOMPOS</div>
-                        <div className='text-sm text-nature-text-secondary font-light'>123 Main Street, City, ST 12345</div>
+                        <div className='text-sm text-nature-text-secondary font-light'>
+                          123 Main Street, City, ST 12345
+                        </div>
                       </div>
                     </div>
                   </div>

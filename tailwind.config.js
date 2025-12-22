@@ -5,6 +5,14 @@ export default {
   './src/**/*.{js,ts,jsx,tsx}'
 ],
   theme: {
+    screens: {
+      'xs': '475px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       colors: {
         nature: {
@@ -13,10 +21,12 @@ export default {
           accent: '#94E4B8', // Mint green
           'accent-warm': '#D2691E', // Earthy Orange/Terracotta
           'accent-muted': '#6B5E5E', // Muted brown
+          main: '#F5F5F0', // Main background - soft off-white
           bg: '#E8E7E0', // Warm cream
           surface: '#F2F1EC', // Light cream surface
           'surface-light': '#EDECE7', // Component surface
           'surface-disabled': '#D4D3CE', // Disabled surface
+          'divider-light': '#E5E7EB', // Light divider
           text: {
             primary: '#0F172A', // Deep slate
             secondary: '#1E293B', // Dark gray-blue
@@ -50,7 +60,28 @@ export default {
       borderRadius: {
         'soft': '12px',
         'softer': '16px',
-      }
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '100': '25rem',
+        '112': '28rem',
+        '128': '32rem',
+      },
+      maxWidth: {
+        '8xl': '88rem',
+        '9xl': '96rem',
+      },
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: '1rem',
+          sm: '2rem',
+          lg: '4rem',
+          xl: '5rem',
+          '2xl': '6rem',
+        },
+      },
     },
   },
   plugins: [],
