@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Calendar,
   Phone,
@@ -33,8 +33,6 @@ export function BookingPage() {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedTime, setSelectedTime] = useState<string>('09:30 AM');
   const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(0);
-  const [isHoveringCarousel, setIsHoveringCarousel] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const staffMembers = [
     {
@@ -73,9 +71,6 @@ export function BookingPage() {
       image: 'https://i.pravatar.cc/150?img=5',
     },
   ];
-  // Carousel configuration
-  const cardsPerPage = 4; // Show 4 cards per page on desktop
-  const totalPages = Math.ceil(staffMembers.length / cardsPerPage);
 
   // Service categories
   const categories = [
@@ -190,25 +185,6 @@ export function BookingPage() {
     const currentMinutes = timeToMinutes(timeSlot);
     const endMinutes = startMinutes + totalDuration;
     return currentMinutes >= startMinutes && currentMinutes < endMinutes;
-  };
-
-  // Auto-scroll carousel logic
-  useEffect(() => {
-    if (!isHoveringCarousel && currentStep === 1 && totalPages > 1) {
-      const interval = setInterval(() => {
-        setCurrentPage((prev) => (prev + 1) % totalPages);
-      }, 3000); // Change every 3 seconds
-
-      return () => clearInterval(interval);
-    }
-  }, [isHoveringCarousel, currentStep, totalPages]);
-
-  const handleNextPage = () => {
-    setCurrentPage((prev) => (prev + 1) % totalPages);
-  };
-
-  const handlePrevPage = () => {
-    setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
   };
 
   // Animation variants
@@ -440,77 +416,18 @@ export function BookingPage() {
                   </div>
                 </div>
 
-                {/* Carousel Container */}
-                <div
-                  className='relative'
-                  onMouseEnter={() => setIsHoveringCarousel(true)}
-                  onMouseLeave={() => setIsHoveringCarousel(false)}
-                >
-                  {/* Navigation Buttons - Only show if there are multiple pages */}
-                  {totalPages > 1 && (
-                    <>
-                      <button
-                        onClick={handlePrevPage}
-                        className='absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 bg-white border-2 border-nature-text-primary flex items-center justify-center hover:bg-nature-surface transition-colors shadow-lg'
-                        aria-label='Previous page'
-                      >
-                        <ChevronLeft className='w-5 h-5' />
-                      </button>
-
-                      <button
-                        onClick={handleNextPage}
-                        className='absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 bg-white border-2 border-nature-text-primary flex items-center justify-center hover:bg-nature-surface transition-colors shadow-lg'
-                        aria-label='Next page'
-                      >
-                        <ChevronRight className='w-5 h-5' />
-                      </button>
-                    </>
-                  )}
-
-                  {/* Carousel Wrapper */}
-                  <div className='overflow-hidden'>
-                    <motion.div
-                      className='flex gap-4'
-                      animate={{
-                        x: `-${currentPage * 100}%`,
-                      }}
-                      transition={{
-                        type: 'spring',
-                        stiffness: 300,
-                        damping: 30,
-                      }}
-                    >
-                      {staffMembers.map((staff, index) => (
-                        <div key={index} className='min-w-[calc(25%-0.75rem)] flex-shrink-0'>
-                          <StaffCard
-                            name={staff.name}
-                            image={staff.image}
-                            isAnyStaff={staff.id === 'any'}
-                            isSelected={selectedStaff === staff.id}
-                            onClick={() => setSelectedStaff(staff.id)}
-                          />
-                        </div>
-                      ))}
-                    </motion.div>
-                  </div>
-
-                  {/* Carousel Indicators - Only show if there are multiple pages */}
-                  {totalPages > 1 && (
-                    <div className='flex justify-center gap-2 mt-6'>
-                      {Array.from({ length: totalPages }).map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentPage(index)}
-                          className={`w-2 h-2 rounded-full transition-all ${
-                            index === currentPage
-                              ? 'bg-nature-text-primary w-8'
-                              : 'bg-nature-divider hover:bg-nature-text-tertiary'
-                          }`}
-                          aria-label={`Go to page ${index + 1}`}
-                        />
-                      ))}
-                    </div>
-                  )}
+                {/* Staff Grid */}
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+                  {staffMembers.map((staff) => (
+                    <StaffCard
+                      key={staff.id}
+                      name={staff.name}
+                      image={staff.image}
+                      isAnyStaff={staff.id === 'any'}
+                      isSelected={selectedStaff === staff.id}
+                      onClick={() => setSelectedStaff(staff.id)}
+                    />
+                  ))}
                 </div>
               </motion.div>
 
