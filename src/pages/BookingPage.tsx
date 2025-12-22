@@ -438,44 +438,166 @@ export function BookingPage() {
                   <h2 className='text-xl font-black tracking-tight'>Select Date</h2>
                 </div>
 
-                <div className='border-2 border-nature-divider rounded-lg p-6 bg-white max-w-md'>
-                  <div className='flex items-center justify-between mb-6'>
-                    <button className='p-1 hover:bg-nature-surface rounded transition-colors'>
-                      <ChevronLeft className='w-5 h-5' />
-                    </button>
-                    <span className='font-mono font-bold text-sm tracking-widest'>Jan 2024</span>
-                    <button className='p-1 hover:bg-nature-surface rounded transition-colors'>
-                      <ChevronRight className='w-5 h-5' />
-                    </button>
+                <div className='relative border-2 border-nature-text-primary p-8 bg-gradient-to-br from-white to-nature-surface/20 max-w-2xl shadow-lg'>
+                  {/* Decorative corner accent */}
+                  <div className='absolute -top-1 -right-1 w-6 h-6 bg-nature-primary' />
+                  <div className='absolute -bottom-1 -left-1 w-6 h-6 bg-nature-primary' />
+
+                  {/* Quick Selection Buttons */}
+                  <div className='mb-6 flex flex-wrap gap-3'>
+                    <motion.button
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSelectedDate(1)}
+                      className='group relative px-4 py-2 border-2 border-nature-divider bg-white hover:border-nature-text-primary transition-all overflow-hidden'
+                    >
+                      <div className='absolute inset-0 bg-nature-primary translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+                      <span className='relative z-10 text-xs font-bold tracking-wider group-hover:text-white transition-colors'>
+                        START OF MONTH
+                      </span>
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSelectedDate(15)}
+                      className='group relative px-4 py-2 border-2 border-nature-divider bg-white hover:border-nature-text-primary transition-all overflow-hidden'
+                    >
+                      <div className='absolute inset-0 bg-nature-text-primary translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+                      <span className='relative z-10 text-xs font-bold tracking-wider group-hover:text-white transition-colors flex items-center gap-2'>
+                        <span className='w-2 h-2 rounded-full bg-nature-primary group-hover:bg-white' />
+                        TODAY
+                      </span>
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSelectedDate(31)}
+                      className='group relative px-4 py-2 border-2 border-nature-divider bg-white hover:border-nature-text-primary transition-all overflow-hidden'
+                    >
+                      <div className='absolute inset-0 bg-nature-primary translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+                      <span className='relative z-10 text-xs font-bold tracking-wider group-hover:text-white transition-colors'>
+                        END OF MONTH
+                      </span>
+                    </motion.button>
                   </div>
 
-                  <div className='grid grid-cols-7 gap-2'>
-                    {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map((day) => (
-                      <div key={day} className='text-center text-[10px] font-mono text-nature-text-tertiary font-bold'>
-                        {day}
+                  {/* Month Navigation */}
+                  <div className='flex items-center justify-between mb-8 pb-4 border-b-2 border-nature-divider'>
+                    <motion.button
+                      whileHover={{ scale: 1.1, x: -2 }}
+                      whileTap={{ scale: 0.9 }}
+                      className='p-2 border-2 border-nature-text-primary hover:bg-nature-text-primary hover:text-white transition-all group'
+                    >
+                      <ChevronLeft className='w-5 h-5' />
+                    </motion.button>
+                    <div className='flex flex-col items-center'>
+                      <span className='font-mono font-black text-lg tracking-[0.3em] text-nature-text-primary'>
+                        JAN 2024
+                      </span>
+                      <div className='flex items-center gap-1 mt-1'>
+                        <div className='w-8 h-0.5 bg-nature-primary' />
+                        <div className='w-2 h-0.5 bg-nature-primary' />
+                      </div>
+                    </div>
+                    <motion.button
+                      whileHover={{ scale: 1.1, x: 2 }}
+                      whileTap={{ scale: 0.9 }}
+                      className='p-2 border-2 border-nature-text-primary hover:bg-nature-text-primary hover:text-white transition-all group'
+                    >
+                      <ChevronRight className='w-5 h-5' />
+                    </motion.button>
+                  </div>
+
+                  {/* Calendar Grid */}
+                  <div className='grid grid-cols-7 gap-3'>
+                    {/* Day Headers */}
+                    {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map((day, idx) => (
+                      <div
+                        key={day}
+                        className='text-center pb-3 border-b-2 border-nature-divider'
+                      >
+                        <div className='text-[9px] font-mono text-nature-text-tertiary font-black tracking-[0.15em]'>
+                          {day}
+                        </div>
                       </div>
                     ))}
 
+                    {/* Date Buttons */}
                     {[...Array(31)].map((_, i) => {
                       const date = i + 1;
                       const isSelected = date === selectedDate;
                       const isDisabled = date === 11;
+                      const isToday = date === 15;
                       return (
-                        <button
+                        <motion.button
                           key={i}
                           disabled={isDisabled}
                           onClick={() => setSelectedDate(date)}
+                          whileHover={!isDisabled ? { scale: 1.15, y: -2 } : {}}
+                          whileTap={!isDisabled ? { scale: 0.95 } : {}}
                           className={`
-                            aspect-square text-sm flex items-center justify-center rounded transition-all
-                            ${isSelected ? 'bg-nature-text-primary text-white font-bold' : ''}
-                            ${isDisabled ? 'text-nature-text-tertiary/30 line-through cursor-not-allowed' : ''}
-                            ${!isSelected && !isDisabled ? 'hover:bg-nature-surface' : ''}
+                            relative aspect-square text-sm font-bold flex items-center justify-center transition-all
+                            ${
+                              isSelected
+                                ? 'bg-nature-text-primary text-white shadow-lg scale-110 z-10'
+                                : ''
+                            }
+                            ${
+                              isDisabled
+                                ? 'text-nature-text-tertiary/20 cursor-not-allowed relative'
+                                : ''
+                            }
+                            ${
+                              !isSelected && !isDisabled
+                                ? 'bg-white border-2 border-nature-divider hover:border-nature-text-primary hover:shadow-md'
+                                : ''
+                            }
+                            ${isToday && !isSelected ? 'ring-2 ring-nature-primary ring-offset-2' : ''}
                           `}
                         >
-                          {date}
-                        </button>
+                          {/* Disabled date diagonal line */}
+                          {isDisabled && (
+                            <div className='absolute inset-0 flex items-center justify-center'>
+                              <div className='w-full h-0.5 bg-nature-text-tertiary/20 rotate-45' />
+                            </div>
+                          )}
+
+                          {/* Selected date corner accent */}
+                          {isSelected && (
+                            <>
+                              <div className='absolute -top-0.5 -right-0.5 w-2 h-2 bg-nature-primary' />
+                              <div className='absolute -bottom-0.5 -left-0.5 w-2 h-2 bg-nature-primary' />
+                            </>
+                          )}
+
+                          <span className='relative z-10'>{date}</span>
+                        </motion.button>
                       );
                     })}
+                  </div>
+
+                  {/* Selection Info */}
+                  <div className='mt-6 pt-6 border-t-2 border-nature-divider'>
+                    <div className='flex items-center justify-between'>
+                      <div className='text-[10px] font-mono text-nature-text-tertiary tracking-wider font-bold'>
+                        SELECTED DATE
+                      </div>
+                      <div className='flex items-center gap-3'>
+                        <div className='text-right'>
+                          <div className='text-sm font-black text-nature-text-primary'>
+                            January {selectedDate}, 2024
+                          </div>
+                          <div className='text-[10px] font-mono text-nature-text-secondary tracking-wider'>
+                            {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][
+                              selectedDate % 7
+                            ]}
+                          </div>
+                        </div>
+                        <div className='w-10 h-10 border-2 border-nature-text-primary bg-nature-text-primary text-white flex items-center justify-center font-black text-lg'>
+                          {selectedDate}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
