@@ -49,10 +49,26 @@ export function BookingPage() {
   ];
 
   const categories = [
-    { id: 'all', name: 'All Services', icon: '✨' },
-    { id: 'nails', name: 'Nails', icon: '💅' },
-    { id: 'spa', name: 'Spa & Wellness', icon: '🧖' },
-    { id: 'beauty', name: 'Beauty', icon: '💄' },
+    {
+      id: 'all',
+      name: 'All Services',
+      image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=100&h=100&fit=crop',
+    },
+    {
+      id: 'nails',
+      name: 'Nails',
+      image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=100&h=100&fit=crop',
+    },
+    {
+      id: 'spa',
+      name: 'Spa & Wellness',
+      image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=100&h=100&fit=crop',
+    },
+    {
+      id: 'beauty',
+      name: 'Beauty',
+      image: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=100&h=100&fit=crop',
+    },
   ];
 
   const services = [
@@ -608,7 +624,7 @@ export function BookingPage() {
                           whileHover={{ y: -2 }}
                           whileTap={{ scale: 0.95 }}
                           className={`
-                            px-5 py-2.5 rounded-soft border transition-all font-medium text-sm
+                            px-4 py-2.5 rounded-soft border transition-all font-medium text-sm flex items-center gap-3
                             ${
                               isSelected
                                 ? 'bg-nature-primary text-white border-nature-primary shadow-soft'
@@ -616,9 +632,13 @@ export function BookingPage() {
                             }
                           `}
                         >
-                          <span className='mr-2'>{category.icon}</span>
-                          {category.name}
-                          <span className={`ml-2 text-xs ${isSelected ? 'text-white/80' : 'text-nature-text-tertiary'}`}>
+                          <img
+                            src={category.image}
+                            alt={category.name}
+                            className='w-8 h-8 rounded-soft object-cover'
+                          />
+                          <span>{category.name}</span>
+                          <span className={`text-xs ${isSelected ? 'text-white/80' : 'text-nature-text-tertiary'}`}>
                             ({categoryCount})
                           </span>
                         </motion.button>
