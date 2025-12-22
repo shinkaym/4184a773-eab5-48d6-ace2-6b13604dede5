@@ -17,6 +17,8 @@ import {
   MapPin,
   Download,
   Briefcase,
+  Menu,
+  X,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -28,6 +30,7 @@ import logo from '../assets/images/logo.jpg';
 export function BookingPage() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Embla Carousel refs
   const [emblaStaffRef, emblaStaffApi] = useEmblaCarousel({
@@ -310,17 +313,31 @@ export function BookingPage() {
         </div>
 
         {/* Navigation */}
-        <nav className='relative z-10 w-full px-6 py-6'>
+        <nav className='relative z-10 w-full px-4 sm:px-6 py-4 sm:py-6'>
           <div className='max-w-[1400px] mx-auto flex justify-between items-center'>
-            <div className='flex items-center gap-3'>
-              <img src={logo} alt='AICOMPOS Logo' className='h-10 w-auto rounded-soft shadow-soft' />
-              <span className='font-display text-2xl font-semibold tracking-tight text-white drop-shadow-lg'>
+            <div className='flex items-center gap-2 sm:gap-3'>
+              {/* Hamburger Menu Button - Mobile/Tablet only */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className='lg:hidden p-2 rounded-soft bg-white/10 backdrop-blur-md hover:bg-white/20 transition-all'
+                aria-label='Toggle menu'
+              >
+                {mobileMenuOpen ? (
+                  <X className='w-5 h-5 text-white' />
+                ) : (
+                  <Menu className='w-5 h-5 text-white' />
+                )}
+              </button>
+
+              <img src={logo} alt='AICOMPOS Logo' className='h-8 sm:h-10 w-auto rounded-soft shadow-soft' />
+              <span className='font-display text-lg sm:text-xl md:text-2xl font-semibold tracking-tight text-white drop-shadow-lg'>
                 AICOM<span className='text-nature-primary'>POS</span>
               </span>
             </div>
 
-            <div className='flex items-center gap-8'>
-              <div className='hidden md:flex items-center gap-6 text-sm font-medium'>
+            <div className='flex items-center gap-3 sm:gap-6 md:gap-8'>
+              {/* Desktop Navigation Links */}
+              <div className='hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-medium'>
                 <a href='#' className='flex items-center gap-2 text-white/90 hover:text-white transition-colors'>
                   <Calendar className='w-4 h-4' />
                   Appointments
@@ -331,37 +348,72 @@ export function BookingPage() {
                 </a>
               </div>
 
-              <div className='flex items-center gap-4 pl-6 border-l border-white/30'>
-                <button className='flex items-center gap-2 px-4 py-2 rounded-soft bg-white/10 backdrop-blur-md text-sm font-medium text-white hover:bg-white/20 transition-all'>
-                  <User className='w-4 h-4' />
-                  John Wick
+              <div className='flex items-center gap-2 sm:gap-3 md:gap-4 pl-3 sm:pl-4 md:pl-6 border-l border-white/30'>
+                <button className='flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-soft bg-white/10 backdrop-blur-md text-xs sm:text-sm font-medium text-white hover:bg-white/20 transition-all'>
+                  <User className='w-3 h-3 sm:w-4 sm:h-4' />
+                  <span className='hidden sm:inline'>John Wick</span>
+                  <span className='sm:hidden'>John</span>
                 </button>
                 <button
                   onClick={handleLogout}
-                  className='flex items-center gap-2 text-sm font-medium text-white/90 hover:text-nature-error transition-colors'
+                  className='flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium text-white/90 hover:text-nature-error transition-colors'
                 >
-                  <LogOut className='w-4 h-4' />
-                  Logout
+                  <LogOut className='w-3 h-3 sm:w-4 sm:h-4' />
+                  <span className='hidden md:inline'>Logout</span>
                 </button>
               </div>
             </div>
           </div>
+
+          {/* Mobile Menu Dropdown */}
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className='lg:hidden overflow-hidden'
+              >
+                <div className='mt-4 py-4 px-4 bg-white/10 backdrop-blur-md rounded-soft'>
+                  <div className='flex flex-col gap-3'>
+                    <a
+                      href='#'
+                      className='flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-soft transition-all'
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Calendar className='w-5 h-5' />
+                      <span className='font-medium'>Appointments</span>
+                    </a>
+                    <a
+                      href='#'
+                      className='flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-soft transition-all'
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Phone className='w-5 h-5' />
+                      <span className='font-medium'>Contact</span>
+                    </a>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </nav>
 
         {/* Hero Content */}
-        <div className='relative z-10 max-w-[1400px] mx-auto px-6 h-full flex flex-col justify-center'>
+        <div className='relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 h-full flex flex-col justify-center'>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className='max-w-3xl'
           >
-            <h1 className='text-4xl md:text-5xl lg:text-6xl font-display font-semibold tracking-tight text-white mb-5 drop-shadow-lg leading-tight'>
+            <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-semibold tracking-tight text-white mb-4 sm:mb-5 drop-shadow-lg leading-tight'>
               Professional
               <br />
               Beauty Services
             </h1>
-            <p className='text-white/90 text-base md:text-lg font-light max-w-2xl leading-relaxed'>
+            <p className='text-white/90 text-sm sm:text-base md:text-lg font-light max-w-2xl leading-relaxed'>
               Experience premium nail care and styling services with our expert team. Book your appointment in just a
               few simple steps.
             </p>
@@ -370,7 +422,7 @@ export function BookingPage() {
       </div>
 
       {/* Main Content */}
-      <div className='flex-grow w-full max-w-[1400px] mx-auto p-6 md:py-12 grid grid-cols-1 lg:grid-cols-12 gap-12'>
+      <div className='flex-grow w-full max-w-[1400px] mx-auto p-4 sm:p-6 md:py-12 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 lg:gap-12'>
         {/* Left Sidebar - Steps */}
         <div className='lg:col-span-3 hidden lg:block'>
           <div className='sticky top-8'>
