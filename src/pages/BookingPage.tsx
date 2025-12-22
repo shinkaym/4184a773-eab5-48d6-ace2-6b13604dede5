@@ -322,11 +322,7 @@ export function BookingPage() {
                 className='lg:hidden p-2 rounded-soft bg-white/10 backdrop-blur-md hover:bg-white/20 transition-all'
                 aria-label='Toggle menu'
               >
-                {mobileMenuOpen ? (
-                  <X className='w-5 h-5 text-white' />
-                ) : (
-                  <Menu className='w-5 h-5 text-white' />
-                )}
+                {mobileMenuOpen ? <X className='w-5 h-5 text-white' /> : <Menu className='w-5 h-5 text-white' />}
               </button>
 
               <img src={logo} alt='AICOMPOS Logo' className='h-8 sm:h-10 w-auto rounded-soft shadow-soft' />
@@ -791,12 +787,12 @@ export function BookingPage() {
                   </div>
 
                   {filteredServices.length === 0 ? (
-                    <div className='border-2 border-dashed border-nature-divider rounded-softer p-12 text-center bg-nature-surface/30'>
-                      <Scissors className='w-12 h-12 mx-auto mb-4 text-nature-text-tertiary' />
-                      <p className='text-nature-text-tertiary text-sm'>No services found in this category</p>
+                    <div className='border-2 border-dashed border-nature-divider rounded-softer p-8 md:p-12 text-center bg-nature-surface/30'>
+                      <Scissors className='w-10 h-10 md:w-12 md:h-12 mx-auto mb-4 text-nature-text-tertiary' />
+                      <p className='text-nature-text-tertiary text-xs sm:text-sm'>No services found in this category</p>
                     </div>
                   ) : (
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4'>
                       {filteredServices.map((service) => {
                         const isSelected = selectedServices.includes(service.id);
                         return (
@@ -815,7 +811,7 @@ export function BookingPage() {
                             `}
                           >
                             {/* Service Image */}
-                            <div className='relative h-40 overflow-hidden'>
+                            <div className='relative h-32 sm:h-36 md:h-40 overflow-hidden'>
                               <img src={service.image} alt={service.name} className='w-full h-full object-cover' />
                               <div
                                 className={`absolute inset-0 transition-all ${
@@ -824,10 +820,10 @@ export function BookingPage() {
                               />
 
                               {/* Checkmark */}
-                              <div className='absolute top-3 right-3'>
+                              <div className='absolute top-2 right-2 sm:top-3 sm:right-3'>
                                 <div
                                   className={`
-                                    w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all backdrop-blur-sm
+                                    w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full border-2 flex items-center justify-center transition-all backdrop-blur-sm
                                     ${
                                       isSelected
                                         ? 'bg-nature-primary border-nature-primary'
@@ -835,24 +831,24 @@ export function BookingPage() {
                                     }
                                   `}
                                 >
-                                  {isSelected && <Check className='w-5 h-5 text-white stroke-[3]' />}
+                                  {isSelected && <Check className='w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white stroke-[3]' />}
                                 </div>
                               </div>
                             </div>
 
                             {/* Service Info */}
-                            <div className='p-5'>
+                            <div className='p-3 sm:p-4 md:p-5'>
                               <h3
-                                className={`text-lg font-semibold tracking-tight mb-1 ${
+                                className={`text-base sm:text-lg font-semibold tracking-tight mb-1 ${
                                   isSelected ? 'text-nature-text-primary' : ''
                                 }`}
                               >
                                 {service.name}
                               </h3>
-                              <div className='text-xs font-medium text-nature-text-tertiary tracking-wide mb-3'>
+                              <div className='text-xs font-medium text-nature-text-tertiary tracking-wide mb-2 sm:mb-3'>
                                 {service.duration} MINUTES
                               </div>
-                              <div className='text-2xl font-bold tracking-tight'>${service.price}</div>
+                              <div className='text-xl sm:text-2xl font-bold tracking-tight'>${service.price}</div>
                             </div>
                           </motion.button>
                         );
@@ -1223,7 +1219,10 @@ export function BookingPage() {
                 </motion.div>
 
                 {/* Action Buttons */}
-                <motion.div variants={itemVariants} className='w-full max-w-2xl flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6'>
+                <motion.div
+                  variants={itemVariants}
+                  className='w-full max-w-2xl flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6'
+                >
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
