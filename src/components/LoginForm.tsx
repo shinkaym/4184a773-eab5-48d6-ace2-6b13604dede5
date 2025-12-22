@@ -60,7 +60,7 @@ export function LoginForm() {
           {/* Name Field */}
           <div className='space-y-1'>
             <label htmlFor='name' className={labelClasses}>
-              Name
+              Full Name
             </label>
             <div className='relative'>
               <User

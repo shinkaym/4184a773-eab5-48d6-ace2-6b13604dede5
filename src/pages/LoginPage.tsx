@@ -1,11 +1,14 @@
 import { Carousel } from '../components/Carousel';
 import { LoginForm } from '../components/LoginForm';
+import logo from '../assets/images/logo.jpg';
+
 export function LoginPage() {
   return (
     <div className='min-h-screen w-full bg-nature-main p-4 md:p-8 flex flex-col'>
       {/* Header */}
       <header className='w-full max-w-7xl mx-auto flex justify-between items-center mb-8 px-2'>
         <div className='flex items-center gap-2'>
+          <img src={logo} alt='AICOMPOS Logo' className='h-8 md:h-10 w-auto' />
           <h1 className='text-2xl md:text-3xl font-black tracking-tighter text-nature-text-primary'>
             AICOM<span className='text-white drop-shadow-md'>POS</span>
           </h1>

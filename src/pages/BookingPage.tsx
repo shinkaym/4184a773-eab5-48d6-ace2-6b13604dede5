@@ -20,6 +20,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { StaffCard } from '../components/StaffCard';
 import { StepIndicator } from '../components/StepIndicator';
+import logo from '../assets/images/logo.jpg';
 
 export function BookingPage() {
   const navigate = useNavigate();
@@ -185,7 +186,7 @@ export function BookingPage() {
         <nav className='relative z-10 w-full px-6 py-6'>
           <div className='max-w-[1400px] mx-auto flex justify-between items-center'>
             <div className='flex items-center gap-3'>
-              <div className='w-8 h-8 bg-white border-2 border-white shadow-lg' />
+              <img src={logo} alt='AICOMPOS Logo' className='h-8 w-auto shadow-lg' />
               <span className='font-black text-lg tracking-tight text-nature-text-primary drop-shadow-lg'>
                 AICOM
                 <span className='text-white drop-shadow-md'>POS</span>
