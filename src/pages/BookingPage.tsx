@@ -306,7 +306,7 @@ export function BookingPage() {
             alt='Nail Salon Banner'
             className='w-full h-full object-cover'
           />
-          <div className='absolute inset-0 bg-gradient-to-b from-nature-text-primary/40 via-nature-text-primary/20 to-nature-bg/90' />
+          <div className='absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70' />
         </div>
 
         {/* Navigation */}
@@ -464,8 +464,8 @@ export function BookingPage() {
                     </div>
                   </div>
 
-                  <div className='overflow-hidden' ref={emblaStaffRef}>
-                    <div className='flex gap-3'>
+                  <div className='overflow-hidden py-2' ref={emblaStaffRef}>
+                    <div className='flex gap-3 px-1'>
                       {staffMembers.map((staff) => (
                         <div key={staff.id} className='flex-[0_0_160px] min-w-0'>
                           <StaffCard
@@ -681,8 +681,8 @@ export function BookingPage() {
                         </button>
                       </div>
                     </div>
-                    <div className='overflow-hidden' ref={emblaCategoryRef}>
-                      <div className='flex gap-3'>
+                    <div className='overflow-hidden py-2' ref={emblaCategoryRef}>
+                      <div className='flex gap-3 px-1'>
                         {categories.map((category) => {
                           const isSelected = selectedCategory === category.id;
                           const categoryCount =
@@ -694,12 +694,12 @@ export function BookingPage() {
                               <motion.button
                                 onClick={() => setSelectedCategory(category.id)}
                                 whileHover={{ y: -2 }}
-                                whileTap={{ scale: 0.95 }}
+                                whileTap={{ scale: 0.98 }}
                                 className={`
                                   px-4 py-2.5 rounded-soft border transition-all font-medium text-sm flex items-center gap-3 whitespace-nowrap
                                   ${
                                     isSelected
-                                      ? 'bg-nature-primary text-white border-nature-primary shadow-soft'
+                                      ? 'bg-nature-primary text-white border-nature-primary shadow-soft scale-[1.02]'
                                       : 'bg-white text-nature-text-secondary border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5'
                                   }
                                 `}

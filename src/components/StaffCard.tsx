@@ -13,8 +13,7 @@ export function StaffCard({ name, image, isSelected, onClick, isAnyStaff }: Staf
   return (
     <motion.div
       whileHover={{
-        y: -4,
-        scale: 1.02,
+        y: -2,
       }}
       whileTap={{
         scale: 0.98,
@@ -24,7 +23,7 @@ export function StaffCard({ name, image, isSelected, onClick, isAnyStaff }: Staf
         relative p-3 rounded-soft border cursor-pointer transition-all duration-300 flex flex-col items-center text-center bg-white overflow-hidden
         ${
           isSelected
-            ? 'border-nature-primary shadow-soft-lg'
+            ? 'border-nature-primary shadow-soft-lg scale-[1.02]'
             : 'border-nature-divider hover:border-nature-primary hover:shadow-soft'
         }
       `}
