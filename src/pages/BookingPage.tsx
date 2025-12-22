@@ -17,14 +17,12 @@ import {
   Briefcase,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { StaffCard } from '../components/StaffCard';
 import { StepIndicator } from '../components/StepIndicator';
 
-interface BookingPageProps {
-  onComplete?: () => void;
-}
-
-export function BookingPage({ onComplete }: BookingPageProps) {
+export function BookingPage() {
+  const navigate = useNavigate();
   // Step management
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
 
@@ -122,7 +120,7 @@ export function BookingPage({ onComplete }: BookingPageProps) {
   };
 
   const handleBackToHome = () => {
-    onComplete?.();
+    navigate('/');
   };
 
   const handleDownloadTicket = () => {

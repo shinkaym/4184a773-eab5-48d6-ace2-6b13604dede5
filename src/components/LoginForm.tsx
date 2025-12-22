@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { User, Phone, Mail, Calendar, ArrowRight, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+
 export function LoginForm() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -16,6 +19,11 @@ export function LoginForm() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate('/booking');
   };
   const inputClasses = (fieldName: string) => `
     w-full pl-10 pr-4 py-3 bg-white border-2 rounded-lg outline-none transition-all duration-200
@@ -48,7 +56,7 @@ export function LoginForm() {
         <h2 className='text-4xl font-bold text-nature-text-primary mb-2 tracking-tight'>LOGIN</h2>
         <p className='text-nature-text-secondary font-mono text-sm mb-10'> // ENTER CREDENTIALS</p>
 
-        <form className='space-y-6' onSubmit={(e) => e.preventDefault()}>
+        <form className='space-y-6' onSubmit={handleSubmit}>
           {/* Name Field */}
           <div className='space-y-1'>
             <label htmlFor='name' className={labelClasses}>
@@ -188,6 +196,7 @@ export function LoginForm() {
 
           {/* Submit Button */}
           <motion.button
+            type='submit'
             whileHover={{
               scale: 1.02,
             }}

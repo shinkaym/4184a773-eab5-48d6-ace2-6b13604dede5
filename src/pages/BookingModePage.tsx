@@ -1,10 +1,10 @@
 import { ArrowLeft, CalendarX, CalendarCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { BookingModeCard } from '../components/BookingModeCard';
-interface BookingModePageProps {
-  onBack: () => void;
-}
-export function BookingModePage({ onBack }: BookingModePageProps) {
+
+export function BookingModePage() {
+  const navigate = useNavigate();
   const containerVariants = {
     hidden: {
       opacity: 0,
@@ -50,7 +50,7 @@ export function BookingModePage({ onBack }: BookingModePageProps) {
               opacity: 1,
               x: 0,
             }}
-            onClick={onBack}
+            onClick={() => navigate('/')}
             className='flex items-center gap-2 px-6 py-3 bg-white border-2 border-nature-text-primary font-bold uppercase tracking-wider hover:bg-nature-surface transition-colors shadow-md hover:shadow-lg group'
           >
             <ArrowLeft className='w-5 h-5 group-hover:-translate-x-1 transition-transform' />
@@ -80,7 +80,7 @@ export function BookingModePage({ onBack }: BookingModePageProps) {
                 title='Create Unassigned'
                 description='Create appointment without assigning an employee yet. Best for flexible scheduling.'
                 icon={CalendarX}
-                onClick={() => console.log('Unassigned selected')}
+                onClick={() => navigate('/appointment')}
               />
             </motion.div>
 
@@ -89,7 +89,7 @@ export function BookingModePage({ onBack }: BookingModePageProps) {
                 title='Create Scheduled'
                 description='Create appointment with specific employee assignment. Best for direct booking.'
                 icon={CalendarCheck}
-                onClick={() => console.log('Scheduled selected')}
+                onClick={() => navigate('/appointment')}
               />
             </motion.div>
           </div>
