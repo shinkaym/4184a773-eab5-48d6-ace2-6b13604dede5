@@ -21,7 +21,7 @@ export function StaffCard({ name, image, isSelected, onClick, isAnyStaff }: Staf
       }}
       onClick={onClick}
       className={`
-        relative p-5 rounded-soft border cursor-pointer transition-all duration-300 flex flex-col items-center text-center bg-white overflow-hidden
+        relative p-3 rounded-soft border cursor-pointer transition-all duration-300 flex flex-col items-center text-center bg-white overflow-hidden
         ${
           isSelected
             ? 'border-nature-primary shadow-soft-lg'
@@ -36,24 +36,24 @@ export function StaffCard({ name, image, isSelected, onClick, isAnyStaff }: Staf
 
       {/* Selection indicator */}
       {isSelected && (
-        <div className='absolute top-3 right-3 w-6 h-6 rounded-full bg-nature-primary flex items-center justify-center shadow-soft z-10'>
-          <Check className='w-4 h-4 text-white stroke-[3]' />
+        <div className='absolute top-2 right-2 w-5 h-5 rounded-full bg-nature-primary flex items-center justify-center shadow-soft z-10'>
+          <Check className='w-3 h-3 text-white stroke-[3]' />
         </div>
       )}
 
-      <div className='mb-4 relative z-10'>
+      <div className='mb-3 relative z-10'>
         {isAnyStaff ? (
-          <div className='w-20 h-20 rounded-full bg-gradient-to-br from-nature-primary/10 to-nature-secondary/10 flex items-center justify-center border-2 border-nature-divider'>
-            <Users className='w-9 h-9 text-nature-primary' />
+          <div className='w-14 h-14 rounded-full bg-gradient-to-br from-nature-primary/10 to-nature-secondary/10 flex items-center justify-center border-2 border-nature-divider'>
+            <Users className='w-7 h-7 text-nature-primary' />
           </div>
         ) : (
-          <div className='w-20 h-20 rounded-full overflow-hidden border-2 border-nature-divider shadow-soft'>
+          <div className='w-14 h-14 rounded-full overflow-hidden border-2 border-nature-divider shadow-soft'>
             <img src={image || 'https://i.pravatar.cc/150'} alt={name} className='w-full h-full object-cover' />
           </div>
         )}
       </div>
 
-      <h4 className='font-semibold text-nature-text-primary text-base relative z-10'>{name}</h4>
+      <h4 className='font-semibold text-nature-text-primary text-sm relative z-10'>{name}</h4>
     </motion.div>
   );
 }

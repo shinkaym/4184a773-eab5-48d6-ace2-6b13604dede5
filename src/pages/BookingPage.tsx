@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   Calendar,
   Phone,
@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import useEmblaCarousel from 'embla-carousel-react';
 import { StaffCard } from '../components/StaffCard';
 import { StepIndicator } from '../components/StepIndicator';
 import logo from '../assets/images/logo.jpg';
@@ -27,6 +28,18 @@ import logo from '../assets/images/logo.jpg';
 export function BookingPage() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
+
+  // Embla Carousel refs
+  const [emblaStaffRef, emblaStaffApi] = useEmblaCarousel({
+    align: 'start',
+    dragFree: true,
+    containScroll: 'trimSnaps'
+  });
+  const [emblaCategoryRef, emblaCategoryApi] = useEmblaCarousel({
+    align: 'start',
+    dragFree: true,
+    containScroll: 'trimSnaps'
+  });
 
   // Step 1 state
   const [selectedStaff, setSelectedStaff] = useState<string>('any');
@@ -251,6 +264,23 @@ export function BookingPage() {
     setCurrentMonth(11);
   };
 
+  // Embla scroll handlers
+  const scrollStaffPrev = useCallback(() => {
+    if (emblaStaffApi) emblaStaffApi.scrollPrev();
+  }, [emblaStaffApi]);
+
+  const scrollStaffNext = useCallback(() => {
+    if (emblaStaffApi) emblaStaffApi.scrollNext();
+  }, [emblaStaffApi]);
+
+  const scrollCategoryPrev = useCallback(() => {
+    if (emblaCategoryApi) emblaCategoryApi.scrollPrev();
+  }, [emblaCategoryApi]);
+
+  const scrollCategoryNext = useCallback(() => {
+    if (emblaCategoryApi) emblaCategoryApi.scrollNext();
+  }, [emblaCategoryApi]);
+
   const monthNames = [
     'January',
     'February',
@@ -404,29 +434,50 @@ export function BookingPage() {
                       <Scissors className='w-5 h-5 text-nature-primary' />
                       <h2 className='text-2xl font-display font-semibold tracking-tight'>Select Employee</h2>
                     </div>
-                    <div className='relative'>
-                      <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-nature-text-tertiary' />
-                      <input
-                        type='text'
-                        placeholder='Search staff...'
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className='pl-10 pr-4 py-2.5 border border-nature-divider rounded-soft text-sm focus:border-nature-primary focus:outline-none focus:ring-2 focus:ring-nature-primary/20 transition-all bg-white'
-                      />
+                    <div className='flex items-center gap-3'>
+                      <div className='relative'>
+                        <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-nature-text-tertiary' />
+                        <input
+                          type='text'
+                          placeholder='Search staff...'
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className='pl-10 pr-4 py-2.5 border border-nature-divider rounded-soft text-sm focus:border-nature-primary focus:outline-none focus:ring-2 focus:ring-nature-primary/20 transition-all bg-white'
+                        />
+                      </div>
+                      <div className='flex gap-2'>
+                        <button
+                          onClick={scrollStaffPrev}
+                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          aria-label='Previous staff'
+                        >
+                          <ChevronLeft className='w-5 h-5' />
+                        </button>
+                        <button
+                          onClick={scrollStaffNext}
+                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          aria-label='Next staff'
+                        >
+                          <ChevronRight className='w-5 h-5' />
+                        </button>
+                      </div>
                     </div>
                   </div>
 
-                  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
-                    {staffMembers.map((staff) => (
-                      <StaffCard
-                        key={staff.id}
-                        name={staff.name}
-                        image={staff.image}
-                        isAnyStaff={staff.id === 'any'}
-                        isSelected={selectedStaff === staff.id}
-                        onClick={() => setSelectedStaff(staff.id)}
-                      />
-                    ))}
+                  <div className='overflow-hidden' ref={emblaStaffRef}>
+                    <div className='flex gap-3'>
+                      {staffMembers.map((staff) => (
+                        <div key={staff.id} className='flex-[0_0_160px] min-w-0'>
+                          <StaffCard
+                            name={staff.name}
+                            image={staff.image}
+                            isAnyStaff={staff.id === 'any'}
+                            isSelected={selectedStaff === staff.id}
+                            onClick={() => setSelectedStaff(staff.id)}
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
 
@@ -610,40 +661,64 @@ export function BookingPage() {
                   </div>
 
                   {/* Category Filter */}
-                  <div className='mb-6 flex flex-wrap gap-3'>
-                    {categories.map((category) => {
-                      const isSelected = selectedCategory === category.id;
-                      const categoryCount =
-                        category.id === 'all'
-                          ? services.length
-                          : services.filter((s) => s.category === category.id).length;
-                      return (
-                        <motion.button
-                          key={category.id}
-                          onClick={() => setSelectedCategory(category.id)}
-                          whileHover={{ y: -2 }}
-                          whileTap={{ scale: 0.95 }}
-                          className={`
-                            px-4 py-2.5 rounded-soft border transition-all font-medium text-sm flex items-center gap-3
-                            ${
-                              isSelected
-                                ? 'bg-nature-primary text-white border-nature-primary shadow-soft'
-                                : 'bg-white text-nature-text-secondary border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5'
-                            }
-                          `}
+                  <div className='mb-6 relative'>
+                    <div className='flex items-center justify-between mb-4'>
+                      <div className='text-sm font-medium text-nature-text-tertiary'>CATEGORIES</div>
+                      <div className='flex gap-2'>
+                        <button
+                          onClick={scrollCategoryPrev}
+                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          aria-label='Previous category'
                         >
-                          <img
-                            src={category.image}
-                            alt={category.name}
-                            className='w-8 h-8 rounded-soft object-cover'
-                          />
-                          <span>{category.name}</span>
-                          <span className={`text-xs ${isSelected ? 'text-white/80' : 'text-nature-text-tertiary'}`}>
-                            ({categoryCount})
-                          </span>
-                        </motion.button>
-                      );
-                    })}
+                          <ChevronLeft className='w-4 h-4' />
+                        </button>
+                        <button
+                          onClick={scrollCategoryNext}
+                          className='p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all'
+                          aria-label='Next category'
+                        >
+                          <ChevronRight className='w-4 h-4' />
+                        </button>
+                      </div>
+                    </div>
+                    <div className='overflow-hidden' ref={emblaCategoryRef}>
+                      <div className='flex gap-3'>
+                        {categories.map((category) => {
+                          const isSelected = selectedCategory === category.id;
+                          const categoryCount =
+                            category.id === 'all'
+                              ? services.length
+                              : services.filter((s) => s.category === category.id).length;
+                          return (
+                            <div key={category.id} className='flex-[0_0_auto] min-w-0'>
+                              <motion.button
+                                onClick={() => setSelectedCategory(category.id)}
+                                whileHover={{ y: -2 }}
+                                whileTap={{ scale: 0.95 }}
+                                className={`
+                                  px-4 py-2.5 rounded-soft border transition-all font-medium text-sm flex items-center gap-3 whitespace-nowrap
+                                  ${
+                                    isSelected
+                                      ? 'bg-nature-primary text-white border-nature-primary shadow-soft'
+                                      : 'bg-white text-nature-text-secondary border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5'
+                                  }
+                                `}
+                              >
+                                <img
+                                  src={category.image}
+                                  alt={category.name}
+                                  className='w-8 h-8 rounded-soft object-cover'
+                                />
+                                <span>{category.name}</span>
+                                <span className={`text-xs ${isSelected ? 'text-white/80' : 'text-nature-text-tertiary'}`}>
+                                  ({categoryCount})
+                                </span>
+                              </motion.button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
 
                   {filteredServices.length === 0 ? (
