@@ -241,10 +241,7 @@ export function BookingPage() {
     navigate('/');
   };
 
-  const handlePreviousMonth = () => {
-    const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-    const newYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-
+  const updateMonth = (newMonth: number, newYear: number) => {
     setCurrentMonth(newMonth);
     setCurrentYear(newYear);
 
@@ -255,46 +252,26 @@ export function BookingPage() {
     } else {
       setSelectedDate(1);
     }
+  };
+
+  const handlePreviousMonth = () => {
+    const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const newYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+    updateMonth(newMonth, newYear);
   };
 
   const handleNextMonth = () => {
     const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
     const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
-
-    setCurrentMonth(newMonth);
-    setCurrentYear(newYear);
-
-    // Reset selected date to first valid date of new month
-    const today = new Date();
-    if (newYear === today.getFullYear() && newMonth === today.getMonth()) {
-      setSelectedDate(today.getDate());
-    } else {
-      setSelectedDate(1);
-    }
+    updateMonth(newMonth, newYear);
   };
 
   const handleFirstMonth = () => {
-    setCurrentMonth(0);
-
-    // Reset selected date to first valid date
-    const today = new Date();
-    if (currentYear === today.getFullYear() && 0 === today.getMonth()) {
-      setSelectedDate(today.getDate());
-    } else {
-      setSelectedDate(1);
-    }
+    updateMonth(0, currentYear);
   };
 
   const handleLastMonth = () => {
-    setCurrentMonth(11);
-
-    // Reset selected date to first valid date
-    const today = new Date();
-    if (currentYear === today.getFullYear() && 11 === today.getMonth()) {
-      setSelectedDate(today.getDate());
-    } else {
-      setSelectedDate(1);
-    }
+    updateMonth(11, currentYear);
   };
 
   // Embla scroll handlers
