@@ -242,29 +242,59 @@ export function BookingPage() {
   };
 
   const handlePreviousMonth = () => {
-    if (currentMonth === 0) {
-      setCurrentMonth(11);
-      setCurrentYear(currentYear - 1);
+    const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const newYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+    setCurrentMonth(newMonth);
+    setCurrentYear(newYear);
+
+    // Reset selected date to first valid date of new month
+    const today = new Date();
+    if (newYear === today.getFullYear() && newMonth === today.getMonth()) {
+      setSelectedDate(today.getDate());
     } else {
-      setCurrentMonth(currentMonth - 1);
+      setSelectedDate(1);
     }
   };
 
   const handleNextMonth = () => {
-    if (currentMonth === 11) {
-      setCurrentMonth(0);
-      setCurrentYear(currentYear + 1);
+    const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+    const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+
+    setCurrentMonth(newMonth);
+    setCurrentYear(newYear);
+
+    // Reset selected date to first valid date of new month
+    const today = new Date();
+    if (newYear === today.getFullYear() && newMonth === today.getMonth()) {
+      setSelectedDate(today.getDate());
     } else {
-      setCurrentMonth(currentMonth + 1);
+      setSelectedDate(1);
     }
   };
 
   const handleFirstMonth = () => {
     setCurrentMonth(0);
+
+    // Reset selected date to first valid date
+    const today = new Date();
+    if (currentYear === today.getFullYear() && 0 === today.getMonth()) {
+      setSelectedDate(today.getDate());
+    } else {
+      setSelectedDate(1);
+    }
   };
 
   const handleLastMonth = () => {
     setCurrentMonth(11);
+
+    // Reset selected date to first valid date
+    const today = new Date();
+    if (currentYear === today.getFullYear() && 11 === today.getMonth()) {
+      setSelectedDate(today.getDate());
+    } else {
+      setSelectedDate(1);
+    }
   };
 
   // Embla scroll handlers
@@ -545,8 +575,22 @@ export function BookingPage() {
                       <motion.button
                         whileHover={{ y: -2 }}
                         whileTap={{ scale: 0.95 }}
+                        disabled={(() => {
+                          const today = new Date();
+                          const isStartDisabled =
+                            currentYear < today.getFullYear()
+                              ? true
+                              : currentYear > today.getFullYear()
+                              ? false
+                              : currentMonth < today.getMonth()
+                              ? true
+                              : currentMonth > today.getMonth()
+                              ? false
+                              : 1 < today.getDate();
+                          return isStartDisabled;
+                        })()}
                         onClick={() => setSelectedDate(1)}
-                        className='px-4 py-2.5 rounded-soft border border-nature-divider bg-white hover:border-nature-primary hover:bg-nature-primary/5 transition-all text-xs font-medium tracking-wide'
+                        className='px-4 py-2.5 rounded-soft border border-nature-divider bg-white hover:border-nature-primary hover:bg-nature-primary/5 transition-all text-xs font-medium tracking-wide disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-nature-divider disabled:hover:bg-white'
                       >
                         START OF MONTH
                       </motion.button>
@@ -566,8 +610,22 @@ export function BookingPage() {
                       <motion.button
                         whileHover={{ y: -2 }}
                         whileTap={{ scale: 0.95 }}
+                        disabled={(() => {
+                          const today = new Date();
+                          const isEndDisabled =
+                            currentYear < today.getFullYear()
+                              ? true
+                              : currentYear > today.getFullYear()
+                              ? false
+                              : currentMonth < today.getMonth()
+                              ? true
+                              : currentMonth > today.getMonth()
+                              ? false
+                              : 31 < today.getDate();
+                          return isEndDisabled;
+                        })()}
                         onClick={() => setSelectedDate(31)}
-                        className='px-4 py-2.5 rounded-soft border border-nature-divider bg-white hover:border-nature-primary hover:bg-nature-primary/5 transition-all text-xs font-medium tracking-wide'
+                        className='px-4 py-2.5 rounded-soft border border-nature-divider bg-white hover:border-nature-primary hover:bg-nature-primary/5 transition-all text-xs font-medium tracking-wide disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-nature-divider disabled:hover:bg-white'
                       >
                         END OF MONTH
                       </motion.button>
@@ -630,57 +688,135 @@ export function BookingPage() {
                         </div>
                       ))}
 
-                      {[...Array(31)].map((_, i) => {
-                        const date = i + 1;
-                        const isSelected = date === selectedDate;
+                      {(() => {
+                        // Calculate days in current month
+                        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+                        // Calculate first day of month (0 = Sunday, 6 = Saturday)
+                        const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+
+                        // Calculate days in previous month
+                        const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
                         // Get current date for comparison
                         const today = new Date();
-                        const currentDay = today.getDate();
-                        const currentMonthIndex = today.getMonth();
-                        const currentYearValue = today.getFullYear();
+                        today.setHours(0, 0, 0, 0); // Reset time to compare only dates
 
-                        // Disable dates before today
-                        const isDisabled =
-                          currentYear < currentYearValue
-                            ? true // Past year - disable all
-                            : currentYear > currentYearValue
-                            ? false // Future year - enable all
-                            : currentMonth < currentMonthIndex
-                            ? true // Past month - disable all
-                            : currentMonth > currentMonthIndex
-                            ? false // Future month - enable all
-                            : date < currentDay; // Same month - disable dates before today
+                        // Create array for calendar cells
+                        const calendarCells = [];
 
-                        const isToday =
-                          date === currentDay && currentMonth === currentMonthIndex && currentYear === currentYearValue;
-                        return (
-                          <motion.button
-                            key={i}
-                            disabled={isDisabled}
-                            onClick={() => setSelectedDate(date)}
-                            whileHover={!isDisabled ? { scale: 1.1 } : {}}
-                            whileTap={!isDisabled ? { scale: 0.95 } : {}}
-                            className={`
-                              aspect-square text-sm font-medium flex items-center justify-center transition-all rounded-soft
-                              ${isSelected ? 'bg-nature-primary text-white shadow-soft scale-105' : ''}
-                              ${
-                                isDisabled
-                                  ? 'text-nature-text-tertiary/30 cursor-not-allowed line-through bg-nature-surface/50 border border-nature-divider/50'
-                                  : ''
-                              }
-                              ${
-                                !isSelected && !isDisabled
-                                  ? 'bg-white border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5'
-                                  : ''
-                              }
-                              ${isToday && !isSelected ? 'ring-2 ring-nature-secondary ring-offset-2' : ''}
-                            `}
-                          >
-                            {date}
-                          </motion.button>
-                        );
-                      })}
+                        // Previous month info
+                        const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+                        const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+                        // Next month info
+                        const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+                        const nextYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+
+                        // Add previous month's trailing dates
+                        for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+                          const date = daysInPrevMonth - i;
+                          const cellDate = new Date(prevYear, prevMonth, date);
+                          cellDate.setHours(0, 0, 0, 0);
+                          const isDisabled = cellDate < today;
+
+                          calendarCells.push(
+                            <motion.button
+                              key={`prev-${date}`}
+                              disabled={isDisabled}
+                              onClick={() => {
+                                setCurrentMonth(prevMonth);
+                                setCurrentYear(prevYear);
+                                setSelectedDate(date);
+                              }}
+                              whileHover={!isDisabled ? { scale: 1.1 } : {}}
+                              whileTap={!isDisabled ? { scale: 0.95 } : {}}
+                              className={`
+                                aspect-square text-sm font-medium flex items-center justify-center transition-all rounded-soft
+                                ${
+                                  isDisabled
+                                    ? 'text-nature-text-tertiary/30 cursor-not-allowed bg-nature-surface/50 border border-nature-divider/50'
+                                    : 'text-nature-text-tertiary/60 bg-nature-surface/30 hover:bg-nature-surface/50 hover:text-nature-text-tertiary/80'
+                                }
+                              `}
+                            >
+                              {date}
+                            </motion.button>
+                          );
+                        }
+
+                        // Add current month's dates
+                        for (let date = 1; date <= daysInMonth; date++) {
+                          const isSelected = date === selectedDate;
+                          const cellDate = new Date(currentYear, currentMonth, date);
+                          cellDate.setHours(0, 0, 0, 0);
+                          const isDisabled = cellDate < today;
+
+                          const isToday = cellDate.getTime() === today.getTime();
+
+                          calendarCells.push(
+                            <motion.button
+                              key={`current-${date}`}
+                              disabled={isDisabled}
+                              onClick={() => setSelectedDate(date)}
+                              whileHover={!isDisabled ? { scale: 1.1 } : {}}
+                              whileTap={!isDisabled ? { scale: 0.95 } : {}}
+                              className={`
+                                aspect-square text-sm font-medium flex items-center justify-center transition-all rounded-soft
+                                ${isSelected ? 'bg-nature-primary text-white shadow-soft scale-105' : ''}
+                                ${
+                                  isDisabled
+                                    ? 'text-nature-text-tertiary/30 cursor-not-allowed bg-nature-surface/50 border border-nature-divider/50'
+                                    : ''
+                                }
+                                ${
+                                  !isSelected && !isDisabled
+                                    ? 'bg-white border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5'
+                                    : ''
+                                }
+                                ${isToday && !isSelected ? 'ring-2 ring-nature-secondary ring-offset-2' : ''}
+                              `}
+                            >
+                              {date}
+                            </motion.button>
+                          );
+                        }
+
+                        // Add next month's leading dates to fill the grid
+                        const totalCells = calendarCells.length;
+                        const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+                        for (let date = 1; date <= remainingCells; date++) {
+                          const cellDate = new Date(nextYear, nextMonth, date);
+                          cellDate.setHours(0, 0, 0, 0);
+                          const isDisabled = cellDate < today;
+
+                          calendarCells.push(
+                            <motion.button
+                              key={`next-${date}`}
+                              disabled={isDisabled}
+                              onClick={() => {
+                                setCurrentMonth(nextMonth);
+                                setCurrentYear(nextYear);
+                                setSelectedDate(date);
+                              }}
+                              whileHover={!isDisabled ? { scale: 1.1 } : {}}
+                              whileTap={!isDisabled ? { scale: 0.95 } : {}}
+                              className={`
+                                aspect-square text-sm font-medium flex items-center justify-center transition-all rounded-soft
+                                ${
+                                  isDisabled
+                                    ? 'text-nature-text-tertiary/30 cursor-not-allowed bg-nature-surface/50 border border-nature-divider/50'
+                                    : 'text-nature-text-tertiary/60 bg-nature-surface/30 hover:bg-nature-surface/50 hover:text-nature-text-tertiary/80'
+                                }
+                              `}
+                            >
+                              {date}
+                            </motion.button>
+                          );
+                        }
+
+                        return calendarCells;
+                      })()}
                     </div>
 
                     {/* Selection Info */}
@@ -916,7 +1052,7 @@ export function BookingPage() {
                                 }
                                 ${
                                   isDisabled
-                                    ? 'bg-nature-surface/50 text-nature-text-tertiary/30 border-nature-divider/30 cursor-not-allowed line-through'
+                                    ? 'bg-nature-surface/50 text-nature-text-tertiary/30 border-nature-divider/30 cursor-not-allowed'
                                     : ''
                                 }
                                 ${

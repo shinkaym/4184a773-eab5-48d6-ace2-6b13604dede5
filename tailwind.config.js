@@ -49,7 +49,7 @@ export default {
       },
       fontFamily: {
         sans: ['Roboto', 'system-ui', 'sans-serif'],
-        display: ['Cormorant Garamond', 'Georgia', 'serif'],
+        display: ['Roboto', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         'soft': '0 2px 15px rgba(0, 0, 0, 0.08)',
