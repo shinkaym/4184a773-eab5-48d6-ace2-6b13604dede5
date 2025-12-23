@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   Calendar,
   Phone,
@@ -21,7 +21,7 @@ import {
   X,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import useEmblaCarousel from 'embla-carousel-react';
 import { StaffCard } from '../components/StaffCard';
 import { StepIndicator } from '../components/StepIndicator';
@@ -30,8 +30,17 @@ import { staffMembers, categories, services } from '../data/bookingData';
 
 export function BookingPage() {
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Get step from URL params, default to 1 if not valid
+  const getStepFromParams = (): 1 | 2 | 3 => {
+    const stepParam = searchParams.get('step');
+    const step = stepParam ? parseInt(stepParam, 10) : 1;
+    return step === 1 || step === 2 || step === 3 ? step : 1;
+  };
+
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(getStepFromParams());
 
   // Embla Carousel refs
   const [emblaStaffRef, emblaStaffApi] = useEmblaCarousel({
@@ -45,15 +54,37 @@ export function BookingPage() {
     containScroll: 'trimSnaps',
   });
 
-  // Step 1 state
-  const [selectedStaff, setSelectedStaff] = useState<string>('any');
+  // Check if we have step params (for pre-filling demo data)
+  const hasStepParam = searchParams.has('step');
+
+  // Step 1 state - pre-fill if accessed via URL params
+  const [selectedStaff, setSelectedStaff] = useState<string>(hasStepParam ? 'sarah-1' : 'any');
   const [selectedDate, setSelectedDate] = useState<number>(new Date().getDate());
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [selectedTime, setSelectedTime] = useState<string>('09:30 AM');
+  const [selectedServices, setSelectedServices] = useState<string[]>(
+    hasStepParam ? ['manicure', 'pedicure', 'gel-polish'] : []
+  );
+  const [selectedTime, setSelectedTime] = useState<string>(hasStepParam ? '10:00 AM' : '09:30 AM');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth()); // 0 = January, 11 = December
   const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
+
+  // Sync URL params with currentStep (for browser back/forward navigation)
+  useEffect(() => {
+    const stepParam = searchParams.get('step');
+    const step = stepParam ? parseInt(stepParam, 10) : 1;
+    const validStep = (step === 1 || step === 2 || step === 3) ? step : 1;
+
+    if (validStep !== currentStep) {
+      setCurrentStep(validStep);
+    }
+  }, [searchParams, currentStep]);
+
+  // Update URL when step changes
+  const updateStepInURL = (step: 1 | 2 | 3) => {
+    setSearchParams({ step: step.toString() });
+    setCurrentStep(step);
+  };
 
   const filteredServices =
     selectedCategory === 'all' ? services : services.filter((service) => service.category === selectedCategory);
@@ -133,18 +164,18 @@ export function BookingPage() {
 
   const handleNext = () => {
     if (currentStep < 3) {
-      setCurrentStep((prev) => (prev + 1) as 1 | 2 | 3);
+      updateStepInURL((currentStep + 1) as 1 | 2 | 3);
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep((prev) => (prev - 1) as 1 | 2 | 3);
+      updateStepInURL((currentStep - 1) as 1 | 2 | 3);
     }
   };
 
   const handleConfirm = () => {
-    setCurrentStep(3);
+    updateStepInURL(3);
   };
 
   const handleBackToHome = () => {
