@@ -51,8 +51,8 @@ export function Step1DateSelection({ selectedDate, onDateChange }: Step1DateSele
     updateMonth(11, currentYear);
   };
 
-  const handleDateSelect = (date: number) => {
-    const newDate = new Date(currentYear, currentMonth, date);
+  const handleDateSelect = (date: number, month: number = currentMonth, year: number = currentYear) => {
+    const newDate = new Date(year, month, date);
     onDateChange(newDate);
   };
 
@@ -84,36 +84,65 @@ export function Step1DateSelection({ selectedDate, onDateChange }: Step1DateSele
       <div className="bg-white rounded-softer border border-nature-divider p-8 shadow-soft-lg">
         {/* Quick Selection */}
         <div className="mb-6 flex flex-wrap gap-3 justify-center">
-          <motion.button
-            whileHover={{ y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => handleDateSelect(1)}
-            className="px-4 py-2.5 rounded-soft border border-nature-divider bg-white hover:border-nature-primary hover:bg-nature-primary/5 transition-all text-xs font-medium tracking-wide"
-          >
-            START OF MONTH
-          </motion.button>
-          <motion.button
-            whileHover={{ y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              const today = new Date();
-              setCurrentMonth(today.getMonth());
-              setCurrentYear(today.getFullYear());
-              onDateChange(today);
-            }}
-            className="px-4 py-2.5 rounded-soft border border-nature-primary bg-nature-primary/5 hover:bg-nature-primary/10 transition-all text-xs font-medium tracking-wide flex items-center gap-2"
-          >
-            <span className="w-2 h-2 rounded-full bg-nature-primary" />
-            TODAY
-          </motion.button>
-          <motion.button
-            whileHover={{ y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => handleDateSelect(31)}
-            className="px-4 py-2.5 rounded-soft border border-nature-divider bg-white hover:border-nature-primary hover:bg-nature-primary/5 transition-all text-xs font-medium tracking-wide"
-          >
-            END OF MONTH
-          </motion.button>
+          {(() => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const startOfMonth = new Date(currentYear, currentMonth, 1);
+            startOfMonth.setHours(0, 0, 0, 0);
+            const isStartDisabled = startOfMonth < today;
+
+            const lastDay = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const endOfMonth = new Date(currentYear, currentMonth, lastDay);
+            endOfMonth.setHours(0, 0, 0, 0);
+            const isEndDisabled = endOfMonth < today;
+
+            return (
+              <>
+                <motion.button
+                  whileHover={!isStartDisabled ? { y: -2 } : {}}
+                  whileTap={!isStartDisabled ? { scale: 0.95 } : {}}
+                  disabled={isStartDisabled}
+                  onClick={() => handleDateSelect(1)}
+                  className={`px-4 py-2.5 rounded-soft border transition-all text-xs font-medium tracking-wide ${
+                    isStartDisabled
+                      ? 'border-nature-divider/30 bg-nature-surface/50 text-nature-text-tertiary/30 cursor-not-allowed'
+                      : 'border-nature-divider bg-white hover:border-nature-primary hover:bg-nature-primary/5'
+                  }`}
+                >
+                  START OF MONTH
+                </motion.button>
+                <motion.button
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    const today = new Date();
+                    setCurrentMonth(today.getMonth());
+                    setCurrentYear(today.getFullYear());
+                    onDateChange(today);
+                  }}
+                  className="px-4 py-2.5 rounded-soft border border-nature-primary bg-nature-primary/5 hover:bg-nature-primary/10 transition-all text-xs font-medium tracking-wide flex items-center gap-2"
+                >
+                  <span className="w-2 h-2 rounded-full bg-nature-primary" />
+                  TODAY
+                </motion.button>
+                <motion.button
+                  whileHover={!isEndDisabled ? { y: -2 } : {}}
+                  whileTap={!isEndDisabled ? { scale: 0.95 } : {}}
+                  disabled={isEndDisabled}
+                  onClick={() => {
+                    handleDateSelect(lastDay);
+                  }}
+                  className={`px-4 py-2.5 rounded-soft border transition-all text-xs font-medium tracking-wide ${
+                    isEndDisabled
+                      ? 'border-nature-divider/30 bg-nature-surface/50 text-nature-text-tertiary/30 cursor-not-allowed'
+                      : 'border-nature-divider bg-white hover:border-nature-primary hover:bg-nature-primary/5'
+                  }`}
+                >
+                  END OF MONTH
+                </motion.button>
+              </>
+            );
+          })()}
         </div>
 
         {/* Month Navigation */}
@@ -200,7 +229,7 @@ export function Step1DateSelection({ selectedDate, onDateChange }: Step1DateSele
                   onClick={() => {
                     setCurrentMonth(prevMonth);
                     setCurrentYear(prevYear);
-                    handleDateSelect(date);
+                    handleDateSelect(date, prevMonth, prevYear);
                   }}
                   whileHover={!isDisabled ? { scale: 1.1 } : {}}
                   whileTap={!isDisabled ? { scale: 0.95 } : {}}
@@ -268,7 +297,7 @@ export function Step1DateSelection({ selectedDate, onDateChange }: Step1DateSele
                   onClick={() => {
                     setCurrentMonth(nextMonth);
                     setCurrentYear(nextYear);
-                    handleDateSelect(date);
+                    handleDateSelect(date, nextMonth, nextYear);
                   }}
                   whileHover={!isDisabled ? { scale: 1.1 } : {}}
                   whileTap={!isDisabled ? { scale: 0.95 } : {}}
