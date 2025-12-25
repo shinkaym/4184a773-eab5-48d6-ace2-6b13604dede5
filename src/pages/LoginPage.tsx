@@ -322,6 +322,7 @@ export function LoginPage() {
                       name='firstName'
                       value={formData.firstName}
                       onChange={handleChange}
+                      placeholder='Enter your first name'
                       className={`w-full px-1 py-2.5 text-base border-b-2 focus:outline-none transition-colors bg-transparent ${
                         errors.firstName
                           ? 'border-red-400 focus:border-red-500'
@@ -348,6 +349,7 @@ export function LoginPage() {
                       name='lastName'
                       value={formData.lastName}
                       onChange={handleChange}
+                      placeholder='Enter your last name'
                       className={`w-full px-1 py-2.5 text-base border-b-2 focus:outline-none transition-colors bg-transparent ${
                         errors.lastName
                           ? 'border-red-400 focus:border-red-500'
@@ -390,6 +392,7 @@ export function LoginPage() {
                       name='email'
                       value={formData.email}
                       onChange={handleChange}
+                      placeholder='example@email.com'
                       className={`w-full px-1 py-2.5 text-base border-b-2 focus:outline-none transition-colors bg-transparent ${
                         errors.email ? 'border-red-400 focus:border-red-500' : 'border-gray-300 focus:border-gray-600'
                       }`}
