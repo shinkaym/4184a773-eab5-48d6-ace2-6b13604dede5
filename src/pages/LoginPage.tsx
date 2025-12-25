@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { BannerSlideshow } from '../components/BannerSlideshow';
 import { NumberPad } from '../components/NumberPad';
 import { Check, ArrowLeft, CheckCircle } from 'lucide-react';
@@ -23,13 +25,14 @@ export function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [progress, setProgress] = useState(0);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    dob: '',
     consent: false,
   });
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
 
   const validatePhone = (phone: string): string | undefined => {
     if (phone.length !== 10) return 'Phone number must be 10 digits';
@@ -43,13 +46,12 @@ export function LoginPage() {
     return undefined;
   };
 
-  const validateDOB = (dob: string): string | undefined => {
+  const validateDOB = (dob: Date | null): string | undefined => {
     if (!dob) return undefined;
-    const date = new Date(dob);
     const today = new Date();
     const minAge = new Date(today.getFullYear() - 120, today.getMonth(), today.getDate());
-    if (date > today) return 'Date of birth cannot be in the future';
-    if (date < minAge) return 'Please enter a valid date of birth';
+    if (dob > today) return 'Date of birth cannot be in the future';
+    if (dob < minAge) return 'Please enter a valid date of birth';
     return undefined;
   };
 
@@ -87,7 +89,7 @@ export function LoginPage() {
     const newErrors: FormErrors = {
       lastName: !formData.lastName ? 'Last name is required' : undefined,
       email: validateEmail(formData.email),
-      dob: validateDOB(formData.dob),
+      dob: validateDOB(dateOfBirth),
     };
 
     const hasErrors = Object.values(newErrors).some((error) => error !== undefined);
@@ -98,17 +100,38 @@ export function LoginPage() {
 
     setIsLoading(true);
     setErrors({});
+    setProgress(1);
+
+    // Animate progress bar
+    const duration = 1500;
+    const interval = 20;
+    const steps = duration / interval;
+    const increment = 99 / steps;
+
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        const next = prev + increment;
+        if (next >= 100) {
+          clearInterval(progressInterval);
+          return 100;
+        }
+        return next;
+      });
+    }, interval);
 
     // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, duration));
+      setProgress(100);
       setShowSuccess(true);
       setTimeout(() => {
         navigate('/step-booking');
       }, 2000);
     } catch (error) {
+      clearInterval(progressInterval);
       setErrors({ email: 'An error occurred. Please try again.' });
       setIsLoading(false);
+      setProgress(0);
     }
   };
 
@@ -123,14 +146,13 @@ export function LoginPage() {
   };
 
   const getMaxDate = () => {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
+    return new Date();
   };
 
   const getMinDate = () => {
     const minDate = new Date();
     minDate.setFullYear(minDate.getFullYear() - 120);
-    return minDate.toISOString().split('T')[0];
+    return minDate;
   };
 
   const formatPhoneDisplay = (phone: string) => {
@@ -163,7 +185,18 @@ export function LoginPage() {
       </div>
 
       {/* Right Panel - Smaller */}
-      <div className='flex-1 lg:flex-[2] bg-white flex flex-col min-h-screen'>
+      <div className='flex-1 lg:flex-[2] bg-white flex flex-col min-h-screen relative'>
+        {/* Progress Bar */}
+        {isLoading && !showSuccess && (
+          <div className='absolute top-0 left-0 right-0 h-1 bg-gray-200 z-50'>
+            <motion.div
+              className='h-full bg-green-500'
+              initial={{ width: '1%' }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+            />
+          </div>
+        )}
         <div className='flex-1 flex flex-col p-4 sm:p-8'>
           {/* Header */}
           <div className='relative text-center mb-6 sm:mb-8'>
@@ -253,11 +286,16 @@ export function LoginPage() {
               ) : showSuccess ? (
                 <motion.div
                   key='success'
-                  initial={{ opacity: 0, scale: 0.8 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
                   className='text-center py-12'
                 >
-                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: 'spring' }}>
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.1, duration: 0.3, ease: 'easeOut' }}
+                  >
                     <CheckCircle className='w-16 h-16 sm:w-20 sm:h-20 text-green-500 mx-auto mb-4' />
                   </motion.div>
                   <h3 className='text-xl sm:text-2xl font-bold text-gray-800 mb-2'>Success!</h3>
@@ -370,25 +408,27 @@ export function LoginPage() {
                     <label htmlFor='dob' className='block text-sm sm:text-base font-semibold text-gray-700 mb-2'>
                       Date of Birth
                     </label>
-                    <div
-                      onClick={() => document.getElementById('dob')?.showPicker?.()}
-                      className='cursor-pointer'
-                    >
-                      <input
-                        id='dob'
-                        type='date'
-                        name='dob'
-                        value={formData.dob}
-                        onChange={handleChange}
-                        max={getMaxDate()}
-                        min={getMinDate()}
-                        className={`w-full px-1 py-2.5 text-base border-b-2 focus:outline-none transition-colors bg-transparent cursor-pointer ${
-                          errors.dob ? 'border-red-400 focus:border-red-500' : 'border-gray-300 focus:border-gray-600'
-                        }`}
-                        aria-invalid={!!errors.dob}
-                        aria-describedby={errors.dob ? 'dob-error' : undefined}
-                      />
-                    </div>
+                    <DatePicker
+                      selected={dateOfBirth}
+                      onChange={(date) => {
+                        setDateOfBirth(date);
+                        setErrors((prev) => ({ ...prev, dob: undefined }));
+                      }}
+                      maxDate={getMaxDate()}
+                      minDate={getMinDate()}
+                      dateFormat='MM/dd/yyyy'
+                      placeholderText='Select date of birth'
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode='select'
+                      className={`w-full px-1 py-3 text-lg border-b-2 focus:outline-none transition-colors bg-transparent cursor-pointer ${
+                        errors.dob ? 'border-red-400 focus:border-red-500' : 'border-gray-300 focus:border-gray-600'
+                      }`}
+                      wrapperClassName='w-full'
+                      calendarClassName='custom-datepicker'
+                      aria-invalid={!!errors.dob}
+                      aria-describedby={errors.dob ? 'dob-error' : undefined}
+                    />
                     {errors.dob && (
                       <p id='dob-error' className='text-red-600 text-sm mt-1' role='alert'>
                         {errors.dob}

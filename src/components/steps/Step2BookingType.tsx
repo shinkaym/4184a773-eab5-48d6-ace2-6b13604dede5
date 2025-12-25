@@ -57,8 +57,8 @@ export function Step2BookingType({ selectedType, onTypeChange }: Step2BookingTyp
             )}
             <div className="pointer-events-none">
               <BookingModeCard
-                title="Create Unassigned"
-                description="Booking without assigning an employee yet. Perfect when you don't have a preference or want to be matched with the first available staff member."
+                title="Unassigned"
+                description="Booking without assigning an employee yet."
                 icon={CalendarX}
               />
             </div>
@@ -86,8 +86,8 @@ export function Step2BookingType({ selectedType, onTypeChange }: Step2BookingTyp
             )}
             <div className="pointer-events-none">
               <BookingModeCard
-                title="Create Scheduled"
-                description="Booking with specific employee assignment. Choose your preferred staff member and schedule at their available time slots."
+                title="Scheduled"
+                description="Booking with specific employee assignment."
                 icon={CalendarCheck}
               />
             </div>
