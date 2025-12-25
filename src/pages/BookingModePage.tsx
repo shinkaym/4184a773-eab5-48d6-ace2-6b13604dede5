@@ -86,7 +86,7 @@ export function BookingModePage() {
             <motion.div variants={itemVariants} className='h-full'>
               <BookingModeCard
                 title='Create Unassigned'
-                description='Create appointment without assigning an employee yet. Best for flexible scheduling.'
+                description='Booking without assigning an employee yet.'
                 icon={CalendarX}
                 onClick={() => navigate('/appointment')}
               />
@@ -95,7 +95,7 @@ export function BookingModePage() {
             <motion.div variants={itemVariants} className='h-full'>
               <BookingModeCard
                 title='Create Scheduled'
-                description='Create appointment with specific employee assignment. Best for direct booking.'
+                description='Booking with specific employee assignment.'
                 icon={CalendarCheck}
                 onClick={() => navigate('/appointment')}
               />
