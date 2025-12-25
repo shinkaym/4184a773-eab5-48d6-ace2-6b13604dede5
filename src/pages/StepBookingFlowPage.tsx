@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, User, LogOut } from 'lucide-react';
@@ -17,6 +17,7 @@ type StepNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export function StepBookingFlowPage() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<StepNumber>(1);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   // Form state
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -35,6 +36,13 @@ export function StepBookingFlowPage() {
       setSelectedEmployee(null);
     }
   }, [bookingType]);
+
+  // Auto scroll to content when step changes
+  useEffect(() => {
+    if (contentRef.current) {
+      contentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [currentStep]);
 
   const handleNext = () => {
     if (currentStep < 7) {
@@ -137,16 +145,7 @@ export function StepBookingFlowPage() {
     }),
   };
 
-  const [direction, setDirection] = useState(0);
-
-  const paginate = (newDirection: number) => {
-    setDirection(newDirection);
-  };
-
-  const handleStepChange = (newStep: StepNumber) => {
-    paginate(newStep > currentStep ? 1 : -1);
-    setCurrentStep(newStep);
-  };
+  const [direction] = useState(0);
 
   return (
     <div className='min-h-screen w-full bg-nature-main flex flex-col font-sans text-nature-text-primary'>
@@ -175,7 +174,7 @@ export function StepBookingFlowPage() {
               {/* Desktop Navigation Links */}
               <div className='hidden lg:flex items-center gap-6 text-sm font-medium'>
                 <button
-                  onClick={() => navigate('/step-booking')}
+                  onClick={() => navigate('/booking')}
                   className='text-white/90 hover:text-white transition-colors cursor-pointer'
                 >
                   Booking
@@ -287,7 +286,7 @@ export function StepBookingFlowPage() {
       </div>
 
       {/* Main Content */}
-      <div className='flex-grow w-full max-w-7xl mx-auto p-6 md:py-12 relative overflow-hidden'>
+      <div ref={contentRef} className='flex-grow w-full max-w-7xl mx-auto p-6 md:py-12 relative overflow-hidden'>
         {/* Background decoration */}
         <div className='absolute top-0 right-0 w-[600px] h-[600px] bg-nature-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none' />
         <div className='absolute bottom-0 left-0 w-[500px] h-[500px] bg-nature-secondary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none' />

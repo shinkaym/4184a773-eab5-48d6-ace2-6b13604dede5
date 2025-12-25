@@ -125,7 +125,7 @@ export function LoginPage() {
       setProgress(100);
       setShowSuccess(true);
       setTimeout(() => {
-        navigate('/step-booking');
+        navigate('/booking');
       }, 2000);
     } catch (error) {
       clearInterval(progressInterval);
@@ -165,17 +165,6 @@ export function LoginPage() {
     <div className='min-h-screen w-full flex flex-col lg:flex-row'>
       {/* Left Panel - Larger - Hidden on mobile */}
       <div className='hidden lg:flex lg:flex-[3] relative overflow-hidden flex-col items-center justify-center px-8 bg-gradient-to-br from-[#7B6DB8] via-[#5EB598] to-[#4DC9A5]'>
-        {/* Hero Text */}
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className='text-4xl font-serif text-white mb-10 text-center tracking-wide drop-shadow-lg'
-          style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-        >
-          Please Sign In!
-        </motion.h1>
-
         {/* Banner Slideshow */}
         <BannerSlideshow />
 
@@ -211,7 +200,7 @@ export function LoginPage() {
                 <span className='text-sm font-medium'>Back</span>
               </button>
             )}
-            <h2 className='text-xl sm:text-2xl font-bold text-gray-800 mb-1'>AICOM Checkin</h2>
+            <h2 className='text-xl sm:text-2xl font-bold text-gray-800 mb-1'>Please Sign In!</h2>
           </div>
 
           {/* Content Area */}
@@ -413,7 +402,7 @@ export function LoginPage() {
                     </label>
                     <DatePicker
                       selected={dateOfBirth}
-                      onChange={(date) => {
+                      onChange={(date: Date | null) => {
                         setDateOfBirth(date);
                         setErrors((prev) => ({ ...prev, dob: undefined }));
                       }}
@@ -429,7 +418,7 @@ export function LoginPage() {
                       }`}
                       wrapperClassName='w-full'
                       calendarClassName='custom-datepicker'
-                      aria-invalid={!!errors.dob}
+                      aria-invalid={errors.dob ? 'true' : 'false'}
                       aria-describedby={errors.dob ? 'dob-error' : undefined}
                     />
                     {errors.dob && (
