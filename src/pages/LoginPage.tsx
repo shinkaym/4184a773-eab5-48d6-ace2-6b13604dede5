@@ -34,20 +34,17 @@ export function LoginPage() {
   const validatePhone = (phone: string): string | undefined => {
     if (phone.length !== 10) return 'Phone number must be 10 digits';
     if (!/^\d{10}$/.test(phone)) return 'Phone number must contain only digits';
-    if (/^(\d)\1{9}$/.test(phone)) return 'Please enter a valid phone number';
-    const areaCode = phone.substring(0, 3);
-    if (areaCode === '000' || areaCode === '111') return 'Invalid area code';
     return undefined;
   };
 
   const validateEmail = (email: string): string | undefined => {
-    if (!email) return 'Email is required';
+    if (!email) return undefined;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Invalid email address';
     return undefined;
   };
 
   const validateDOB = (dob: string): string | undefined => {
-    if (!dob) return 'Date of birth is required';
+    if (!dob) return undefined;
     const date = new Date(dob);
     const today = new Date();
     const minAge = new Date(today.getFullYear() - 120, today.getMonth(), today.getDate());
@@ -88,11 +85,9 @@ export function LoginPage() {
 
     // Validate all fields
     const newErrors: FormErrors = {
-      firstName: !formData.firstName ? 'First name is required' : undefined,
       lastName: !formData.lastName ? 'Last name is required' : undefined,
       email: validateEmail(formData.email),
       dob: validateDOB(formData.dob),
-      consent: !formData.consent ? 'You must accept the privacy policy' : undefined,
     };
 
     const hasErrors = Object.values(newErrors).some((error) => error !== undefined);
@@ -171,55 +166,23 @@ export function LoginPage() {
       <div className='flex-1 lg:flex-[2] bg-white flex flex-col min-h-screen'>
         <div className='flex-1 flex flex-col p-4 sm:p-8'>
           {/* Header */}
-          <div className='text-center mb-6 sm:mb-8'>
+          <div className='relative text-center mb-6 sm:mb-8'>
+            {step === 'details' && (
+              <button
+                type='button'
+                onClick={handleBack}
+                className='absolute left-0 top-1/2 -translate-y-1/2 flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300'
+                aria-label='Go back to phone number entry'
+              >
+                <ArrowLeft className='w-4 h-4' />
+                <span className='text-sm font-medium'>Back</span>
+              </button>
+            )}
             <h2 className='text-xl sm:text-2xl font-bold text-gray-800 mb-1'>AICOM Checkin</h2>
-
-            {/* Progress Indicator */}
-            <div
-              className='mt-6 flex items-center justify-center gap-2'
-              role='progressbar'
-              aria-valuenow={step === 'phone' ? 1 : 2}
-              aria-valuemin={1}
-              aria-valuemax={2}
-            >
-              <div className='flex items-center'>
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
-                    step === 'phone' ? 'bg-gray-800 text-white' : 'bg-gray-800 text-white'
-                  }`}
-                >
-                  1
-                </div>
-                <span
-                  className={`ml-2 text-xs sm:text-sm font-medium ${
-                    step === 'phone' ? 'text-gray-800' : 'text-gray-400'
-                  }`}
-                >
-                  Phone
-                </span>
-              </div>
-              <div className='w-12 sm:w-16 h-0.5 bg-gray-300 mx-2' />
-              <div className='flex items-center'>
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
-                    step === 'details' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-500'
-                  }`}
-                >
-                  2
-                </div>
-                <span
-                  className={`ml-2 text-xs sm:text-sm font-medium ${
-                    step === 'details' ? 'text-gray-800' : 'text-gray-400'
-                  }`}
-                >
-                  Details
-                </span>
-              </div>
-            </div>
           </div>
 
           {/* Content Area */}
-          <div className='flex-1 flex flex-col justify-center'>
+          <div className='flex-1 flex flex-col justify-center overflow-y-auto'>
             <AnimatePresence mode='wait'>
               {step === 'phone' ? (
                 <motion.div
@@ -237,8 +200,8 @@ export function LoginPage() {
                     {/* Phone Display */}
                     <div className='w-full max-w-sm mx-auto mb-4'>
                       <div
-                        className={`bg-gray-50 border-2 rounded-lg px-4 py-3 text-center transition-colors ${
-                          errors.phone ? 'border-red-400 bg-red-50' : 'border-gray-200'
+                        className={`pb-2 border-b-2 text-center transition-colors ${
+                          errors.phone ? 'border-red-400' : 'border-gray-300'
                         }`}
                       >
                         <div
@@ -310,21 +273,10 @@ export function LoginPage() {
                   onSubmit={handleSubmit}
                   className='space-y-3 sm:space-y-4 max-w-md mx-auto w-full px-2 sm:px-0'
                 >
-                  {/* Back Button */}
-                  <button
-                    type='button'
-                    onClick={handleBack}
-                    className='flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors mb-4 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded px-2 py-1'
-                    aria-label='Go back to phone number entry'
-                  >
-                    <ArrowLeft className='w-4 h-4' />
-                    <span className='text-sm font-medium'>Back</span>
-                  </button>
-
                   {/* First Name */}
                   <div>
-                    <label htmlFor='firstName' className='block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5'>
-                      First Name <span className='text-red-500'>*</span>
+                    <label htmlFor='firstName' className='block text-sm sm:text-base font-semibold text-gray-700 mb-2'>
+                      First Name
                     </label>
                     <input
                       id='firstName'
@@ -332,17 +284,16 @@ export function LoginPage() {
                       name='firstName'
                       value={formData.firstName}
                       onChange={handleChange}
-                      className={`w-full px-3 py-2 text-sm border-2 rounded-lg focus:outline-none transition-colors ${
+                      className={`w-full px-1 py-2.5 text-base border-b-2 focus:outline-none transition-colors bg-transparent ${
                         errors.firstName
                           ? 'border-red-400 focus:border-red-500'
-                          : 'border-gray-200 focus:border-gray-400'
+                          : 'border-gray-300 focus:border-gray-600'
                       }`}
-                      required
                       aria-invalid={!!errors.firstName}
                       aria-describedby={errors.firstName ? 'firstName-error' : undefined}
                     />
                     {errors.firstName && (
-                      <p id='firstName-error' className='text-red-600 text-xs mt-1' role='alert'>
+                      <p id='firstName-error' className='text-red-600 text-sm mt-1' role='alert'>
                         {errors.firstName}
                       </p>
                     )}
@@ -350,7 +301,7 @@ export function LoginPage() {
 
                   {/* Last Name */}
                   <div>
-                    <label htmlFor='lastName' className='block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5'>
+                    <label htmlFor='lastName' className='block text-sm sm:text-base font-semibold text-gray-700 mb-2'>
                       Last Name <span className='text-red-500'>*</span>
                     </label>
                     <input
@@ -359,17 +310,17 @@ export function LoginPage() {
                       name='lastName'
                       value={formData.lastName}
                       onChange={handleChange}
-                      className={`w-full px-3 py-2 text-sm border-2 rounded-lg focus:outline-none transition-colors ${
+                      className={`w-full px-1 py-2.5 text-base border-b-2 focus:outline-none transition-colors bg-transparent ${
                         errors.lastName
                           ? 'border-red-400 focus:border-red-500'
-                          : 'border-gray-200 focus:border-gray-400'
+                          : 'border-gray-300 focus:border-gray-600'
                       }`}
                       required
                       aria-invalid={!!errors.lastName}
                       aria-describedby={errors.lastName ? 'lastName-error' : undefined}
                     />
                     {errors.lastName && (
-                      <p id='lastName-error' className='text-red-600 text-xs mt-1' role='alert'>
+                      <p id='lastName-error' className='text-red-600 text-sm mt-1' role='alert'>
                         {errors.lastName}
                       </p>
                     )}
@@ -377,7 +328,7 @@ export function LoginPage() {
 
                   {/* Phone Number (read-only) */}
                   <div>
-                    <label htmlFor='phone' className='block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5'>
+                    <label htmlFor='phone' className='block text-sm sm:text-base font-semibold text-gray-700 mb-2'>
                       Phone Number
                     </label>
                     <input
@@ -385,15 +336,15 @@ export function LoginPage() {
                       type='tel'
                       value={formatPhoneDisplay(phoneNumber)}
                       readOnly
-                      className='w-full px-3 py-2 text-sm border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed'
+                      className='w-full px-1 py-2.5 text-base border-b-2 border-gray-300 bg-transparent text-gray-600 cursor-not-allowed'
                       aria-label='Phone number (read-only)'
                     />
                   </div>
 
                   {/* Email */}
                   <div>
-                    <label htmlFor='email' className='block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5'>
-                      Email <span className='text-red-500'>*</span>
+                    <label htmlFor='email' className='block text-sm sm:text-base font-semibold text-gray-700 mb-2'>
+                      Email
                     </label>
                     <input
                       id='email'
@@ -401,15 +352,14 @@ export function LoginPage() {
                       name='email'
                       value={formData.email}
                       onChange={handleChange}
-                      className={`w-full px-3 py-2 text-sm border-2 rounded-lg focus:outline-none transition-colors ${
-                        errors.email ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-gray-400'
+                      className={`w-full px-1 py-2.5 text-base border-b-2 focus:outline-none transition-colors bg-transparent ${
+                        errors.email ? 'border-red-400 focus:border-red-500' : 'border-gray-300 focus:border-gray-600'
                       }`}
-                      required
                       aria-invalid={!!errors.email}
                       aria-describedby={errors.email ? 'email-error' : undefined}
                     />
                     {errors.email && (
-                      <p id='email-error' className='text-red-600 text-xs mt-1' role='alert'>
+                      <p id='email-error' className='text-red-600 text-sm mt-1' role='alert'>
                         {errors.email}
                       </p>
                     )}
@@ -417,26 +367,30 @@ export function LoginPage() {
 
                   {/* Date of Birth */}
                   <div>
-                    <label htmlFor='dob' className='block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5'>
-                      Date of Birth <span className='text-red-500'>*</span>
+                    <label htmlFor='dob' className='block text-sm sm:text-base font-semibold text-gray-700 mb-2'>
+                      Date of Birth
                     </label>
-                    <input
-                      id='dob'
-                      type='date'
-                      name='dob'
-                      value={formData.dob}
-                      onChange={handleChange}
-                      max={getMaxDate()}
-                      min={getMinDate()}
-                      className={`w-full px-3 py-2 text-sm border-2 rounded-lg focus:outline-none transition-colors ${
-                        errors.dob ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-gray-400'
-                      }`}
-                      required
-                      aria-invalid={!!errors.dob}
-                      aria-describedby={errors.dob ? 'dob-error' : undefined}
-                    />
+                    <div
+                      onClick={() => document.getElementById('dob')?.showPicker?.()}
+                      className='cursor-pointer'
+                    >
+                      <input
+                        id='dob'
+                        type='date'
+                        name='dob'
+                        value={formData.dob}
+                        onChange={handleChange}
+                        max={getMaxDate()}
+                        min={getMinDate()}
+                        className={`w-full px-1 py-2.5 text-base border-b-2 focus:outline-none transition-colors bg-transparent cursor-pointer ${
+                          errors.dob ? 'border-red-400 focus:border-red-500' : 'border-gray-300 focus:border-gray-600'
+                        }`}
+                        aria-invalid={!!errors.dob}
+                        aria-describedby={errors.dob ? 'dob-error' : undefined}
+                      />
+                    </div>
                     {errors.dob && (
-                      <p id='dob-error' className='text-red-600 text-xs mt-1' role='alert'>
+                      <p id='dob-error' className='text-red-600 text-sm mt-1' role='alert'>
                         {errors.dob}
                       </p>
                     )}
@@ -453,7 +407,6 @@ export function LoginPage() {
                           checked={formData.consent}
                           onChange={handleChange}
                           className='sr-only peer'
-                          required
                           aria-invalid={!!errors.consent}
                           aria-describedby={errors.consent ? 'consent-error' : undefined}
                         />
@@ -469,7 +422,7 @@ export function LoginPage() {
                           {formData.consent && <Check className='w-3 h-3 text-white' />}
                         </div>
                       </div>
-                      <span className='text-xs sm:text-sm text-gray-600 leading-relaxed'>
+                      <span className='text-sm sm:text-base text-gray-600 leading-relaxed'>
                         By checking the box, you consent to receive messages sent by us. For more information, please
                         read our{' '}
                         <a
@@ -484,7 +437,7 @@ export function LoginPage() {
                       </span>
                     </label>
                     {errors.consent && (
-                      <p id='consent-error' className='text-red-600 text-xs mt-1 ml-7' role='alert'>
+                      <p id='consent-error' className='text-red-600 text-sm mt-1 ml-7' role='alert'>
                         {errors.consent}
                       </p>
                     )}
@@ -497,8 +450,8 @@ export function LoginPage() {
                       disabled={isLoading}
                       whileHover={!isLoading ? { scale: 1.02 } : {}}
                       whileTap={!isLoading ? { scale: 0.98 } : {}}
-                      className={`w-full py-3 rounded-lg font-bold text-sm sm:text-base tracking-wider transition-all shadow-lg focus:outline-none focus:ring-4 focus:ring-gray-300 ${
-                        isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-800 text-white hover:bg-gray-900'
+                      className={`w-full py-3 rounded-lg font-bold text-sm sm:text-base tracking-wider transition-all shadow-lg focus:outline-none focus:ring-4 focus:ring-green-300 ${
+                        isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 text-white hover:bg-green-700'
                       }`}
                     >
                       {isLoading ? (
