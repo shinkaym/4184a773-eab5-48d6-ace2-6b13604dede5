@@ -109,7 +109,7 @@ export function LoginPage() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       setShowSuccess(true);
       setTimeout(() => {
-        navigate('/booking');
+        navigate('/step-booking');
       }, 2000);
     } catch (error) {
       setErrors({ email: 'An error occurred. Please try again.' });
