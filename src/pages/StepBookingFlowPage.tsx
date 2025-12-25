@@ -220,8 +220,8 @@ export function StepBookingFlowPage() {
               { num: 6, label: 'Review' },
               { num: 7, label: 'Done' },
             ].map((step, index) => (
-              <div key={step.num} className="flex items-center flex-1">
-                <div className="flex flex-col items-center flex-1">
+              <>
+                <div key={step.num} className="flex flex-col items-center">
                   <div
                     className={`
                       w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300
@@ -238,7 +238,7 @@ export function StepBookingFlowPage() {
                   </div>
                   <div
                     className={`
-                      mt-2 text-xs font-medium transition-colors duration-300
+                      mt-2 text-xs font-medium transition-colors duration-300 whitespace-nowrap
                       ${
                         currentStep === step.num
                           ? 'text-nature-primary'
@@ -252,7 +252,7 @@ export function StepBookingFlowPage() {
                   </div>
                 </div>
                 {index < 6 && (
-                  <div className="flex-1 h-1 mx-2 relative">
+                  <div key={`line-${step.num}`} className="flex-1 h-1 mx-2 relative">
                     <div className="absolute inset-0 bg-nature-divider rounded-full" />
                     <div
                       className={`absolute inset-0 rounded-full transition-all duration-300 ${
@@ -262,7 +262,7 @@ export function StepBookingFlowPage() {
                     />
                   </div>
                 )}
-              </div>
+              </>
             ))}
           </div>
         </div>
