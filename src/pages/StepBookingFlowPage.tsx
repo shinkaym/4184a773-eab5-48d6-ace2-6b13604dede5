@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, User, LogOut } from 'lucide-react';
@@ -25,15 +25,32 @@ export function StepBookingFlowPage() {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
+  // Reset employee selection when booking type is unassigned
+  useEffect(() => {
+    if (bookingType === 'unassigned') {
+      setSelectedEmployee(null);
+    }
+  }, [bookingType]);
+
   const handleNext = () => {
     if (currentStep < 7) {
-      setCurrentStep((currentStep + 1) as StepNumber);
+      // Skip employee selection (step 3) if booking type is unassigned
+      if (currentStep === 2 && bookingType === 'unassigned') {
+        setCurrentStep(4);
+      } else {
+        setCurrentStep((currentStep + 1) as StepNumber);
+      }
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep((currentStep - 1) as StepNumber);
+      // Skip employee selection (step 3) when going back if booking type is unassigned
+      if (currentStep === 4 && bookingType === 'unassigned') {
+        setCurrentStep(2);
+      } else {
+        setCurrentStep((currentStep - 1) as StepNumber);
+      }
     } else {
       navigate('/');
     }
@@ -72,7 +89,8 @@ export function StepBookingFlowPage() {
       case 2:
         return !bookingType;
       case 3:
-        return !selectedEmployee;
+        // Employee selection is only required for scheduled bookings
+        return bookingType === 'scheduled' && !selectedEmployee;
       case 4:
         return selectedServices.length === 0;
       case 5:
