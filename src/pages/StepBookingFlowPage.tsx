@@ -151,7 +151,7 @@ export function StepBookingFlowPage() {
   return (
     <div className="min-h-screen w-full bg-nature-main flex flex-col font-sans text-nature-text-primary">
       {/* Hero Banner */}
-      <div className="relative w-full h-[280px] md:h-[320px] overflow-hidden">
+      <div className="relative w-full h-[400px] md:h-[480px] overflow-hidden">
         <div className="absolute inset-0">
           <img
             src="https://picsum.photos/seed/nailsalon/1920/800"
@@ -162,7 +162,7 @@ export function StepBookingFlowPage() {
         </div>
 
         {/* Navigation */}
-        <nav className="relative z-10 w-full px-6 py-6">
+        <nav className="relative z-50 w-full px-6 py-6">
           <div className="max-w-[1400px] mx-auto flex justify-between items-center">
             <div className="flex items-center gap-3">
               <img src={logo} alt="AICOMPOS Logo" className="h-10 w-auto rounded-soft shadow-soft" />
@@ -172,13 +172,13 @@ export function StepBookingFlowPage() {
             </div>
 
             <div className="flex items-center gap-4 pl-6 border-l border-white/30">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-soft bg-white/10 backdrop-blur-md text-sm font-medium text-white hover:bg-white/20 transition-all">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-soft bg-white/10 backdrop-blur-md text-sm font-medium text-white hover:bg-white/20 transition-all cursor-pointer">
                 <User className="w-4 h-4" />
                 John Wick
               </button>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 text-sm font-medium text-white/90 hover:text-nature-error transition-colors"
+                className="flex items-center gap-2 text-sm font-medium text-white/90 hover:text-nature-error transition-colors cursor-pointer"
               >
                 <LogOut className="w-4 h-4" />
                 Logout
