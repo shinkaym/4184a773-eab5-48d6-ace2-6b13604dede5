@@ -75,8 +75,10 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
       {/* Time Grid */}
       <div className="bg-white rounded-softer border border-nature-divider p-8 shadow-soft-lg">
         <div className="flex items-center justify-between mb-6">
-          <div className="text-xs font-medium text-nature-text-tertiary tracking-wider">
-            15-MIN INTERVALS • 9:00 AM - 7:00 PM
+          <div>
+            <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">STORE TIME</div>
+            <div className="text-sm font-semibold text-nature-text-primary">Thursday, December 25th 2025, 01:47 AM</div>
+            <div className="text-xs text-nature-text-secondary mt-0.5">Central Standard Time (CT)</div>
           </div>
           {selectedTime && (
             <div className="flex items-center gap-4 text-xs">
