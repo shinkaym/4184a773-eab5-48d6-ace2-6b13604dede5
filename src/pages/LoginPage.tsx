@@ -185,7 +185,7 @@ export function LoginPage() {
       </div>
 
       {/* Right Panel - Smaller */}
-      <div className='flex-1 lg:flex-[2] bg-white flex flex-col min-h-screen relative'>
+      <div className='flex-1 lg:flex-[2] bg-white flex flex-col min-h-screen relative overflow-hidden'>
         {/* Progress Bar */}
         {isLoading && !showSuccess && (
           <div className='absolute top-0 left-0 right-0 h-1 bg-gray-200 z-50'>
@@ -215,7 +215,7 @@ export function LoginPage() {
           </div>
 
           {/* Content Area */}
-          <div className='flex-1 flex flex-col justify-center overflow-y-auto'>
+          <div className='flex-1 flex flex-col justify-center overflow-y-auto overflow-x-hidden'>
             <AnimatePresence mode='wait'>
               {step === 'phone' ? (
                 <motion.div
@@ -272,9 +272,9 @@ export function LoginPage() {
                       whileTap={phoneNumber.length === 10 ? { scale: 0.98 } : {}}
                       onClick={handleCheckIn}
                       disabled={phoneNumber.length !== 10}
-                      className={`w-full max-w-sm mx-auto block py-3 rounded-lg font-bold text-sm sm:text-base tracking-wider transition-all shadow-lg focus:outline-none focus:ring-4 focus:ring-gray-300 ${
+                      className={`w-full max-w-sm mx-auto block py-3 rounded-lg font-bold text-sm sm:text-base tracking-wider transition-all shadow-lg focus:outline-none focus:ring-4 focus:ring-orange-300 ${
                         phoneNumber.length === 10
-                          ? 'bg-gray-800 text-white hover:bg-gray-900 cursor-pointer'
+                          ? 'bg-orange-500 text-white hover:bg-orange-600 cursor-pointer'
                           : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                       }`}
                       aria-label='Check in with phone number'
