@@ -149,58 +149,76 @@ export function StepBookingFlowPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-nature-main flex flex-col font-sans text-nature-text-primary">
+    <div className='min-h-screen w-full bg-nature-main flex flex-col font-sans text-nature-text-primary'>
       {/* Hero Banner */}
-      <div className="relative w-full h-[400px] md:h-[480px] overflow-hidden">
-        <div className="absolute inset-0">
+      <div className='relative w-full h-[400px] md:h-[480px] overflow-hidden'>
+        <div className='absolute inset-0'>
           <img
-            src="https://picsum.photos/seed/nailsalon/1920/800"
-            alt="Nail Salon Banner"
-            className="w-full h-full object-cover"
+            src='https://picsum.photos/seed/nailsalon/1920/800'
+            alt='Nail Salon Banner'
+            className='w-full h-full object-cover'
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+          <div className='absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70' />
         </div>
 
         {/* Navigation */}
-        <nav className="relative z-50 w-full px-6 py-6">
-          <div className="max-w-[1400px] mx-auto flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <img src={logo} alt="AICOMPOS Logo" className="h-10 w-auto rounded-soft shadow-soft" />
-              <span className="font-display text-2xl font-semibold tracking-tight text-white drop-shadow-lg">
-                AICOM<span className="text-nature-primary">POS</span>
+        <nav className='relative z-50 w-full px-6 py-6'>
+          <div className='max-w-[1400px] mx-auto flex justify-between items-center'>
+            <div className='flex items-center gap-3'>
+              <img src={logo} alt='AICOMPOS Logo' className='h-10 w-auto rounded-soft shadow-soft' />
+              <span className='font-display text-2xl font-semibold tracking-tight text-white drop-shadow-lg'>
+                AICOM<span className='text-nature-primary'>POS</span>
               </span>
             </div>
 
-            <div className="flex items-center gap-4 pl-6 border-l border-white/30">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-soft bg-white/10 backdrop-blur-md text-sm font-medium text-white hover:bg-white/20 transition-all cursor-pointer">
-                <User className="w-4 h-4" />
-                John Wick
-              </button>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 text-sm font-medium text-white/90 hover:text-nature-error transition-colors cursor-pointer"
-              >
-                <LogOut className="w-4 h-4" />
-                Logout
-              </button>
+            <div className='flex items-center gap-6'>
+              {/* Desktop Navigation Links */}
+              <div className='hidden lg:flex items-center gap-6 text-sm font-medium'>
+                <button
+                  onClick={() => navigate('/step-booking')}
+                  className='text-white/90 hover:text-white transition-colors cursor-pointer'
+                >
+                  Booking
+                </button>
+                <button
+                  onClick={() => navigate('/contact')}
+                  className='text-white/90 hover:text-white transition-colors cursor-pointer'
+                >
+                  Contact
+                </button>
+              </div>
+
+              <div className='flex items-center gap-4 pl-6 border-l border-white/30'>
+                <button className='flex items-center gap-2 px-4 py-2 rounded-soft bg-white/10 backdrop-blur-md text-sm font-medium text-white hover:bg-white/20 transition-all cursor-pointer'>
+                  <User className='w-4 h-4' />
+                  John Wick
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className='flex items-center gap-2 text-sm font-medium text-white/90 hover:text-nature-error transition-colors cursor-pointer'
+                >
+                  <LogOut className='w-4 h-4' />
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
         </nav>
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-[1400px] mx-auto px-6 h-full flex flex-col justify-center -mt-16">
+        <div className='relative z-10 max-w-[1400px] mx-auto px-6 h-full flex flex-col justify-center -mt-16'>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="max-w-3xl"
+            className='max-w-3xl'
           >
-            <h1 className="text-5xl md:text-6xl font-display font-semibold tracking-tight text-white mb-5 drop-shadow-lg leading-tight">
+            <h1 className='text-5xl md:text-6xl font-display font-semibold tracking-tight text-white mb-5 drop-shadow-lg leading-tight'>
               Book Your
               <br />
               Appointment
             </h1>
-            <p className="text-white/90 text-lg font-light max-w-2xl leading-relaxed">
+            <p className='text-white/90 text-lg font-light max-w-2xl leading-relaxed'>
               Follow these simple steps to schedule your perfect beauty experience
             </p>
           </motion.div>
@@ -208,9 +226,9 @@ export function StepBookingFlowPage() {
       </div>
 
       {/* Progress Indicator */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-nature-divider shadow-soft">
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
+      <div className='sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-nature-divider shadow-soft'>
+        <div className='max-w-6xl mx-auto px-6 py-4'>
+          <div className='flex items-center justify-between'>
             {[
               { num: 1, label: 'Date' },
               { num: 2, label: 'Type' },
@@ -221,7 +239,7 @@ export function StepBookingFlowPage() {
               { num: 7, label: 'Done' },
             ].map((step, index) => (
               <>
-                <div key={step.num} className="flex flex-col items-center">
+                <div key={step.num} className='flex flex-col items-center'>
                   <div
                     className={`
                       w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300
@@ -252,8 +270,8 @@ export function StepBookingFlowPage() {
                   </div>
                 </div>
                 {index < 6 && (
-                  <div key={`line-${step.num}`} className="flex-1 h-1 mx-2 relative">
-                    <div className="absolute inset-0 bg-nature-divider rounded-full" />
+                  <div key={`line-${step.num}`} className='flex-1 h-1 mx-2 relative'>
+                    <div className='absolute inset-0 bg-nature-divider rounded-full' />
                     <div
                       className={`absolute inset-0 rounded-full transition-all duration-300 ${
                         currentStep > step.num ? 'bg-nature-secondary' : 'bg-transparent'
@@ -269,26 +287,26 @@ export function StepBookingFlowPage() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow w-full max-w-7xl mx-auto p-6 md:py-12 relative overflow-hidden">
+      <div className='flex-grow w-full max-w-7xl mx-auto p-6 md:py-12 relative overflow-hidden'>
         {/* Background decoration */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-nature-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-nature-secondary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none" />
+        <div className='absolute top-0 right-0 w-[600px] h-[600px] bg-nature-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none' />
+        <div className='absolute bottom-0 left-0 w-[500px] h-[500px] bg-nature-secondary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none' />
 
         {/* Step Content with Slide Animation */}
-        <div className="relative z-10 min-h-[600px] flex flex-col">
-          <AnimatePresence initial={false} custom={direction} mode="wait">
+        <div className='relative z-10 min-h-[600px] flex flex-col'>
+          <AnimatePresence initial={false} custom={direction} mode='wait'>
             <motion.div
               key={currentStep}
               custom={direction}
               variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
+              initial='enter'
+              animate='center'
+              exit='exit'
               transition={{
                 x: { type: 'spring', stiffness: 300, damping: 30 },
                 opacity: { duration: 0.2 },
               }}
-              className="flex-grow"
+              className='flex-grow'
             >
               {currentStep === 1 && <Step1DateSelection selectedDate={selectedDate} onDateChange={setSelectedDate} />}
               {currentStep === 2 && <Step2BookingType selectedType={bookingType} onTypeChange={setBookingType} />}
@@ -337,11 +355,11 @@ export function StepBookingFlowPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="flex justify-between items-center mt-12 pt-8 border-t border-nature-divider"
+              className='flex justify-between items-center mt-12 pt-8 border-t border-nature-divider'
             >
-              <ArrowButton direction="left" text="Back" onClick={handleBack} />
+              <ArrowButton direction='left' text='Back' onClick={handleBack} />
               <ArrowButton
-                direction="right"
+                direction='right'
                 text={getNextButtonText()}
                 onClick={currentStep === 6 ? handleFinish : handleNext}
                 disabled={isNextDisabled()}
@@ -355,15 +373,15 @@ export function StepBookingFlowPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="flex justify-center items-center mt-12"
+              className='flex justify-center items-center mt-12'
             >
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleBackToHome}
-                className="flex items-center gap-2 px-8 py-4 bg-white border-2 border-nature-primary text-nature-primary rounded-soft font-medium hover:bg-nature-primary/5 transition-all shadow-soft"
+                className='flex items-center gap-2 px-8 py-4 bg-white border-2 border-nature-primary text-nature-primary rounded-soft font-medium hover:bg-nature-primary/5 transition-all shadow-soft'
               >
-                <ArrowLeft className="w-5 h-5" />
+                <ArrowLeft className='w-5 h-5' />
                 Back to Home
               </motion.button>
             </motion.div>
@@ -372,8 +390,8 @@ export function StepBookingFlowPage() {
       </div>
 
       {/* Footer */}
-      <footer className="w-full border-t border-nature-divider py-8 px-6 mt-auto bg-white/50 backdrop-blur-sm">
-        <div className="max-w-[1400px] mx-auto flex justify-between items-center text-xs text-nature-text-tertiary font-light tracking-wide">
+      <footer className='w-full border-t border-nature-divider py-8 px-6 mt-auto bg-white/50 backdrop-blur-sm'>
+        <div className='max-w-[1400px] mx-auto flex justify-between items-center text-xs text-nature-text-tertiary font-light tracking-wide'>
           <div>Copyright © 2024 AICOMPOS</div>
           <div>Step {currentStep} of 7</div>
         </div>
