@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
-import { Check, Download, Calendar, User, Scissors, Clock, MapPin, Hash } from 'lucide-react';
+import { Check, Download, Calendar, User, Scissors, Clock, Phone } from 'lucide-react';
 import { services, staffMembers } from '../../data/bookingData';
 
 interface Step7CompletionProps {
+  customerName: string;
+  customerPhone: string;
   selectedDate: Date;
   bookingType: 'unassigned' | 'scheduled' | null;
   selectedEmployee: string | null;
@@ -12,6 +14,8 @@ interface Step7CompletionProps {
 }
 
 export function Step7Completion({
+  customerName,
+  customerPhone,
   selectedDate,
   bookingType,
   selectedEmployee,
@@ -29,8 +33,9 @@ export function Step7Completion({
     return total + (service?.price || 0);
   }, 0);
 
-  const employeeName = staffMembers.find((s) => s.id === selectedEmployee)?.name || 'Any Staff';
+  const employeeName = staffMembers.find((s) => s.id === selectedEmployee)?.name || 'Any Available Staff';
 
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const monthNames = [
     'January',
     'February',
@@ -46,20 +51,13 @@ export function Step7Completion({
     'December',
   ];
 
-  const calculateEndTime = (startTime: string, duration: number) => {
-    const [time, period] = startTime.split(' ');
-    const [hours, minutes] = time.split(':').map(Number);
-    const totalMinutes = (period === 'PM' && hours !== 12 ? hours + 12 : hours) * 60 + minutes + duration;
-    const endHours = Math.floor(totalMinutes / 60) % 24;
-    const endMinutes = totalMinutes % 60;
-    const endPeriod = endHours >= 12 ? 'PM' : 'AM';
-    const displayHours = endHours > 12 ? endHours - 12 : endHours === 0 ? 12 : endHours;
-    return `${displayHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')} ${endPeriod}`;
+  const formatAppointmentDate = () => {
+    const dayName = dayNames[selectedDate.getDay()];
+    const monthName = monthNames[selectedDate.getMonth()];
+    const date = selectedDate.getDate();
+    const year = selectedDate.getFullYear();
+    return `${dayName}, ${monthName} ${date}, ${year}`;
   };
-
-  const confirmationNumber = `BK-${new Date().getFullYear()}-${Math.floor(Math.random() * 100000)
-    .toString()
-    .padStart(5, '0')}`;
 
   const checkmarkVariants = {
     hidden: { scale: 0, rotate: -180 },
@@ -110,48 +108,68 @@ export function Step7Completion({
         transition={{ delay: 0.4 }}
         className="w-full bg-white rounded-softer p-10 shadow-soft-xl border border-nature-divider mb-8"
       >
-        {/* Confirmation Number */}
-        <div className="mb-8 pb-8 border-b border-nature-divider text-center">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <Hash className="w-5 h-5 text-nature-primary" />
-            <div className="text-xs font-medium text-nature-text-tertiary tracking-wider">CONFIRMATION NUMBER</div>
-          </div>
-          <div className="text-3xl font-display font-bold tracking-tight text-nature-primary">
-            {confirmationNumber}
-          </div>
-        </div>
-
         {/* Details Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Date & Time */}
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
-              <Calendar className="w-6 h-6 text-nature-primary" />
-            </div>
-            <div className="flex-grow">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">DATE & TIME</div>
-              <div className="font-semibold text-base text-nature-text-primary">
-                {monthNames[selectedDate.getMonth()]} {selectedDate.getDate()}, {selectedDate.getFullYear()}
-              </div>
-              <div className="text-xs text-nature-text-secondary font-light">
-                {selectedTime} - {selectedTime && calculateEndTime(selectedTime, totalDuration)}
-              </div>
-            </div>
-          </div>
-
-          {/* Employee */}
+          {/* Customer Name */}
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
               <User className="w-6 h-6 text-nature-primary" />
             </div>
             <div className="flex-grow">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">EMPLOYEE</div>
-              <div className="font-semibold text-base text-nature-text-primary">{employeeName}</div>
-              <div className="text-xs text-nature-text-secondary font-light">
-                {bookingType === 'unassigned' ? 'Unassigned' : 'Scheduled'}
-              </div>
+              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">CUSTOMER</div>
+              <div className="font-semibold text-base text-nature-text-primary">{customerName}</div>
             </div>
           </div>
+
+          {/* Phone */}
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <Phone className="w-6 h-6 text-nature-primary" />
+            </div>
+            <div className="flex-grow">
+              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">PHONE</div>
+              <div className="font-semibold text-base text-nature-text-primary">{customerPhone}</div>
+            </div>
+          </div>
+
+          {/* Appointment Date */}
+          <div className="flex items-start gap-4 md:col-span-2">
+            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <Calendar className="w-6 h-6 text-nature-primary" />
+            </div>
+            <div className="flex-grow">
+              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">
+                APPOINTMENT DATE
+              </div>
+              <div className="font-semibold text-base text-nature-text-primary">{formatAppointmentDate()}</div>
+              <div className="text-xs text-nature-text-secondary font-light">Central Standard Time (CT)</div>
+            </div>
+          </div>
+
+          {/* Time */}
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <Clock className="w-6 h-6 text-nature-primary" />
+            </div>
+            <div className="flex-grow">
+              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">TIME</div>
+              <div className="font-semibold text-base text-nature-text-primary">{selectedTime}</div>
+            </div>
+          </div>
+
+          {/* Technician - Only show for scheduled bookings */}
+          {bookingType === 'scheduled' && (
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+                <User className="w-6 h-6 text-nature-primary" />
+              </div>
+              <div className="flex-grow">
+                <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">TECHNICIAN</div>
+                <div className="font-semibold text-base text-nature-text-primary">{employeeName}</div>
+                <div className="text-xs text-nature-text-secondary font-light">Scheduled</div>
+              </div>
+            </div>
+          )}
 
           {/* Services */}
           <div className="flex items-start gap-4 md:col-span-2">
@@ -183,20 +201,6 @@ export function Step7Completion({
                   Total Duration: {totalDuration} minutes
                 </div>
                 <div className="text-2xl font-bold text-nature-primary">${totalPrice}</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Location */}
-          <div className="flex items-start gap-4 md:col-span-2">
-            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
-              <MapPin className="w-6 h-6 text-nature-primary" />
-            </div>
-            <div className="flex-grow">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">LOCATION</div>
-              <div className="font-semibold text-base text-nature-text-primary">AICOMPOS Beauty Salon</div>
-              <div className="text-xs text-nature-text-secondary font-light">
-                123 Main Street, City, ST 12345
               </div>
             </div>
           </div>

@@ -25,6 +25,10 @@ export function StepBookingFlowPage() {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
+  // Customer info (hardcoded for now)
+  const customerName = 'John Wick';
+  const customerPhone = '(555) 123-4567';
+
   // Reset employee selection when booking type is unassigned
   useEffect(() => {
     if (bookingType === 'unassigned') {
@@ -67,6 +71,16 @@ export function StepBookingFlowPage() {
 
   const handleLogout = () => {
     navigate('/');
+  };
+
+  const handleBackToHome = () => {
+    // Reset all booking state
+    setCurrentStep(1);
+    setSelectedDate(new Date());
+    setBookingType(null);
+    setSelectedEmployee(null);
+    setSelectedServices([]);
+    setSelectedTime(null);
   };
 
   const totalDuration = selectedServices.reduce((total, serviceId) => {
@@ -293,6 +307,8 @@ export function StepBookingFlowPage() {
               )}
               {currentStep === 6 && (
                 <Step6Review
+                  customerName={customerName}
+                  customerPhone={customerPhone}
                   selectedDate={selectedDate}
                   bookingType={bookingType}
                   selectedEmployee={selectedEmployee}
@@ -302,6 +318,8 @@ export function StepBookingFlowPage() {
               )}
               {currentStep === 7 && (
                 <Step7Completion
+                  customerName={customerName}
+                  customerPhone={customerPhone}
                   selectedDate={selectedDate}
                   bookingType={bookingType}
                   selectedEmployee={selectedEmployee}
@@ -342,7 +360,7 @@ export function StepBookingFlowPage() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/')}
+                onClick={handleBackToHome}
                 className="flex items-center gap-2 px-8 py-4 bg-white border-2 border-nature-primary text-nature-primary rounded-soft font-medium hover:bg-nature-primary/5 transition-all shadow-soft"
               >
                 <ArrowLeft className="w-5 h-5" />

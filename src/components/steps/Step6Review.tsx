@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
-import { Calendar, User, Scissors, Clock, DollarSign, Briefcase } from 'lucide-react';
+import { Calendar, User, Scissors, Clock, DollarSign, Phone } from 'lucide-react';
 import { services, staffMembers } from '../../data/bookingData';
 
 interface Step6ReviewProps {
+  customerName: string;
+  customerPhone: string;
   selectedDate: Date;
   bookingType: 'unassigned' | 'scheduled' | null;
   selectedEmployee: string | null;
@@ -11,6 +13,8 @@ interface Step6ReviewProps {
 }
 
 export function Step6Review({
+  customerName,
+  customerPhone,
   selectedDate,
   bookingType,
   selectedEmployee,
@@ -27,8 +31,9 @@ export function Step6Review({
     return total + (service?.price || 0);
   }, 0);
 
-  const employeeName = staffMembers.find((s) => s.id === selectedEmployee)?.name || 'Any Staff';
+  const employeeName = staffMembers.find((s) => s.id === selectedEmployee)?.name || 'Any Available Staff';
 
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const monthNames = [
     'January',
     'February',
@@ -44,15 +49,12 @@ export function Step6Review({
     'December',
   ];
 
-  const calculateEndTime = (startTime: string, duration: number) => {
-    const [time, period] = startTime.split(' ');
-    const [hours, minutes] = time.split(':').map(Number);
-    const totalMinutes = (period === 'PM' && hours !== 12 ? hours + 12 : hours) * 60 + minutes + duration;
-    const endHours = Math.floor(totalMinutes / 60) % 24;
-    const endMinutes = totalMinutes % 60;
-    const endPeriod = endHours >= 12 ? 'PM' : 'AM';
-    const displayHours = endHours > 12 ? endHours - 12 : endHours === 0 ? 12 : endHours;
-    return `${displayHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')} ${endPeriod}`;
+  const formatAppointmentDate = () => {
+    const dayName = dayNames[selectedDate.getDay()];
+    const monthName = monthNames[selectedDate.getMonth()];
+    const date = selectedDate.getDate();
+    const year = selectedDate.getFullYear();
+    return `${dayName}, ${monthName} ${date}, ${year}`;
   };
 
   return (
@@ -71,7 +73,7 @@ export function Step6Review({
           transition={{ delay: 0.1 }}
           className="inline-flex items-center justify-center w-16 h-16 rounded-soft bg-gradient-to-br from-nature-primary/20 to-nature-secondary/20 mb-6"
         >
-          <Briefcase className="w-8 h-8 text-nature-primary" />
+          <DollarSign className="w-8 h-8 text-nature-primary" />
         </motion.div>
         <h2 className="text-4xl md:text-5xl font-display font-semibold tracking-tight text-nature-text-primary mb-4">
           Review Your Booking
@@ -82,131 +84,116 @@ export function Step6Review({
       </div>
 
       {/* Review Card */}
-      <div className="bg-white rounded-softer p-8 md:p-12 shadow-soft-xl border border-nature-divider">
-        <div className="space-y-8">
-          {/* Date & Time */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="flex items-start gap-5"
-          >
-            <div className="w-14 h-14 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
-              <Calendar className="w-7 h-7 text-nature-primary" />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="w-full bg-white rounded-softer p-10 shadow-soft-xl border border-nature-divider"
+      >
+        {/* Details Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Customer Name */}
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <User className="w-6 h-6 text-nature-primary" />
             </div>
             <div className="flex-grow">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">DATE & TIME</div>
-              <h3 className="font-semibold text-lg mb-1">
-                {monthNames[selectedDate.getMonth()]} {selectedDate.getDate()}, {selectedDate.getFullYear()}
-              </h3>
-              <p className="text-sm text-nature-text-secondary font-light">
-                {selectedTime} - {selectedTime && calculateEndTime(selectedTime, totalDuration)}
-              </p>
+              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">CUSTOMER</div>
+              <div className="font-semibold text-base text-nature-text-primary">{customerName}</div>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Booking Type */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.25 }}
-            className="flex items-start gap-5"
-          >
-            <div className="w-14 h-14 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
-              <Briefcase className="w-7 h-7 text-nature-primary" />
+          {/* Phone */}
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <Phone className="w-6 h-6 text-nature-primary" />
             </div>
             <div className="flex-grow">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">BOOKING TYPE</div>
-              <h3 className="font-semibold text-lg">
-                {bookingType === 'unassigned' ? 'Unassigned Booking' : 'Scheduled Booking'}
-              </h3>
-              <p className="text-sm text-nature-text-secondary font-light">
-                {bookingType === 'unassigned'
-                  ? 'First available staff member'
-                  : 'Specific employee assignment'}
-              </p>
+              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">PHONE</div>
+              <div className="font-semibold text-base text-nature-text-primary">{customerPhone}</div>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Employee */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex items-start gap-5"
-          >
-            <div className="w-14 h-14 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
-              <User className="w-7 h-7 text-nature-primary" />
+          {/* Appointment Date */}
+          <div className="flex items-start gap-4 md:col-span-2">
+            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <Calendar className="w-6 h-6 text-nature-primary" />
             </div>
             <div className="flex-grow">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">EMPLOYEE</div>
-              <h3 className="font-semibold text-lg">{employeeName}</h3>
-              <p className="text-sm text-nature-text-secondary font-light">Service provider</p>
+              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">
+                APPOINTMENT DATE
+              </div>
+              <div className="font-semibold text-base text-nature-text-primary">{formatAppointmentDate()}</div>
+              <div className="text-xs text-nature-text-secondary font-light">Central Standard Time (CT)</div>
             </div>
-          </motion.div>
+          </div>
+
+          {/* Time */}
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <Clock className="w-6 h-6 text-nature-primary" />
+            </div>
+            <div className="flex-grow">
+              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">TIME</div>
+              <div className="font-semibold text-base text-nature-text-primary">{selectedTime}</div>
+            </div>
+          </div>
+
+          {/* Technician - Only show for scheduled bookings */}
+          {bookingType === 'scheduled' && (
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+                <User className="w-6 h-6 text-nature-primary" />
+              </div>
+              <div className="flex-grow">
+                <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">TECHNICIAN</div>
+                <div className="font-semibold text-base text-nature-text-primary">{employeeName}</div>
+                <div className="text-xs text-nature-text-secondary font-light">Scheduled</div>
+              </div>
+            </div>
+          )}
 
           {/* Services */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.35 }}
-            className="flex items-start gap-5"
-          >
-            <div className="w-14 h-14 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
-              <Scissors className="w-7 h-7 text-nature-primary" />
+          <div className="flex items-start gap-4 md:col-span-2">
+            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <Scissors className="w-6 h-6 text-nature-primary" />
             </div>
             <div className="flex-grow">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-3">
-                SELECTED SERVICES
-              </div>
-              <div className="space-y-3">
+              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-2">SERVICES</div>
+              <div className="space-y-2">
                 {selectedServices.map((serviceId) => {
                   const service = services.find((s) => s.id === serviceId);
                   if (!service) return null;
                   return (
-                    <div
-                      key={serviceId}
-                      className="flex items-center justify-between p-4 bg-gradient-to-r from-nature-primary/5 to-nature-secondary/5 rounded-soft border-l-4 border-nature-primary"
-                    >
-                      <div>
-                        <div className="font-semibold text-base">{service.name}</div>
-                        <div className="text-xs text-nature-text-secondary mt-1 font-light flex items-center gap-3">
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {service.duration} minutes
-                          </span>
-                        </div>
+                    <div key={serviceId} className="flex items-center justify-between">
+                      <span className="font-semibold text-base text-nature-text-primary">{service.name}</span>
+                      <div className="flex items-center gap-4 text-xs text-nature-text-secondary">
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {service.duration} min
+                        </span>
+                        <span className="font-bold text-sm">${service.price}</span>
                       </div>
-                      <div className="text-lg font-bold">${service.price}</div>
                     </div>
                   );
                 })}
               </div>
-
-              {/* Total */}
-              <div className="mt-6 pt-6 border-t border-nature-divider flex items-center justify-between">
-                <div>
-                  <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">TOTAL</div>
-                  <div className="text-sm text-nature-text-secondary font-light">
-                    {totalDuration} minutes • {selectedServices.length} service
-                    {selectedServices.length > 1 ? 's' : ''}
-                  </div>
+              <div className="mt-4 pt-4 border-t border-nature-divider flex items-center justify-between">
+                <div className="text-sm text-nature-text-secondary font-light">
+                  Total Duration: {totalDuration} minutes
                 </div>
-                <div className="flex items-center gap-2">
-                  <DollarSign className="w-6 h-6 text-nature-primary" />
-                  <div className="text-3xl font-bold tracking-tight">{totalPrice}</div>
-                </div>
+                <div className="text-2xl font-bold text-nature-primary">${totalPrice}</div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Important Note */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
+        transition={{ delay: 0.3 }}
         className="mt-6 bg-nature-surface/50 border border-nature-divider rounded-soft p-4 text-center"
       >
         <p className="text-xs text-nature-text-tertiary font-light">
