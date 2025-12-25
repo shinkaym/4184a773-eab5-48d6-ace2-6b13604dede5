@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, User, LogOut } from 'lucide-react';
 import logo from '../assets/images/logo.jpg';
 import { ArrowButton } from '../components/ArrowButton';
-import { Step1DateSelection } from '../components/steps/Step1DateSelection';
-import { Step2BookingType } from '../components/steps/Step2BookingType';
+import { Step1DateSelection as DateSelection } from '../components/steps/Step1DateSelection';
+import { Step2BookingType as BookingType } from '../components/steps/Step2BookingType';
 import { Step3EmployeeSelection } from '../components/steps/Step3EmployeeSelection';
 import { Step4ServiceSelection } from '../components/steps/Step4ServiceSelection';
 import { Step5TimeSelection } from '../components/steps/Step5TimeSelection';
@@ -53,6 +53,15 @@ export function StepBookingFlowPage() {
         setCurrentStep((currentStep + 1) as StepNumber);
       }
     }
+  };
+
+  // Auto-advance when booking type is selected
+  const handleBookingTypeChange = (type: 'unassigned' | 'scheduled') => {
+    setBookingType(type);
+    // Automatically move to next step
+    setTimeout(() => {
+      setCurrentStep(2);
+    }, 300); // Small delay for better UX
   };
 
   const handleBack = () => {
@@ -107,9 +116,10 @@ export function StepBookingFlowPage() {
   const isNextDisabled = () => {
     switch (currentStep) {
       case 1:
-        return !selectedDate;
+        // Booking type step - always disabled, auto-advances when selected
+        return true;
       case 2:
-        return !bookingType;
+        return !selectedDate;
       case 3:
         // Employee selection is only required for scheduled bookings
         return bookingType === 'scheduled' && !selectedEmployee;
@@ -229,8 +239,8 @@ export function StepBookingFlowPage() {
         <div className='max-w-6xl mx-auto px-6 py-4'>
           <div className='flex items-center justify-between'>
             {[
-              { num: 1, label: 'Date' },
-              { num: 2, label: 'Type' },
+              { num: 1, label: 'Type' },
+              { num: 2, label: 'Date' },
               { num: 3, label: 'Employee' },
               { num: 4, label: 'Services' },
               { num: 5, label: 'Time' },
@@ -307,8 +317,8 @@ export function StepBookingFlowPage() {
               }}
               className='flex-grow'
             >
-              {currentStep === 1 && <Step1DateSelection selectedDate={selectedDate} onDateChange={setSelectedDate} />}
-              {currentStep === 2 && <Step2BookingType selectedType={bookingType} onTypeChange={setBookingType} />}
+              {currentStep === 1 && <BookingType selectedType={bookingType} onTypeChange={handleBookingTypeChange} />}
+              {currentStep === 2 && <DateSelection selectedDate={selectedDate} onDateChange={setSelectedDate} />}
               {currentStep === 3 && (
                 <Step3EmployeeSelection selectedEmployee={selectedEmployee} onEmployeeChange={setSelectedEmployee} />
               )}
