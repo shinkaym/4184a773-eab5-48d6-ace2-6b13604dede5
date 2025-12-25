@@ -96,7 +96,7 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
           )}
         </div>
 
-        <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 max-h-96 overflow-y-auto">
+        <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 max-h-96 overflow-y-auto p-1">
           {timeSlots.map((time, index) => {
             const isStartTime = time === selectedTime;
             const isInRange = isTimeInRange(time);
@@ -112,22 +112,17 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
                 transition={{ delay: index * 0.01 }}
                 disabled={isDisabled}
                 onClick={() => onTimeChange(time)}
-                whileHover={!isDisabled ? { scale: 1.05 } : {}}
+                whileHover={!isDisabled ? { scale: 1.08 } : {}}
                 whileTap={!isDisabled ? { scale: 0.95 } : {}}
                 className={`
                   relative py-3 px-2 text-xs font-medium rounded-soft border transition-all
                   ${isStartTime ? 'bg-nature-primary text-white border-nature-primary shadow-soft z-10' : ''}
                   ${isInRange && !isStartTime ? 'bg-nature-secondary/20 text-nature-text-primary border-nature-secondary' : ''}
-                  ${isDisabled ? 'bg-nature-surface/50 text-nature-text-tertiary/30 border-nature-divider/30 cursor-not-allowed' : ''}
+                  ${isDisabled ? 'bg-nature-surface/50 text-nature-text-tertiary/30 border-nature-divider/30 cursor-not-allowed opacity-40' : ''}
                   ${!isStartTime && !isInRange && !isDisabled ? 'border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5' : ''}
                 `}
               >
                 {time}
-                {isDisabled && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-full h-px bg-nature-text-tertiary/30 rotate-45" />
-                  </div>
-                )}
               </motion.button>
             );
           })}
@@ -169,21 +164,13 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
         <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-3">AVAILABILITY LEGEND</div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-sm bg-nature-surface/50 border border-nature-divider/30 relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full h-px bg-nature-text-tertiary/30 rotate-45" />
-              </div>
-            </div>
+            <div className="w-4 h-4 rounded-sm bg-nature-surface/50 border border-nature-divider/30 opacity-40" />
             <span className="text-nature-text-secondary">
               <span className="font-medium">Store Off Hours:</span> 9:00-9:30 AM, 6:30-7:00 PM
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-sm bg-nature-surface/50 border border-nature-divider/30 relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full h-px bg-nature-text-tertiary/30 rotate-45" />
-              </div>
-            </div>
+            <div className="w-4 h-4 rounded-sm bg-nature-surface/50 border border-nature-divider/30 opacity-40" />
             <span className="text-nature-text-secondary">
               <span className="font-medium">Employee Break:</span> 12:00-1:00 PM, 3:00-3:30 PM
             </span>
