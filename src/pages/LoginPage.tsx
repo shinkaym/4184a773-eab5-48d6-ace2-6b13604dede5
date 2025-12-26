@@ -164,7 +164,7 @@ export function LoginPage() {
   return (
     <div className='min-h-screen w-full flex flex-col lg:flex-row'>
       {/* Left Panel - Larger - Hidden on mobile */}
-      <div className='hidden lg:flex lg:flex-[3] relative overflow-hidden flex-col items-center justify-center px-8 bg-gradient-to-br from-[#7B6DB8] via-[#5EB598] to-[#4DC9A5]'>
+      <div className='hidden lg:flex lg:flex-[3] relative overflow-hidden flex-col items-center justify-center px-8 bg-gradient-to-br from-nature-primary via-nature-secondary to-nature-primary/80'>
         {/* Banner Slideshow */}
         <BannerSlideshow />
 
