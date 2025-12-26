@@ -110,48 +110,48 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
       className="w-full max-w-6xl mx-auto"
     >
       {/* Header */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-8 sm:mb-12">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="inline-flex items-center justify-center w-16 h-16 rounded-soft bg-gradient-to-br from-nature-primary/20 to-nature-secondary/20 mb-6"
+          className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-soft bg-gradient-to-br from-nature-primary/20 to-nature-secondary/20 mb-4 sm:mb-6"
         >
-          <Clock className="w-8 h-8 text-nature-primary" />
+          <Clock className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-nature-primary" />
         </motion.div>
-        <h2 className="text-4xl md:text-5xl font-display font-semibold tracking-tight text-nature-text-primary mb-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-semibold tracking-tight text-nature-text-primary mb-3 sm:mb-4 px-4">
           Select Your Time
         </h2>
-        <p className="text-nature-text-secondary text-lg font-light">Choose your preferred appointment time</p>
+        <p className="text-nature-text-secondary text-base sm:text-lg font-light px-4">Choose your preferred appointment time</p>
       </div>
 
       {/* Time Grid */}
-      <div className="bg-white rounded-softer border border-nature-divider p-8 shadow-soft-lg">
-        <div className="flex items-center justify-between mb-6">
+      <div className="bg-white rounded-softer border border-nature-divider p-4 sm:p-6 md:p-8 shadow-soft-lg">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4 sm:mb-6">
           <div>
-            <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">STORE TIME</div>
-            <div className="text-sm font-semibold text-nature-text-primary">Thursday, December 25th 2025, 01:47 AM</div>
+            <div className="text-[10px] sm:text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">STORE TIME</div>
+            <div className="text-xs sm:text-sm font-semibold text-nature-text-primary">Thursday, December 25th 2025, 01:47 AM</div>
             <div className="text-xs text-nature-text-secondary mt-0.5">Central Standard Time (CT)</div>
           </div>
           {selectedTime && (
-            <div className="flex items-center gap-4 text-xs">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs">
               <div className="flex items-center gap-1.5">
                 <div className="w-3 h-3 rounded-sm bg-nature-primary" />
-                <span className="text-nature-text-tertiary font-medium">Start Time</span>
+                <span className="text-nature-text-tertiary font-medium">Start</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <div className="w-3 h-3 rounded-sm bg-nature-secondary" />
-                <span className="text-nature-text-tertiary font-medium">Duration ({serviceDuration} min)</span>
+                <span className="text-nature-text-tertiary font-medium">Duration</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <div className="w-3 h-3 rounded-sm bg-nature-surface" />
-                <span className="text-nature-text-tertiary font-medium">Unavailable</span>
+                <span className="text-nature-text-tertiary font-medium">N/A</span>
               </div>
             </div>
           )}
         </div>
 
-        <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 max-h-96 overflow-y-auto p-1">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3 max-h-96 overflow-y-auto p-1">
           {timeSlots.map((time, index) => {
             const isStartTime = time === selectedTime;
             const isInRange = isTimeInRange(time);
@@ -167,10 +167,10 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
                 transition={{ delay: index * 0.01 }}
                 disabled={isDisabled}
                 onClick={() => handleTimeClick(time)}
-                whileHover={!isDisabled ? { scale: 1.08 } : {}}
+                whileHover={!isDisabled ? { scale: 1.05 } : {}}
                 whileTap={!isDisabled ? { scale: 0.95 } : {}}
                 className={`
-                  relative py-3 px-2 text-xs font-medium rounded-soft border transition-all
+                  relative py-2 sm:py-3 px-1.5 sm:px-2 text-[10px] sm:text-xs font-medium rounded-soft border transition-all
                   ${isStartTime ? 'bg-nature-primary text-white border-nature-primary shadow-soft z-10' : ''}
                   ${isInRange && !isStartTime ? 'bg-nature-secondary/20 text-nature-text-primary border-nature-secondary' : ''}
                   ${isDisabled ? 'bg-nature-surface/50 text-nature-text-tertiary/30 border-nature-divider/30 cursor-not-allowed opacity-40' : ''}
@@ -188,14 +188,14 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-6 pt-6 border-t border-nature-divider"
+            className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-nature-divider"
           >
-            <div className="flex items-center justify-between">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider">SELECTED TIME</div>
-              <div className="text-right">
-                <div className="text-base font-semibold text-nature-text-primary">{selectedTime}</div>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
+              <div className="text-[10px] sm:text-xs font-medium text-nature-text-tertiary tracking-wider">SELECTED TIME</div>
+              <div className="text-left sm:text-right">
+                <div className="text-sm sm:text-base font-semibold text-nature-text-primary">{selectedTime}</div>
                 <div className="text-xs text-nature-text-secondary">
-                  Duration: {serviceDuration} minutes • Ends at{' '}
+                  Duration: {serviceDuration} min • Ends{' '}
                   {(() => {
                     const [time, period] = selectedTime.split(' ');
                     const [hours, minutes] = time.split(':').map(Number);
@@ -215,18 +215,18 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
       </div>
 
       {/* Legend */}
-      <div className="mt-6 bg-nature-surface/30 rounded-soft p-4 border border-nature-divider">
-        <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-3">AVAILABILITY LEGEND</div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-sm bg-nature-surface/50 border border-nature-divider/30 opacity-40" />
-            <span className="text-nature-text-secondary">
-              <span className="font-medium">Store Off Hours:</span> 9:00-9:30 AM, 6:30-7:00 PM
+      <div className="mt-4 sm:mt-6 bg-nature-surface/30 rounded-soft p-3 sm:p-4 border border-nature-divider">
+        <div className="text-[10px] sm:text-xs font-medium text-nature-text-tertiary tracking-wider mb-2 sm:mb-3">AVAILABILITY LEGEND</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3 text-xs">
+          <div className="flex items-start gap-2">
+            <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-sm bg-nature-surface/50 border border-nature-divider/30 opacity-40 flex-shrink-0 mt-0.5" />
+            <span className="text-nature-text-secondary text-[11px] sm:text-xs">
+              <span className="font-medium">Store Off:</span> 9:00-9:30 AM, 6:30-7:00 PM
             </span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-sm bg-nature-surface/50 border border-nature-divider/30 opacity-40" />
-            <span className="text-nature-text-secondary">
+          <div className="flex items-start gap-2">
+            <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-sm bg-nature-surface/50 border border-nature-divider/30 opacity-40 flex-shrink-0 mt-0.5" />
+            <span className="text-nature-text-secondary text-[11px] sm:text-xs">
               <span className="font-medium">Employee Break:</span> 12:00-1:00 PM, 3:00-3:30 PM
             </span>
           </div>
@@ -248,31 +248,31 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-softer shadow-soft-xl max-w-md w-full p-6 relative"
+              className="bg-white rounded-softer shadow-soft-xl max-w-md w-full p-5 sm:p-6 relative"
             >
               {/* Close Button */}
               <button
                 onClick={() => setShowDialog(false)}
-                className="absolute top-4 right-4 text-nature-text-tertiary hover:text-nature-text-primary transition-colors"
+                className="absolute top-3 right-3 sm:top-4 sm:right-4 text-nature-text-tertiary hover:text-nature-text-primary transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
 
               {/* Icon */}
-              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-50 mb-4">
-                <AlertCircle className="w-7 h-7 text-red-500" />
+              <div className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-red-50 mb-3 sm:mb-4">
+                <AlertCircle className="w-6 h-6 sm:w-7 sm:h-7 text-red-500" />
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-semibold text-nature-text-primary mb-2">Time Conflict</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-nature-text-primary mb-2">Time Conflict</h3>
 
               {/* Message */}
-              <p className="text-nature-text-secondary mb-6">{conflictMessage}</p>
+              <p className="text-sm sm:text-base text-nature-text-secondary mb-5 sm:mb-6">{conflictMessage}</p>
 
               {/* Action Button */}
               <button
                 onClick={() => setShowDialog(false)}
-                className="w-full bg-nature-primary text-white py-3 rounded-soft font-semibold hover:bg-nature-primary/90 transition-colors"
+                className="w-full bg-nature-primary text-white py-2.5 sm:py-3 rounded-soft font-semibold text-sm sm:text-base hover:bg-nature-primary/90 transition-colors"
               >
                 Choose Another Time
               </button>

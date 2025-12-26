@@ -160,25 +160,25 @@ export function StepBookingFlowPage() {
 
       {/* Progress Indicator */}
       <div className='sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-nature-divider shadow-soft'>
-        <div className='max-w-6xl mx-auto px-6 py-4'>
-          <div className='flex items-center justify-between'>
+        <div className='max-w-6xl mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-5'>
+          <div className='flex items-center justify-between overflow-x-auto scrollbar-hide px-1'>
             {[
-              { num: 1, label: 'Type' },
-              { num: 2, label: 'Date' },
-              { num: 3, label: 'Employee' },
-              { num: 4, label: 'Services' },
-              { num: 5, label: 'Time' },
-              { num: 6, label: 'Review' },
-              { num: 7, label: 'Done' },
+              { num: 1, label: 'Type', short: 'Type' },
+              { num: 2, label: 'Date', short: 'Date' },
+              { num: 3, label: 'Employee', short: 'Staff' },
+              { num: 4, label: 'Services', short: 'Service' },
+              { num: 5, label: 'Time', short: 'Time' },
+              { num: 6, label: 'Review', short: 'Review' },
+              { num: 7, label: 'Done', short: 'Done' },
             ].map((step, index) => (
               <>
-                <div key={step.num} className='flex flex-col items-center'>
+                <div key={step.num} className='flex flex-col items-center min-w-[44px] sm:min-w-[60px] py-1'>
                   <div
                     className={`
-                      w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300
+                      w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-all duration-300
                       ${
                         currentStep === step.num
-                          ? 'bg-nature-primary text-white shadow-soft scale-110'
+                          ? 'bg-nature-primary text-white shadow-lg scale-110 sm:scale-110'
                           : currentStep > step.num
                           ? 'bg-nature-secondary text-white'
                           : 'bg-nature-surface text-nature-text-tertiary border-2 border-nature-divider'
@@ -189,7 +189,7 @@ export function StepBookingFlowPage() {
                   </div>
                   <div
                     className={`
-                      mt-2 text-xs font-medium transition-colors duration-300 whitespace-nowrap
+                      mt-1 sm:mt-2 text-[10px] sm:text-xs font-medium transition-colors duration-300 whitespace-nowrap
                       ${
                         currentStep === step.num
                           ? 'text-nature-primary'
@@ -199,11 +199,15 @@ export function StepBookingFlowPage() {
                       }
                     `}
                   >
-                    {step.label}
+                    <span className='hidden md:inline'>{step.label}</span>
+                    <span className='md:hidden'>{step.short}</span>
                   </div>
                 </div>
                 {index < 6 && (
-                  <div key={`line-${step.num}`} className='flex-1 h-1 mx-2 relative'>
+                  <div
+                    key={`line-${step.num}`}
+                    className='flex-1 h-0.5 sm:h-1 mx-1 sm:mx-2 relative min-w-[12px] sm:min-w-[20px]'
+                  >
                     <div className='absolute inset-0 bg-nature-divider rounded-full' />
                     <div
                       className={`absolute inset-0 rounded-full transition-all duration-300 ${
@@ -220,13 +224,13 @@ export function StepBookingFlowPage() {
       </div>
 
       {/* Main Content */}
-      <div ref={contentRef} className='flex-grow w-full max-w-7xl mx-auto p-6 md:py-12 relative overflow-hidden'>
+      <div ref={contentRef} className='flex-grow w-full max-w-7xl mx-auto p-4 sm:p-6 md:py-12 relative overflow-hidden'>
         {/* Background decoration */}
         <div className='absolute top-0 right-0 w-[600px] h-[600px] bg-nature-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none' />
         <div className='absolute bottom-0 left-0 w-[500px] h-[500px] bg-nature-secondary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none' />
 
         {/* Step Content with Slide Animation */}
-        <div className='relative z-10 min-h-[600px] flex flex-col'>
+        <div className='relative z-10 min-h-[400px] sm:min-h-[500px] md:min-h-[600px] flex flex-col'>
           <AnimatePresence initial={false} mode='wait'>
             <motion.div
               key={currentStep}
@@ -287,9 +291,9 @@ export function StepBookingFlowPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className='flex justify-between items-center mt-12 pt-8 border-t border-nature-divider'
+              className='flex flex-row justify-between items-center mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-nature-divider'
             >
-              <ArrowButton direction='left' text='Back' onClick={handleBack} />
+              <ArrowButton direction='left' text='Back' onClick={handleBack} disabled={currentStep === 1} />
               <ArrowButton
                 direction='right'
                 text={getNextButtonText()}
@@ -305,15 +309,15 @@ export function StepBookingFlowPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className='flex justify-center items-center mt-12'
+              className='flex justify-center items-center mt-8 sm:mt-12'
             >
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleBackToHome}
-                className='flex items-center gap-2 px-8 py-4 bg-white border-2 border-nature-primary text-nature-primary rounded-soft font-medium hover:bg-nature-primary/5 transition-all shadow-soft'
+                className='flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-white border-2 border-nature-primary text-nature-primary rounded-soft font-medium hover:bg-nature-primary/5 transition-all shadow-soft text-sm sm:text-base'
               >
-                <ArrowLeft className='w-5 h-5' />
+                <ArrowLeft className='w-4 h-4 sm:w-5 sm:h-5' />
                 Back to Home
               </motion.button>
             </motion.div>
@@ -322,10 +326,10 @@ export function StepBookingFlowPage() {
       </div>
 
       {/* Footer */}
-      <footer className='w-full border-t border-nature-divider py-8 px-6 mt-auto bg-white/50 backdrop-blur-sm'>
-        <div className='max-w-[1400px] mx-auto flex justify-between items-center text-xs text-nature-text-tertiary font-light tracking-wide'>
+      <footer className='w-full border-t border-nature-divider py-6 sm:py-8 px-4 sm:px-6 mt-auto bg-white/50 backdrop-blur-sm'>
+        <div className='max-w-[1400px] mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0 text-xs text-nature-text-tertiary font-light tracking-wide'>
           <div>Copyright © 2024 AICOMPOS</div>
-          <div>Step {currentStep} of 7</div>
+          <div className='font-medium'>Step {currentStep} of 7</div>
         </div>
       </footer>
     </div>

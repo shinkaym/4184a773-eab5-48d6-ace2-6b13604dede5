@@ -35,19 +35,19 @@ export function Step6Review({
       className="w-full max-w-4xl mx-auto"
     >
       {/* Header */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-8 sm:mb-12">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="inline-flex items-center justify-center w-16 h-16 rounded-soft bg-gradient-to-br from-nature-primary/20 to-nature-secondary/20 mb-6"
+          className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-soft bg-gradient-to-br from-nature-primary/20 to-nature-secondary/20 mb-4 sm:mb-6"
         >
-          <DollarSign className="w-8 h-8 text-nature-primary" />
+          <DollarSign className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-nature-primary" />
         </motion.div>
-        <h2 className="text-4xl md:text-5xl font-display font-semibold tracking-tight text-nature-text-primary mb-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-semibold tracking-tight text-nature-text-primary mb-3 sm:mb-4 px-4">
           Review Your Booking
         </h2>
-        <p className="text-nature-text-secondary text-lg font-light">
+        <p className="text-nature-text-secondary text-base sm:text-lg font-light px-4">
           Please review your appointment details before confirming
         </p>
       </div>
@@ -57,86 +57,86 @@ export function Step6Review({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="w-full bg-white rounded-softer p-10 shadow-soft-xl border border-nature-divider"
+        className="w-full bg-white rounded-softer p-4 sm:p-6 md:p-8 lg:p-10 shadow-soft-xl border border-nature-divider"
       >
         {/* Details Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/* Customer Name */}
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
-              <User className="w-6 h-6 text-nature-primary" />
+          <div className="flex items-start gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <User className="w-5 h-5 sm:w-6 sm:h-6 text-nature-primary" />
             </div>
             <div className="flex-grow">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">CUSTOMER</div>
-              <div className="font-semibold text-base text-nature-text-primary">{customerName}</div>
+              <div className="text-[10px] sm:text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">CUSTOMER</div>
+              <div className="font-semibold text-sm sm:text-base text-nature-text-primary">{customerName}</div>
             </div>
           </div>
 
           {/* Phone */}
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
-              <Phone className="w-6 h-6 text-nature-primary" />
+          <div className="flex items-start gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-nature-primary" />
             </div>
             <div className="flex-grow">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">PHONE</div>
-              <div className="font-semibold text-base text-nature-text-primary">{customerPhone}</div>
+              <div className="text-[10px] sm:text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">PHONE</div>
+              <div className="font-semibold text-sm sm:text-base text-nature-text-primary">{customerPhone}</div>
             </div>
           </div>
 
           {/* Appointment Date */}
-          <div className="flex items-start gap-4 md:col-span-2">
-            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
-              <Calendar className="w-6 h-6 text-nature-primary" />
+          <div className="flex items-start gap-3 sm:gap-4 md:col-span-2">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-nature-primary" />
             </div>
             <div className="flex-grow">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">
+              <div className="text-[10px] sm:text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">
                 APPOINTMENT DATE
               </div>
-              <div className="font-semibold text-base text-nature-text-primary">{formatAppointmentDate(selectedDate)}</div>
+              <div className="font-semibold text-sm sm:text-base text-nature-text-primary">{formatAppointmentDate(selectedDate)}</div>
               <div className="text-xs text-nature-text-secondary font-light">Central Standard Time (CT)</div>
             </div>
           </div>
 
           {/* Time */}
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
-              <Clock className="w-6 h-6 text-nature-primary" />
+          <div className="flex items-start gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-nature-primary" />
             </div>
             <div className="flex-grow">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">TIME</div>
-              <div className="font-semibold text-base text-nature-text-primary">{selectedTime}</div>
+              <div className="text-[10px] sm:text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">TIME</div>
+              <div className="font-semibold text-sm sm:text-base text-nature-text-primary">{selectedTime}</div>
             </div>
           </div>
 
           {/* Technician - Only show for scheduled bookings */}
           {bookingType === 'scheduled' && (
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
-                <User className="w-6 h-6 text-nature-primary" />
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+                <User className="w-5 h-5 sm:w-6 sm:h-6 text-nature-primary" />
               </div>
               <div className="flex-grow">
-                <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">TECHNICIAN</div>
-                <div className="font-semibold text-base text-nature-text-primary">{employeeName}</div>
+                <div className="text-[10px] sm:text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">TECHNICIAN</div>
+                <div className="font-semibold text-sm sm:text-base text-nature-text-primary">{employeeName}</div>
                 <div className="text-xs text-nature-text-secondary font-light">Scheduled</div>
               </div>
             </div>
           )}
 
           {/* Services */}
-          <div className="flex items-start gap-4 md:col-span-2">
-            <div className="w-12 h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
-              <Scissors className="w-6 h-6 text-nature-primary" />
+          <div className="flex items-start gap-3 sm:gap-4 md:col-span-2">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-soft border-2 border-nature-primary/20 bg-nature-primary/5 flex items-center justify-center flex-shrink-0">
+              <Scissors className="w-5 h-5 sm:w-6 sm:h-6 text-nature-primary" />
             </div>
             <div className="flex-grow">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-2">SERVICES</div>
+              <div className="text-[10px] sm:text-xs font-medium text-nature-text-tertiary tracking-wider mb-2">SERVICES</div>
               <div className="space-y-2">
                 {selectedServices.map((serviceId) => {
                   const service = services.find((s) => s.id === serviceId);
                   if (!service) return null;
                   return (
-                    <div key={serviceId} className="flex items-center justify-between">
-                      <span className="font-semibold text-base text-nature-text-primary">{service.name}</span>
-                      <div className="flex items-center gap-4 text-xs text-nature-text-secondary">
+                    <div key={serviceId} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-0">
+                      <span className="font-semibold text-sm sm:text-base text-nature-text-primary">{service.name}</span>
+                      <div className="flex items-center gap-3 sm:gap-4 text-xs text-nature-text-secondary">
                         <span className="flex items-center gap-1">
                           <Clock className="w-3 h-3" />
                           {service.duration} min
@@ -147,11 +147,11 @@ export function Step6Review({
                   );
                 })}
               </div>
-              <div className="mt-4 pt-4 border-t border-nature-divider flex items-center justify-between">
-                <div className="text-sm text-nature-text-secondary font-light">
+              <div className="mt-4 pt-4 border-t border-nature-divider flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                <div className="text-xs sm:text-sm text-nature-text-secondary font-light">
                   Total Duration: {totalDuration} minutes
                 </div>
-                <div className="text-2xl font-bold text-nature-primary">${totalPrice}</div>
+                <div className="text-xl sm:text-2xl font-bold text-nature-primary">${totalPrice}</div>
               </div>
             </div>
           </div>

@@ -27,12 +27,12 @@ export function ArrowButton({ direction, text, onClick, disabled = false }: Arro
         <div className="relative flex items-center">
           {/* Arrow Shape */}
           <svg
-            width="200"
-            height="56"
+            width="100%"
+            height="100%"
             viewBox="0 0 200 56"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="drop-shadow-soft"
+            className="drop-shadow-soft w-[140px] sm:w-[180px] md:w-[200px] h-[40px] sm:h-[48px] md:h-[56px]"
           >
             {/* Arrow body with point on left and rounded corners */}
             <path
@@ -49,14 +49,14 @@ export function ArrowButton({ direction, text, onClick, disabled = false }: Arro
           </svg>
 
           {/* Text and Icon */}
-          <div className="absolute inset-0 flex items-center justify-center gap-3 pl-8">
+          <div className="absolute inset-0 flex items-center justify-center gap-2 sm:gap-3 pl-6 sm:pl-8">
             <ArrowLeft
-              className={`w-5 h-5 transition-transform duration-300 ${
+              className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${
                 disabled ? 'text-nature-text-tertiary' : 'text-nature-primary group-hover:-translate-x-1'
               }`}
             />
             <span
-              className={`text-sm font-semibold tracking-wide uppercase ${
+              className={`text-xs sm:text-sm font-semibold tracking-wide uppercase ${
                 disabled ? 'text-nature-text-tertiary' : 'text-nature-text-primary group-hover:text-nature-primary'
               }`}
             >
@@ -69,12 +69,12 @@ export function ArrowButton({ direction, text, onClick, disabled = false }: Arro
         <div className="relative flex items-center">
           {/* Arrow Shape */}
           <svg
-            width="200"
-            height="56"
+            width="100%"
+            height="100%"
             viewBox="0 0 200 56"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="drop-shadow-soft"
+            className="drop-shadow-soft w-[140px] sm:w-[180px] md:w-[200px] h-[40px] sm:h-[48px] md:h-[56px]"
           >
             {/* Arrow body with point on right and rounded corners */}
             <path
@@ -91,16 +91,16 @@ export function ArrowButton({ direction, text, onClick, disabled = false }: Arro
           </svg>
 
           {/* Text and Icon */}
-          <div className="absolute inset-0 flex items-center justify-center gap-3 pr-8">
+          <div className="absolute inset-0 flex items-center justify-center gap-2 sm:gap-3 pr-6 sm:pr-8">
             <span
-              className={`text-sm font-semibold tracking-wide uppercase ${
+              className={`text-xs sm:text-sm font-semibold tracking-wide uppercase ${
                 disabled ? 'text-nature-text-tertiary' : 'text-white'
               }`}
             >
               {text}
             </span>
             <ArrowRight
-              className={`w-5 h-5 transition-transform duration-300 ${
+              className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${
                 disabled ? 'text-nature-text-tertiary' : 'text-white group-hover:translate-x-1'
               }`}
             />

@@ -65,25 +65,25 @@ export function Step2DateSelection({ selectedDate, onDateChange }: Step2DateSele
       className="w-full max-w-4xl mx-auto"
     >
       {/* Header */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-8 sm:mb-12">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="inline-flex items-center justify-center w-16 h-16 rounded-soft bg-gradient-to-br from-nature-primary/20 to-nature-secondary/20 mb-6"
+          className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-soft bg-gradient-to-br from-nature-primary/20 to-nature-secondary/20 mb-4 sm:mb-6"
         >
-          <Calendar className="w-8 h-8 text-nature-primary" />
+          <Calendar className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-nature-primary" />
         </motion.div>
-        <h2 className="text-4xl md:text-5xl font-display font-semibold tracking-tight text-nature-text-primary mb-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-semibold tracking-tight text-nature-text-primary mb-3 sm:mb-4 px-4">
           Select Your Date
         </h2>
-        <p className="text-nature-text-secondary text-lg font-light">Choose your preferred appointment date</p>
+        <p className="text-nature-text-secondary text-base sm:text-lg font-light px-4">Choose your preferred appointment date</p>
       </div>
 
       {/* Calendar */}
-      <div className="bg-white rounded-softer border border-nature-divider p-8 shadow-soft-lg">
+      <div className="bg-white rounded-softer border border-nature-divider p-4 sm:p-6 md:p-8 shadow-soft-lg">
         {/* Quick Selection */}
-        <div className="mb-6 flex flex-wrap gap-3 justify-center">
+        <div className="mb-4 sm:mb-6 flex flex-wrap gap-2 sm:gap-3 justify-center">
           {(() => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -103,13 +103,14 @@ export function Step2DateSelection({ selectedDate, onDateChange }: Step2DateSele
                   whileTap={!isStartDisabled ? { scale: 0.95 } : {}}
                   disabled={isStartDisabled}
                   onClick={() => handleDateSelect(1)}
-                  className={`px-4 py-2.5 rounded-soft border transition-all text-xs font-medium tracking-wide ${
+                  className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-soft border transition-all text-[10px] sm:text-xs font-medium tracking-wide ${
                     isStartDisabled
                       ? 'border-nature-divider/30 bg-nature-surface/50 text-nature-text-tertiary/30 cursor-not-allowed'
                       : 'border-nature-divider bg-white hover:border-nature-primary hover:bg-nature-primary/5'
                   }`}
                 >
-                  START OF MONTH
+                  <span className="hidden sm:inline">START OF MONTH</span>
+                  <span className="sm:hidden">START</span>
                 </motion.button>
                 <motion.button
                   whileHover={{ y: -2 }}
@@ -120,9 +121,9 @@ export function Step2DateSelection({ selectedDate, onDateChange }: Step2DateSele
                     setCurrentYear(today.getFullYear());
                     onDateChange(today);
                   }}
-                  className="px-4 py-2.5 rounded-soft border border-nature-primary bg-nature-primary/5 hover:bg-nature-primary/10 transition-all text-xs font-medium tracking-wide flex items-center gap-2"
+                  className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-soft border border-nature-primary bg-nature-primary/5 hover:bg-nature-primary/10 transition-all text-[10px] sm:text-xs font-medium tracking-wide flex items-center gap-1.5 sm:gap-2"
                 >
-                  <span className="w-2 h-2 rounded-full bg-nature-primary" />
+                  <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-nature-primary" />
                   TODAY
                 </motion.button>
                 <motion.button
@@ -132,13 +133,14 @@ export function Step2DateSelection({ selectedDate, onDateChange }: Step2DateSele
                   onClick={() => {
                     handleDateSelect(lastDay);
                   }}
-                  className={`px-4 py-2.5 rounded-soft border transition-all text-xs font-medium tracking-wide ${
+                  className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-soft border transition-all text-[10px] sm:text-xs font-medium tracking-wide ${
                     isEndDisabled
                       ? 'border-nature-divider/30 bg-nature-surface/50 text-nature-text-tertiary/30 cursor-not-allowed'
                       : 'border-nature-divider bg-white hover:border-nature-primary hover:bg-nature-primary/5'
                   }`}
                 >
-                  END OF MONTH
+                  <span className="hidden sm:inline">END OF MONTH</span>
+                  <span className="sm:hidden">END</span>
                 </motion.button>
               </>
             );
@@ -146,59 +148,59 @@ export function Step2DateSelection({ selectedDate, onDateChange }: Step2DateSele
         </div>
 
         {/* Month Navigation */}
-        <div className="flex items-center justify-between mb-8 pb-6 border-b border-nature-divider">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between mb-6 sm:mb-8 pb-4 sm:pb-6 border-b border-nature-divider">
+          <div className="flex items-center gap-1 sm:gap-2">
             <motion.button
               whileHover={{ x: -2 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleFirstMonth}
-              className="p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all"
+              className="p-1.5 sm:p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all"
               title="First month of year"
             >
-              <ChevronsLeft className="w-5 h-5" />
+              <ChevronsLeft className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.button>
             <motion.button
               whileHover={{ x: -2 }}
               whileTap={{ scale: 0.9 }}
               onClick={handlePreviousMonth}
-              className="p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all"
+              className="p-1.5 sm:p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all"
               title="Previous month"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.button>
           </div>
           <div className="flex flex-col items-center">
-            <span className="font-display text-2xl font-semibold tracking-wide text-nature-text-primary">
+            <span className="font-display text-base sm:text-xl md:text-2xl font-semibold tracking-wide text-nature-text-primary">
               {monthNames[currentMonth]} {currentYear}
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <motion.button
               whileHover={{ x: 2 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleNextMonth}
-              className="p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all"
+              className="p-1.5 sm:p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all"
               title="Next month"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.button>
             <motion.button
               whileHover={{ x: 2 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleLastMonth}
-              className="p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all"
+              className="p-1.5 sm:p-2 rounded-soft border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5 transition-all"
               title="Last month of year"
             >
-              <ChevronsRight className="w-5 h-5" />
+              <ChevronsRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.button>
           </div>
         </div>
 
         {/* Calendar Grid */}
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map((day) => (
-            <div key={day} className="text-center pb-3">
-              <div className="text-xs font-medium text-nature-text-tertiary tracking-wider">{day}</div>
+            <div key={day} className="text-center pb-2 sm:pb-3">
+              <div className="text-[10px] sm:text-xs font-medium text-nature-text-tertiary tracking-wider">{day}</div>
             </div>
           ))}
 
@@ -231,10 +233,10 @@ export function Step2DateSelection({ selectedDate, onDateChange }: Step2DateSele
                     setCurrentYear(prevYear);
                     handleDateSelect(date, prevMonth, prevYear);
                   }}
-                  whileHover={!isDisabled ? { scale: 1.1 } : {}}
+                  whileHover={!isDisabled ? { scale: 1.05 } : {}}
                   whileTap={!isDisabled ? { scale: 0.95 } : {}}
                   className={`
-                    aspect-square text-sm font-medium flex items-center justify-center transition-all rounded-soft
+                    aspect-square text-xs sm:text-sm font-medium flex items-center justify-center transition-all rounded-soft
                     ${
                       isDisabled
                         ? 'text-nature-text-tertiary/30 cursor-not-allowed bg-nature-surface/50'
@@ -263,10 +265,10 @@ export function Step2DateSelection({ selectedDate, onDateChange }: Step2DateSele
                   key={`current-${date}`}
                   disabled={isDisabled}
                   onClick={() => handleDateSelect(date)}
-                  whileHover={!isDisabled ? { scale: 1.1 } : {}}
+                  whileHover={!isDisabled ? { scale: 1.05 } : {}}
                   whileTap={!isDisabled ? { scale: 0.95 } : {}}
                   className={`
-                    aspect-square text-sm font-medium flex items-center justify-center transition-all rounded-soft
+                    aspect-square text-xs sm:text-sm font-medium flex items-center justify-center transition-all rounded-soft
                     ${isSelected ? 'bg-nature-primary text-white shadow-soft scale-105' : ''}
                     ${isDisabled ? 'text-nature-text-tertiary/30 cursor-not-allowed bg-nature-surface/50' : ''}
                     ${
@@ -274,7 +276,7 @@ export function Step2DateSelection({ selectedDate, onDateChange }: Step2DateSele
                         ? 'bg-white border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5'
                         : ''
                     }
-                    ${isToday && !isSelected ? 'ring-2 ring-nature-secondary ring-offset-2' : ''}
+                    ${isToday && !isSelected ? 'ring-1 sm:ring-2 ring-nature-secondary ring-offset-1 sm:ring-offset-2' : ''}
                   `}
                 >
                   {date}
@@ -299,10 +301,10 @@ export function Step2DateSelection({ selectedDate, onDateChange }: Step2DateSele
                     setCurrentYear(nextYear);
                     handleDateSelect(date, nextMonth, nextYear);
                   }}
-                  whileHover={!isDisabled ? { scale: 1.1 } : {}}
+                  whileHover={!isDisabled ? { scale: 1.05 } : {}}
                   whileTap={!isDisabled ? { scale: 0.95 } : {}}
                   className={`
-                    aspect-square text-sm font-medium flex items-center justify-center transition-all rounded-soft
+                    aspect-square text-xs sm:text-sm font-medium flex items-center justify-center transition-all rounded-soft
                     ${
                       isDisabled
                         ? 'text-nature-text-tertiary/30 cursor-not-allowed bg-nature-surface/50'
@@ -320,11 +322,11 @@ export function Step2DateSelection({ selectedDate, onDateChange }: Step2DateSele
         </div>
 
         {/* Selection Info */}
-        <div className="mt-6 pt-6 border-t border-nature-divider">
-          <div className="flex items-center justify-between">
-            <div className="text-xs font-medium text-nature-text-tertiary tracking-wider">SELECTED DATE</div>
-            <div className="text-right">
-              <div className="text-base font-semibold text-nature-text-primary">
+        <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-nature-divider">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+            <div className="text-[10px] sm:text-xs font-medium text-nature-text-tertiary tracking-wider">SELECTED DATE</div>
+            <div className="text-left sm:text-right">
+              <div className="text-sm sm:text-base font-semibold text-nature-text-primary">
                 {monthNames[selectedDate.getMonth()]} {selectedDate.getDate()}, {selectedDate.getFullYear()}
               </div>
               <div className="text-xs text-nature-text-secondary">
