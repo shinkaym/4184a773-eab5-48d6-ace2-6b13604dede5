@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
-import { Clock } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Clock, AlertCircle, X } from 'lucide-react';
 
 interface Step5TimeSelectionProps {
   selectedTime: string | null;
@@ -8,6 +9,9 @@ interface Step5TimeSelectionProps {
 }
 
 export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration }: Step5TimeSelectionProps) {
+  const [showDialog, setShowDialog] = useState(false);
+  const [conflictMessage, setConflictMessage] = useState('');
+
   const generateTimeSlots = () => {
     const slots = [];
     const startHour = 9;
@@ -38,6 +42,55 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
     const totalMinutes =
       (period === 'PM' && hours !== 12 ? hours + 12 : hours === 12 && period === 'AM' ? 0 : hours) * 60 + minutes;
     return totalMinutes;
+  };
+
+  const minutesToTime = (totalMinutes: number) => {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
+    return `${displayHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
+  };
+
+  const checkTimeConflict = (startTime: string): { hasConflict: boolean; message: string } => {
+    const startMinutes = timeToMinutes(startTime);
+    const endMinutes = startMinutes + serviceDuration;
+
+    // Check all time slots that would be covered by this service
+    for (let currentMinutes = startMinutes; currentMinutes < endMinutes; currentMinutes += 15) {
+      const currentTime = minutesToTime(currentMinutes);
+
+      if (storeOffTimes.includes(currentTime)) {
+        return {
+          hasConflict: true,
+          message: `The service would run during store off hours (${currentTime}). Please select a different time.`,
+        };
+      }
+
+      if (employeeOffTimes.includes(currentTime)) {
+        return {
+          hasConflict: true,
+          message: `The service would run during employee break time (${currentTime}). Please select a different time.`,
+        };
+      }
+    }
+
+    return { hasConflict: false, message: '' };
+  };
+
+  const handleTimeClick = (time: string) => {
+    // Skip if already disabled
+    if (storeOffTimes.includes(time) || employeeOffTimes.includes(time)) {
+      return;
+    }
+
+    const conflict = checkTimeConflict(time);
+    if (conflict.hasConflict) {
+      setConflictMessage(conflict.message);
+      setShowDialog(true);
+    } else {
+      onTimeChange(time);
+    }
   };
 
   const isTimeInRange = (timeSlot: string) => {
@@ -113,7 +166,7 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.01 }}
                 disabled={isDisabled}
-                onClick={() => onTimeChange(time)}
+                onClick={() => handleTimeClick(time)}
                 whileHover={!isDisabled ? { scale: 1.08 } : {}}
                 whileTap={!isDisabled ? { scale: 0.95 } : {}}
                 className={`
@@ -179,6 +232,54 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
           </div>
         </div>
       </div>
+
+      {/* Conflict Dialog */}
+      <AnimatePresence>
+        {showDialog && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={() => setShowDialog(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-softer shadow-soft-xl max-w-md w-full p-6 relative"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowDialog(false)}
+                className="absolute top-4 right-4 text-nature-text-tertiary hover:text-nature-text-primary transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Icon */}
+              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-50 mb-4">
+                <AlertCircle className="w-7 h-7 text-red-500" />
+              </div>
+
+              {/* Title */}
+              <h3 className="text-xl font-semibold text-nature-text-primary mb-2">Time Conflict</h3>
+
+              {/* Message */}
+              <p className="text-nature-text-secondary mb-6">{conflictMessage}</p>
+
+              {/* Action Button */}
+              <button
+                onClick={() => setShowDialog(false)}
+                className="w-full bg-nature-primary text-white py-3 rounded-soft font-semibold hover:bg-nature-primary/90 transition-colors"
+              >
+                Choose Another Time
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
