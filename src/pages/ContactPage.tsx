@@ -87,7 +87,7 @@ export function ContactPage() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className='bg-white rounded-soft p-8 shadow-soft'
           >
-            <h2 className='text-3xl font-display font-semibold text-nature-text-primary mb-6'>Send Us a Message</h2>
+            <h2 className='text-2xl sm:text-3xl font-display font-semibold text-nature-text-primary mb-6'>Send Us a Message</h2>
             <form className='space-y-6'>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                 <div>
@@ -144,7 +144,7 @@ export function ContactPage() {
                 </label>
                 <textarea
                   id='message'
-                  rows={6}
+                  rows={4}
                   className='w-full px-4 py-3 rounded-soft border border-nature-divider focus:outline-none focus:ring-2 focus:ring-nature-primary focus:border-transparent transition-all resize-none'
                   placeholder='Tell us more about your inquiry...'
                 />
@@ -168,8 +168,8 @@ export function ContactPage() {
             transition={{ duration: 0.6, delay: 0.6 }}
             className='mt-12 bg-white rounded-soft p-8 shadow-soft'
           >
-            <h2 className='text-3xl font-display font-semibold text-nature-text-primary mb-6'>Find Us</h2>
-            <div className='w-full h-[400px] bg-nature-surface rounded-soft flex items-center justify-center'>
+            <h2 className='text-2xl sm:text-3xl font-display font-semibold text-nature-text-primary mb-6'>Find Us</h2>
+            <div className='w-full h-[250px] sm:h-[350px] md:h-[400px] bg-nature-surface rounded-soft flex items-center justify-center'>
               <p className='text-nature-text-tertiary'>Map integration goes here</p>
             </div>
           </motion.div>
