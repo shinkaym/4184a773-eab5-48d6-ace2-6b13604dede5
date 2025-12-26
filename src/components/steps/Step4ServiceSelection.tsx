@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Scissors, Check, Clock, DollarSign } from 'lucide-react';
 import { categories, services } from '../../data/bookingData';
+import useEmblaCarousel from 'embla-carousel-react';
 
 interface Step4ServiceSelectionProps {
   selectedServices: string[];
@@ -10,6 +11,12 @@ interface Step4ServiceSelectionProps {
 
 export function Step4ServiceSelection({ selectedServices, onServicesChange }: Step4ServiceSelectionProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [emblaRef] = useEmblaCarousel({
+    align: 'start',
+    containScroll: 'trimSnaps',
+    dragFree: true,
+    slidesToScroll: 'auto',
+  });
 
   const filteredServices =
     selectedCategory === 'all' ? services : services.filter((service) => service.category === selectedCategory);
@@ -87,44 +94,49 @@ export function Step4ServiceSelection({ selectedServices, onServicesChange }: St
       {/* Category Filter */}
       <div className="mb-8">
         <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-4 text-center">CATEGORIES</div>
-        <div className="flex flex-wrap justify-center gap-3">
-          {categories.map((category, index) => {
-            const isSelected = selectedCategory === category.id;
-            const categoryCount =
-              category.id === 'all'
-                ? services.length
-                : services.filter((s) => s.category === category.id).length;
+        <div className="relative -mx-6 px-6 -my-2 py-2">
+          <div ref={emblaRef} className="overflow-hidden">
+            <div className="flex gap-4 py-3 pb-4 cursor-grab active:cursor-grabbing select-none">
+            {categories.map((category, index) => {
+              const isSelected = selectedCategory === category.id;
+              const categoryCount =
+                category.id === 'all'
+                  ? services.length
+                  : services.filter((s) => s.category === category.id).length;
 
-            return (
-              <motion.button
-                key={category.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + index * 0.05 }}
-                onClick={() => setSelectedCategory(category.id)}
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className={`
-                  px-6 py-3 rounded-soft border transition-all font-medium text-sm flex items-center gap-3
-                  ${
-                    isSelected
-                      ? 'bg-nature-primary text-white border-nature-primary shadow-soft scale-[1.02]'
-                      : 'bg-white text-nature-text-secondary border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5'
-                  }
-                `}
-              >
-                <img
-                  src={category.image}
-                  alt={category.name}
-                  className="w-8 h-8 rounded-soft object-cover flex-shrink-0"
-                />
-                <span>{category.name}</span>
-                <span className={`text-xs ${isSelected ? 'text-white/80' : 'text-nature-text-tertiary'}`}>
-                  ({categoryCount})
-                </span>
-              </motion.button>
-            );
-          })}
+              return (
+                <motion.button
+                  key={category.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + index * 0.05 }}
+                  onClick={() => setSelectedCategory(category.id)}
+                  whileHover={{ y: -2, transition: { duration: 0.15 } }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`
+                    flex-shrink-0 px-8 py-4 rounded-softer border transition-all duration-150
+                    font-semibold text-base flex items-center gap-4
+                    ${
+                      isSelected
+                        ? 'bg-nature-primary text-white border-nature-primary shadow-soft-lg scale-105'
+                        : 'bg-white text-nature-text-secondary border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5'
+                    }
+                  `}
+                >
+                  <img
+                    src={category.image}
+                    alt={category.name}
+                    className="w-10 h-10 rounded-soft object-cover flex-shrink-0"
+                  />
+                  <span className="whitespace-nowrap">{category.name}</span>
+                  <span className={`text-sm ${isSelected ? 'text-white/80' : 'text-nature-text-tertiary'}`}>
+                    ({categoryCount})
+                  </span>
+                </motion.button>
+              );
+            })}
+            </div>
+          </div>
         </div>
       </div>
 

@@ -84,5 +84,38 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hide': {
+          /* Hide scrollbar for Chrome, Safari and Opera */
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+          /* Hide scrollbar for IE, Edge and Firefox */
+          '-ms-overflow-style': 'none',
+          'scrollbar-width': 'none',
+        },
+        '.scrollbar-default': {
+          /* Show scrollbar on hover */
+          '&::-webkit-scrollbar': {
+            display: 'block',
+            width: '8px',
+            height: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#f1f1f1',
+            'border-radius': '10px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#7D8EE1',
+            'border-radius': '10px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: '#6B7DC8',
+          },
+        },
+      });
+    },
+  ],
 }
