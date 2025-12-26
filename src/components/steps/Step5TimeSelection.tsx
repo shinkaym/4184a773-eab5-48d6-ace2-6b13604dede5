@@ -86,7 +86,13 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
 
     const conflict = checkTimeConflict(time);
     if (conflict.hasConflict) {
-      setConflictMessage(conflict.message);
+      // Calculate end time for better context
+      const startMinutes = timeToMinutes(time);
+      const endMinutes = startMinutes + serviceDuration;
+      const endTime = minutesToTime(endMinutes);
+
+      const enhancedMessage = `Your selected service has a duration of ${serviceDuration} minutes (${time} - ${endTime}).\n\n${conflict.message}`;
+      setConflictMessage(enhancedMessage);
       setShowDialog(true);
     } else {
       onTimeChange(time);
@@ -267,7 +273,7 @@ export function Step5TimeSelection({ selectedTime, onTimeChange, serviceDuration
               <h3 className="text-lg sm:text-xl font-semibold text-nature-text-primary mb-2">Time Conflict</h3>
 
               {/* Message */}
-              <p className="text-sm sm:text-base text-nature-text-secondary mb-5 sm:mb-6">{conflictMessage}</p>
+              <p className="text-sm sm:text-base text-nature-text-secondary mb-5 sm:mb-6 whitespace-pre-line">{conflictMessage}</p>
 
               {/* Action Button */}
               <button
