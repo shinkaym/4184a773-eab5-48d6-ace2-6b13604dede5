@@ -5,7 +5,8 @@
       "Bash(npm run dev:*)",
       "Skill(frontend-design:frontend-design)",
       "Bash(npm run build:*)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(git mv:*)"
     ]
   }
 }

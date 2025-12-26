@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
-interface Step1DateSelectionProps {
+interface Step2DateSelectionProps {
   selectedDate: Date;
   onDateChange: (date: Date) => void;
 }
 
-export function Step1DateSelection({ selectedDate, onDateChange }: Step1DateSelectionProps) {
+export function Step2DateSelection({ selectedDate, onDateChange }: Step2DateSelectionProps) {
   const [currentMonth, setCurrentMonth] = useState<number>(selectedDate.getMonth());
   const [currentYear, setCurrentYear] = useState<number>(selectedDate.getFullYear());
 

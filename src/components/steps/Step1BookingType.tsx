@@ -2,12 +2,12 @@ import { motion } from 'framer-motion';
 import { CalendarX, CalendarCheck, Briefcase } from 'lucide-react';
 import { BookingModeCard } from '../BookingModeCard';
 
-interface Step2BookingTypeProps {
+interface Step1BookingTypeProps {
   selectedType: 'unassigned' | 'scheduled' | null;
   onTypeChange: (type: 'unassigned' | 'scheduled') => void;
 }
 
-export function Step2BookingType({ selectedType, onTypeChange }: Step2BookingTypeProps) {
+export function Step1BookingType({ selectedType, onTypeChange }: Step1BookingTypeProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
