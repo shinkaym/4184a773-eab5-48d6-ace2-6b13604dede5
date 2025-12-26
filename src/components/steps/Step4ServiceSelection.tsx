@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Scissors, Check, Clock, DollarSign, ChevronLeft, ChevronRight } from 'lucide-react';
 import { categories, services } from '../../data/bookingData';
 import useEmblaCarousel from 'embla-carousel-react';
+import { calculateTotalDuration, calculateTotalPrice } from '../../utils/bookingUtils';
 
 interface Step4ServiceSelectionProps {
   selectedServices: string[];
@@ -35,15 +36,8 @@ export function Step4ServiceSelection({ selectedServices, onServicesChange }: St
   const endIndex = startIndex + SERVICES_PER_PAGE;
   const paginatedServices = filteredServices.slice(startIndex, endIndex);
 
-  const totalDuration = selectedServices.reduce((total, serviceId) => {
-    const service = services.find((s) => s.id === serviceId);
-    return total + (service?.duration || 0);
-  }, 0);
-
-  const totalPrice = selectedServices.reduce((total, serviceId) => {
-    const service = services.find((s) => s.id === serviceId);
-    return total + (service?.price || 0);
-  }, 0);
+  const totalDuration = calculateTotalDuration(selectedServices);
+  const totalPrice = calculateTotalPrice(selectedServices);
 
   const toggleService = (serviceId: string) => {
     if (selectedServices.includes(serviceId)) {

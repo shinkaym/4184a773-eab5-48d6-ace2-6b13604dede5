@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Check, Download, Calendar, User, Scissors, Clock, Phone } from 'lucide-react';
-import { services, staffMembers } from '../../data/bookingData';
+import { services } from '../../data/bookingData';
+import { formatAppointmentDate, calculateTotalDuration, calculateTotalPrice, getEmployeeName } from '../../utils/bookingUtils';
 
 interface Step7CompletionProps {
   customerName: string;
@@ -23,41 +24,9 @@ export function Step7Completion({
   selectedTime,
   onDownloadTicket,
 }: Step7CompletionProps) {
-  const totalDuration = selectedServices.reduce((total, serviceId) => {
-    const service = services.find((s) => s.id === serviceId);
-    return total + (service?.duration || 0);
-  }, 0);
-
-  const totalPrice = selectedServices.reduce((total, serviceId) => {
-    const service = services.find((s) => s.id === serviceId);
-    return total + (service?.price || 0);
-  }, 0);
-
-  const employeeName = staffMembers.find((s) => s.id === selectedEmployee)?.name || 'Any Available Staff';
-
-  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  const formatAppointmentDate = () => {
-    const dayName = dayNames[selectedDate.getDay()];
-    const monthName = monthNames[selectedDate.getMonth()];
-    const date = selectedDate.getDate();
-    const year = selectedDate.getFullYear();
-    return `${dayName}, ${monthName} ${date}, ${year}`;
-  };
+  const totalDuration = calculateTotalDuration(selectedServices);
+  const totalPrice = calculateTotalPrice(selectedServices);
+  const employeeName = getEmployeeName(selectedEmployee);
 
   const checkmarkVariants = {
     hidden: { scale: 0, rotate: -180 },
@@ -141,7 +110,7 @@ export function Step7Completion({
               <div className="text-xs font-medium text-nature-text-tertiary tracking-wider mb-1">
                 APPOINTMENT DATE
               </div>
-              <div className="font-semibold text-base text-nature-text-primary">{formatAppointmentDate()}</div>
+              <div className="font-semibold text-base text-nature-text-primary">{formatAppointmentDate(selectedDate)}</div>
               <div className="text-xs text-nature-text-secondary font-light">Central Standard Time (CT)</div>
             </div>
           </div>

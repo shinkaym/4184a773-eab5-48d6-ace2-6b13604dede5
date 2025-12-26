@@ -11,6 +11,7 @@ import { Step4ServiceSelection } from '../components/steps/Step4ServiceSelection
 import { Step5TimeSelection } from '../components/steps/Step5TimeSelection';
 import { Step6Review } from '../components/steps/Step6Review';
 import { Step7Completion } from '../components/steps/Step7Completion';
+import { calculateTotalDuration } from '../utils/bookingUtils';
 
 type StepNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
@@ -100,18 +101,7 @@ export function StepBookingFlowPage() {
     setSelectedTime(null);
   };
 
-  const totalDuration = selectedServices.reduce((total, serviceId) => {
-    const services = [
-      { id: 'manicure', duration: 30 },
-      { id: 'pedicure', duration: 45 },
-      { id: 'gel-polish', duration: 60 },
-      { id: 'acrylic-nails', duration: 90 },
-      { id: 'nail-art', duration: 30 },
-      { id: 'spa-treatment', duration: 60 },
-    ];
-    const service = services.find((s) => s.id === serviceId);
-    return total + (service?.duration || 0);
-  }, 0);
+  const totalDuration = calculateTotalDuration(selectedServices);
 
   const isNextDisabled = () => {
     switch (currentStep) {
@@ -141,21 +131,19 @@ export function StepBookingFlowPage() {
   };
 
   const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
+    enter: {
+      x: 1000,
       opacity: 0,
-    }),
+    },
     center: {
       x: 0,
       opacity: 1,
     },
-    exit: (direction: number) => ({
-      x: direction < 0 ? 1000 : -1000,
+    exit: {
+      x: -1000,
       opacity: 0,
-    }),
+    },
   };
-
-  const [direction] = useState(0);
 
   return (
     <div className='min-h-screen w-full bg-nature-main flex flex-col font-sans text-nature-text-primary'>
@@ -303,10 +291,9 @@ export function StepBookingFlowPage() {
 
         {/* Step Content with Slide Animation */}
         <div className='relative z-10 min-h-[600px] flex flex-col'>
-          <AnimatePresence initial={false} custom={direction} mode='wait'>
+          <AnimatePresence initial={false} mode='wait'>
             <motion.div
               key={currentStep}
-              custom={direction}
               variants={slideVariants}
               initial='enter'
               animate='center'
