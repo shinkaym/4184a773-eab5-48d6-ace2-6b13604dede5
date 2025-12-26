@@ -173,7 +173,7 @@ export function StepBookingFlowPage() {
               <div className='hidden lg:flex items-center gap-6 text-sm font-medium'>
                 <button
                   onClick={() => navigate('/booking')}
-                  className='text-white/90 hover:text-white transition-colors cursor-pointer'
+                  className='text-white hover:text-white transition-colors cursor-pointer border-b-2 border-white'
                 >
                   Booking
                 </button>
