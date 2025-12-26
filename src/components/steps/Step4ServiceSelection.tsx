@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Scissors, Check, Clock, DollarSign } from 'lucide-react';
+import { Scissors, Check, Clock, DollarSign, ChevronLeft, ChevronRight } from 'lucide-react';
 import { categories, services } from '../../data/bookingData';
 import useEmblaCarousel from 'embla-carousel-react';
 
@@ -9,8 +9,11 @@ interface Step4ServiceSelectionProps {
   onServicesChange: (services: string[]) => void;
 }
 
+const SERVICES_PER_PAGE = 6;
+
 export function Step4ServiceSelection({ selectedServices, onServicesChange }: Step4ServiceSelectionProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [emblaRef] = useEmblaCarousel({
     align: 'start',
     containScroll: 'trimSnaps',
@@ -18,8 +21,19 @@ export function Step4ServiceSelection({ selectedServices, onServicesChange }: St
     slidesToScroll: 'auto',
   });
 
+  // Reset to page 1 when category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory]);
+
   const filteredServices =
     selectedCategory === 'all' ? services : services.filter((service) => service.category === selectedCategory);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredServices.length / SERVICES_PER_PAGE);
+  const startIndex = (currentPage - 1) * SERVICES_PER_PAGE;
+  const endIndex = startIndex + SERVICES_PER_PAGE;
+  const paginatedServices = filteredServices.slice(startIndex, endIndex);
 
   const totalDuration = selectedServices.reduce((total, serviceId) => {
     const service = services.find((s) => s.id === serviceId);
@@ -37,6 +51,14 @@ export function Step4ServiceSelection({ selectedServices, onServicesChange }: St
     } else {
       onServicesChange([...selectedServices, serviceId]);
     }
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(1, prev - 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(totalPages, prev + 1));
   };
 
   return (
@@ -147,8 +169,9 @@ export function Step4ServiceSelection({ selectedServices, onServicesChange }: St
           <p className="text-nature-text-tertiary text-sm">No services found in this category</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredServices.map((service, index) => {
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {paginatedServices.map((service, index) => {
             const isSelected = selectedServices.includes(service.id);
 
             return (
@@ -228,7 +251,69 @@ export function Step4ServiceSelection({ selectedServices, onServicesChange }: St
               </motion.button>
             );
           })}
-        </div>
+          </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="flex items-center justify-center gap-4 mt-8"
+            >
+              <button
+                onClick={handlePrevPage}
+                disabled={currentPage === 1}
+                className={`
+                  flex items-center gap-2 px-6 py-3 rounded-soft font-semibold transition-all
+                  ${
+                    currentPage === 1
+                      ? 'bg-nature-surface text-nature-text-tertiary cursor-not-allowed'
+                      : 'bg-white text-nature-primary border border-nature-divider hover:border-nature-primary hover:shadow-soft-lg'
+                  }
+                `}
+              >
+                <ChevronLeft className="w-5 h-5" />
+                Previous
+              </button>
+
+              <div className="flex items-center gap-2">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`
+                      w-10 h-10 rounded-soft font-semibold transition-all
+                      ${
+                        currentPage === page
+                          ? 'bg-nature-primary text-white shadow-soft-lg scale-110'
+                          : 'bg-white text-nature-text-secondary border border-nature-divider hover:border-nature-primary hover:bg-nature-primary/5'
+                      }
+                    `}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className={`
+                  flex items-center gap-2 px-6 py-3 rounded-soft font-semibold transition-all
+                  ${
+                    currentPage === totalPages
+                      ? 'bg-nature-surface text-nature-text-tertiary cursor-not-allowed'
+                      : 'bg-white text-nature-primary border border-nature-divider hover:border-nature-primary hover:shadow-soft-lg'
+                  }
+                `}
+              >
+                Next
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </motion.div>
+          )}
+        </>
       )}
     </motion.div>
   );

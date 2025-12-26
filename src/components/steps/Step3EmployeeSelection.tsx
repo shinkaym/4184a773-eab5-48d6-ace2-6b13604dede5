@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Check } from 'lucide-react';
+import { Users, Check, Search } from 'lucide-react';
 import { staffMembers } from '../../data/bookingData';
 
 interface Step3EmployeeSelectionProps {
@@ -8,6 +9,13 @@ interface Step3EmployeeSelectionProps {
 }
 
 export function Step3EmployeeSelection({ selectedEmployee, onEmployeeChange }: Step3EmployeeSelectionProps) {
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // Filter employees based on search query
+  const filteredStaff = staffMembers
+    .filter((staff) => staff.id !== 'any')
+    .filter((staff) => staff.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -32,11 +40,44 @@ export function Step3EmployeeSelection({ selectedEmployee, onEmployeeChange }: S
         <p className="text-nature-text-secondary text-lg font-light">Choose your preferred staff member</p>
       </div>
 
+      {/* Search Input */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="mb-8 max-w-md mx-auto"
+      >
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-nature-text-tertiary" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search employees..."
+            className="w-full pl-12 pr-4 py-3 bg-white border border-nature-divider rounded-soft text-nature-text-primary placeholder:text-nature-text-tertiary focus:outline-none focus:ring-2 focus:ring-nature-primary focus:border-transparent transition-all"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-nature-text-tertiary hover:text-nature-primary transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+        </div>
+      </motion.div>
+
       {/* Employee Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {staffMembers
-          .filter((staff) => staff.id !== 'any')
-          .map((staff, index) => {
+      {filteredStaff.length === 0 ? (
+        <div className="border-2 border-dashed border-nature-divider rounded-softer p-12 text-center bg-nature-surface/30">
+          <Users className="w-12 h-12 mx-auto mb-4 text-nature-text-tertiary" />
+          <p className="text-nature-text-tertiary text-sm">No employees found matching "{searchQuery}"</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {filteredStaff.map((staff, index) => {
             const isSelected = selectedEmployee === staff.id;
 
             return (
@@ -108,7 +149,8 @@ export function Step3EmployeeSelection({ selectedEmployee, onEmployeeChange }: S
               </motion.button>
             );
           })}
-      </div>
+        </div>
+      )}
     </motion.div>
   );
 }

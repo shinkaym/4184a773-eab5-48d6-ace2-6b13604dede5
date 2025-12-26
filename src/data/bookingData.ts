@@ -73,11 +73,11 @@ export const services = [
     image: 'https://images.unsplash.com/photo-1599206676335-193c82b13c9e?w=400&h=300&fit=crop',
   },
   {
-    id: 'spa-treatment',
+    id: 'spa-treatment1',
     name: 'Spa Treatment',
     category: 'spa',
     duration: 60,
     price: 65,
     image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=400&h=300&fit=crop',
-  },
+  }
 ];
